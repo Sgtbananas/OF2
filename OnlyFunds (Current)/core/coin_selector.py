@@ -88,3 +88,14 @@ if __name__ == "__main__":
     )
     for c in top_coins:
         print(f"{c['symbol']}: PnL={c['pnl']:.2f} | WinRate={c['win_rate']:.2%} | Strategies={c['strategies']}")
+def get_top_200_coinex_symbols():
+    """
+    Fetch the top 200 CoinEx spot symbols, sorted by volume.
+    Returns: List of symbol strings.
+    """
+    import ccxt
+    exchange = ccxt.coinex()
+    markets = exchange.load_markets()
+    spot_markets = [m for m in markets.values() if m.get('spot') and m['active']]
+    spot_markets.sort(key=lambda x: float(x.get('info', {}).get('volume', 0)), reverse=True)
+    return [m["symbol"] for m in spot_markets[:200]]
