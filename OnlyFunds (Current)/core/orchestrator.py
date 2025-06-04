@@ -1,12 +1,24 @@
 import numpy as np
 import pandas as pd
 import time
+import logging
 from core.config import load_config
 from core.engine import run_bot, backtest_bot
 from core.ml_filter import MLFilter
 from core.coin_selector import get_top_200_coinex_symbols
 from core.risk_manager import adjust_risk_based_on_profile
 import os
+
+# --- Logging Setup ---
+LOG_FORMAT = "%(asctime)s [%(levelname)s] %(name)s: %(message)s"
+logging.basicConfig(
+    level=logging.INFO,
+    format=LOG_FORMAT,
+    handlers=[
+        logging.FileHandler("orchestrator.log"),
+        logging.StreamHandler()
+    ]
+)
 
 class TradingOrchestrator:
     """
@@ -16,6 +28,7 @@ class TradingOrchestrator:
     """
 
     def __init__(self, config_path="OnlyFunds (Current)/config.yaml"):
+        self.logger = logging.getLogger(self.__class__.__name__)
         self.config_path = config_path
         self.config = load_config(config_path)
         self.available_profiles = ["conservative", "normal", "aggressive"]
@@ -34,9 +47,10 @@ class TradingOrchestrator:
         if profile is None:
             profile = self.config.get("risk", "normal")
         if profile not in self.available_profiles:
+            self.logger.error(f"Profile must be one of {self.available_profiles}")
             raise ValueError(f"Profile must be one of {self.available_profiles}")
         self.config["risk"] = profile
-        print(f"✅ Risk profile set to: {profile}")
+        self.logger.info(f"Risk profile set to: {profile}")
 
     def orchestrate(self, profile=None, retrain=True, schedule=False):
         """
@@ -56,7 +70,7 @@ class TradingOrchestrator:
             best = self._run_and_select_best_pipeline(retrain=retrain)
             self._deploy(best)
             if schedule:
-                print("⏳ Sleeping 1 hour before next orchestration...")
+                self.logger.info("Sleeping 1 hour before next orchestration...")
                 time.sleep(3600)
             else:
                 break
@@ -68,7 +82,7 @@ class TradingOrchestrator:
         """
         results = []
         for model_type in self.available_models:
-            print(f"\n🧪 Backtesting with model: {model_type}")
+            self.logger.info(f"Backtesting with model: {model_type}")
             config = self.config.copy()
             # Set up ML filter
             if model_type == "none":
@@ -83,11 +97,12 @@ class TradingOrchestrator:
                     X_train, y_train = self._prepare_ml_data(config)
                     if len(X_train) > 0:
                         ml_filter.train(np.array(X_train), np.array(y_train))
+                        self.logger.info(f"Trained {model_type} ML model with {len(X_train)} samples.")
                     else:
-                        print("⚠️ Not enough training data for ML filter; skipping training.")
+                        self.logger.warning("Not enough training data for ML filter; skipping training.")
             # Backtest pipeline
             bt_result = backtest_bot(config, ml_filter=ml_filter)
-            print(f"Model: {model_type} | PnL: {bt_result['total_pnl']:.4f} | Winrate: {bt_result['winrate']:.2%}")
+            self.logger.info(f"Model: {model_type} | PnL: {bt_result['total_pnl']:.4f} | Winrate: {bt_result['winrate']:.2%}")
             results.append({
                 "model": model_type,
                 "pnl": bt_result["total_pnl"],
@@ -98,7 +113,7 @@ class TradingOrchestrator:
         # Select winner (highest PnL, then winrate)
         results.sort(key=lambda x: (x["pnl"], x["winrate"]), reverse=True)
         best = results[0]
-        print(f"\n🏆 Selected best pipeline: {best['model']} (PnL: {best['pnl']:.4f}, Winrate: {best['winrate']:.2%})")
+        self.logger.info(f"Selected best pipeline: {best['model']} (PnL: {best['pnl']:.4f}, Winrate: {best['winrate']:.2%})")
         self.metrics = results
         return best
 
@@ -107,24 +122,21 @@ class TradingOrchestrator:
         Extracts features & labels from backtest for ML training.
         Uses backtest pipeline to simulate trades and generate labels.
         """
-        # Simulate pipeline WITHOUT ML for ground truth labels
         config_ = config.copy()
         config_["ml_filter"] = False
-        # Use coin selector to get symbols
         symbols = config_.get("symbols", get_top_200_coinex_symbols())
         X, y = [], []
         for symbol in symbols:
-            # Fetch historical data (user should implement this)
             df = self._fetch_historical_data(symbol, config_)
             if df is None or len(df) < 40:
+                self.logger.warning(f"Skipping {symbol} - insufficient data.")
                 continue
-            # Generate features and labels for ML
             for i in range(30, len(df)-1):
                 feats = MLFilter.extract_features(df, i)
-                # Label: 1 if next bar PnL>0, else 0
                 pnl = df["Close"].iloc[i+1] - df["Close"].iloc[i]
                 y.append(int(pnl > 0))
                 X.append(feats)
+        self.logger.info(f"ML data prepared: {len(X)} samples.")
         return X, y
 
     def _fetch_historical_data(self, symbol, config):
@@ -137,16 +149,13 @@ class TradingOrchestrator:
         Returns None if data is missing or invalid.
         """
         import pandas as pd
-        import logging
 
         timeframe = config.get("timeframe", "5min")
-        # Standardize file path: e.g., data/BTC_USDT_5min.csv
         safe_symbol = symbol.replace("/", "_").replace("-", "_")
         fname = f"data/{safe_symbol}_{timeframe}.csv"
         try:
             if os.path.exists(fname):
                 df = pd.read_csv(fname)
-                # Try to standardize columns (case-insensitive match)
                 df_cols = [col.lower() for col in df.columns]
                 colmap = {}
                 for req in ["close", "volume"]:
@@ -154,44 +163,25 @@ class TradingOrchestrator:
                     if matches:
                         colmap[matches[0]] = req.capitalize()
                 df = df.rename(columns=colmap)
-                # Ensure required columns present
                 if "Close" not in df.columns or "Volume" not in df.columns:
-                    logging.warning(f"{fname} missing required columns. Found: {df.columns}")
+                    self.logger.warning(f"{fname} missing required columns. Found: {df.columns}")
                     return None
                 df = df.dropna(subset=["Close", "Volume"])
                 if len(df) < 50:
-                    logging.warning(f"{fname} has too few rows ({len(df)}).")
+                    self.logger.warning(f"{fname} has too few rows ({len(df)}).")
                     return None
                 return df
             else:
-                logging.warning(f"No local CSV for {symbol} ({fname}).")
+                self.logger.warning(f"No local CSV for {symbol} ({fname}).")
                 # (Optional) Insert API/database fetch here
-                # e.g., df = fetch_from_api(symbol, timeframe)
-                # if df is not None: return df
                 return None
         except Exception as e:
-            logging.error(f"Error fetching data for {symbol}: {e}")
+            self.logger.error(f"Error fetching data for {symbol}: {e}")
             return None
 
     def _deploy(self, best_pipeline):
         """
         Deploys the selected pipeline for live or dry_run trading.
         """
-        print(f"🚀 Deploying pipeline: {best_pipeline['model']} | Risk: {best_pipeline['config']['risk']}")
+        self.logger.info(f"Deploying pipeline: {best_pipeline['model']} | Risk: {best_pipeline['config']['risk']}")
         run_bot(best_pipeline["config"], ml_filter=best_pipeline["ml_filter"])
-
-if __name__ == "__main__":
-    # CLI usage:
-    import argparse
-    parser = argparse.ArgumentParser(description="OnlyFunds Trading Orchestrator")
-    parser.add_argument("--profile", choices=["conservative", "normal", "aggressive"], default=None, help="Risk profile to use.")
-    parser.add_argument("--config", default="OnlyFunds (Current)/config.yaml", help="Path to config YAML.")
-    parser.add_argument("--schedule", action="store_true", help="Continuously re-run orchestration every hour.")
-    parser.add_argument("--no-retrain", action="store_true", help="Skip ML retraining (use existing model).")
-    args = parser.parse_args()
-    orchestrator = TradingOrchestrator(config_path=args.config)
-    orchestrator.orchestrate(
-        profile=args.profile,
-        retrain=not args.no_retrain,
-        schedule=args.schedule
-    )
