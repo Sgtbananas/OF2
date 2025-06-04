@@ -30,7 +30,7 @@ def load_config(path="OnlyFunds (Current)/config.yaml"):
         raise FileNotFoundError(f"Config file not found: {path}")
     with open(path, "r") as f:
         config = yaml.safe_load(f) or {}
-    # Apply defaults for any missing values
+    # Apply defaults
     for k, v in DEFAULT_CONFIG.items():
         if k not in config:
             config[k] = v
@@ -41,7 +41,7 @@ def load_config(path="OnlyFunds (Current)/config.yaml"):
         for ck, cv in DEFAULT_CONFIG["coinex"].items():
             if ck not in config["coinex"]:
                 config["coinex"][ck] = cv
-    # Dynamic symbol population
+    # Dynamic symbol fetch
     if config.get("symbols_source") == "top_200_coinex":
         config["symbols"] = get_top_200_coinex_symbols()
     # Validate config
