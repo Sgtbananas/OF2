@@ -10,6 +10,7 @@ def get_available_symbols(exchange_name="binance", quote="USDT"):
     markets = exchange.load_markets()
     return [s for s in markets if s.endswith(f'/{quote}') and markets[s]['active']]
 
+
 def select_top_coins(
     strategy_name=None, 
     all_strategies=None, 
@@ -79,6 +80,7 @@ def select_top_coins(
     results.sort(key=lambda x: (x["pnl"], x["win_rate"]), reverse=True)
     return results[:top_n]
 
+
 if __name__ == "__main__":
     # Example usage: Select top 3 coins for the "ema" strategy with ML filter enabled
     top_coins = select_top_coins(
@@ -88,6 +90,8 @@ if __name__ == "__main__":
     )
     for c in top_coins:
         print(f"{c['symbol']}: PnL={c['pnl']:.2f} | WinRate={c['win_rate']:.2%} | Strategies={c['strategies']}")
+
+
 def get_top_200_coinex_symbols():
     """
     Fetch the top 200 CoinEx spot symbols, sorted by volume.
