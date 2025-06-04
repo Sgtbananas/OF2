@@ -129,19 +129,49 @@ class TradingOrchestrator:
 
     def _fetch_historical_data(self, symbol, config):
         """
-        User must implement: Returns OHLCV DataFrame with 'Close' and 'Volume'.
+        Robustly fetch OHLCV data for a given symbol.
+        Priority:
+        1. Local CSV at data/{symbol}_{timeframe}.csv
+        2. (Optional) API or database fetch (placeholder, easily patched in)
+        Ensures DataFrame contains 'Close' and 'Volume' columns.
+        Returns None if data is missing or invalid.
         """
-        # Placeholder: expects user to implement/replace with real fetcher.
-        # For now, try to load from a CSV if available.
-        fname = f"data/{symbol.replace('/','_')}_{config.get('timeframe', '5min')}.csv"
-        if os.path.exists(fname):
-            df = pd.read_csv(fname)
-            # Ensure columns are correct
-            if "Close" in df.columns and "Volume" in df.columns:
+        import pandas as pd
+        import logging
+
+        timeframe = config.get("timeframe", "5min")
+        # Standardize file path: e.g., data/BTC_USDT_5min.csv
+        safe_symbol = symbol.replace("/", "_").replace("-", "_")
+        fname = f"data/{safe_symbol}_{timeframe}.csv"
+        try:
+            if os.path.exists(fname):
+                df = pd.read_csv(fname)
+                # Try to standardize columns (case-insensitive match)
+                df_cols = [col.lower() for col in df.columns]
+                colmap = {}
+                for req in ["close", "volume"]:
+                    matches = [c for c in df.columns if c.lower() == req]
+                    if matches:
+                        colmap[matches[0]] = req.capitalize()
+                df = df.rename(columns=colmap)
+                # Ensure required columns present
+                if "Close" not in df.columns or "Volume" not in df.columns:
+                    logging.warning(f"{fname} missing required columns. Found: {df.columns}")
+                    return None
+                df = df.dropna(subset=["Close", "Volume"])
+                if len(df) < 50:
+                    logging.warning(f"{fname} has too few rows ({len(df)}).")
+                    return None
                 return df
-        # User must hook up real data fetch here
-        print(f"⚠️ No data found for {symbol}. Please provide historical data at {fname}.")
-        return None
+            else:
+                logging.warning(f"No local CSV for {symbol} ({fname}).")
+                # (Optional) Insert API/database fetch here
+                # e.g., df = fetch_from_api(symbol, timeframe)
+                # if df is not None: return df
+                return None
+        except Exception as e:
+            logging.error(f"Error fetching data for {symbol}: {e}")
+            return None
 
     def _deploy(self, best_pipeline):
         """
