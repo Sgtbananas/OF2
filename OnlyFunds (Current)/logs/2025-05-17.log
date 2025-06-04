@@ -1,0 +1,250 @@
+[2025-05-17 21:44:24] Fetching data for BTCUSDT...
+[2025-05-17 21:44:27] ⚠️ Strategy ema failed: simulate_trades() missing 2 required positional arguments: 'symbol' and 'target'
+[2025-05-17 21:44:27] ⚠️ Strategy rsi failed: Strategy 'rsi' could not be loaded: module 'strategies.rsi' has no attribute 'RSI'
+[2025-05-17 21:44:27] ⚠️ Strategy macd failed: Strategy 'macd' could not be loaded: module 'strategies.macd' has no attribute 'MACD'
+[2025-05-17 21:44:27] ⚠️ Strategy bollinger failed: Strategy 'bollinger' could not be loaded: module 'strategies.bollinger' has no attribute 'BOLLINGER'
+[2025-05-17 21:44:27] Fetching data for ETHUSDT...
+[2025-05-17 21:44:28] ⚠️ Strategy ema failed: simulate_trades() missing 2 required positional arguments: 'symbol' and 'target'
+[2025-05-17 21:44:28] ⚠️ Strategy rsi failed: Strategy 'rsi' could not be loaded: module 'strategies.rsi' has no attribute 'RSI'
+[2025-05-17 21:44:28] ⚠️ Strategy macd failed: Strategy 'macd' could not be loaded: module 'strategies.macd' has no attribute 'MACD'
+[2025-05-17 21:44:28] ⚠️ Strategy bollinger failed: Strategy 'bollinger' could not be loaded: module 'strategies.bollinger' has no attribute 'BOLLINGER'
+[2025-05-17 21:44:28] Fetching data for XRPUSDT...
+[2025-05-17 21:44:28] ⚠️ Strategy ema failed: simulate_trades() missing 2 required positional arguments: 'symbol' and 'target'
+[2025-05-17 21:44:28] ⚠️ Strategy rsi failed: Strategy 'rsi' could not be loaded: module 'strategies.rsi' has no attribute 'RSI'
+[2025-05-17 21:44:28] ⚠️ Strategy macd failed: Strategy 'macd' could not be loaded: module 'strategies.macd' has no attribute 'MACD'
+[2025-05-17 21:44:28] ⚠️ Strategy bollinger failed: Strategy 'bollinger' could not be loaded: module 'strategies.bollinger' has no attribute 'BOLLINGER'
+[2025-05-17 21:44:28] Fetching data for BNBUSDT...
+[2025-05-17 21:44:28] ⚠️ Strategy ema failed: simulate_trades() missing 2 required positional arguments: 'symbol' and 'target'
+[2025-05-17 21:44:28] ⚠️ Strategy rsi failed: Strategy 'rsi' could not be loaded: module 'strategies.rsi' has no attribute 'RSI'
+[2025-05-17 21:44:28] ⚠️ Strategy macd failed: Strategy 'macd' could not be loaded: module 'strategies.macd' has no attribute 'MACD'
+[2025-05-17 21:44:28] ⚠️ Strategy bollinger failed: Strategy 'bollinger' could not be loaded: module 'strategies.bollinger' has no attribute 'BOLLINGER'
+[2025-05-17 21:44:28] Fetching data for SOLUSDT...
+[2025-05-17 21:44:29] ⚠️ Strategy ema failed: simulate_trades() missing 2 required positional arguments: 'symbol' and 'target'
+[2025-05-17 21:44:29] ⚠️ Strategy rsi failed: Strategy 'rsi' could not be loaded: module 'strategies.rsi' has no attribute 'RSI'
+[2025-05-17 21:44:29] ⚠️ Strategy macd failed: Strategy 'macd' could not be loaded: module 'strategies.macd' has no attribute 'MACD'
+[2025-05-17 21:44:29] ⚠️ Strategy bollinger failed: Strategy 'bollinger' could not be loaded: module 'strategies.bollinger' has no attribute 'BOLLINGER'
+[2025-05-17 21:44:29] Fetching data for USDCUSDT...
+[2025-05-17 21:44:29] ⚠️ Strategy ema failed: simulate_trades() missing 2 required positional arguments: 'symbol' and 'target'
+[2025-05-17 21:44:29] ⚠️ Strategy rsi failed: Strategy 'rsi' could not be loaded: module 'strategies.rsi' has no attribute 'RSI'
+[2025-05-17 21:44:29] ⚠️ Strategy macd failed: Strategy 'macd' could not be loaded: module 'strategies.macd' has no attribute 'MACD'
+[2025-05-17 21:44:29] ⚠️ Strategy bollinger failed: Strategy 'bollinger' could not be loaded: module 'strategies.bollinger' has no attribute 'BOLLINGER'
+[2025-05-17 21:44:29] Fetching data for DOGEUSDT...
+[2025-05-17 21:44:29] ⚠️ Strategy ema failed: simulate_trades() missing 2 required positional arguments: 'symbol' and 'target'
+[2025-05-17 21:44:29] ⚠️ Strategy rsi failed: Strategy 'rsi' could not be loaded: module 'strategies.rsi' has no attribute 'RSI'
+[2025-05-17 21:44:29] ⚠️ Strategy macd failed: Strategy 'macd' could not be loaded: module 'strategies.macd' has no attribute 'MACD'
+[2025-05-17 21:44:29] ⚠️ Strategy bollinger failed: Strategy 'bollinger' could not be loaded: module 'strategies.bollinger' has no attribute 'BOLLINGER'
+[2025-05-17 21:44:29] Fetching data for ADAUSDT...
+[2025-05-17 21:44:30] ⚠️ Strategy ema failed: simulate_trades() missing 2 required positional arguments: 'symbol' and 'target'
+[2025-05-17 21:44:30] ⚠️ Strategy rsi failed: Strategy 'rsi' could not be loaded: module 'strategies.rsi' has no attribute 'RSI'
+[2025-05-17 21:44:30] ⚠️ Strategy macd failed: Strategy 'macd' could not be loaded: module 'strategies.macd' has no attribute 'MACD'
+[2025-05-17 21:44:30] ⚠️ Strategy bollinger failed: Strategy 'bollinger' could not be loaded: module 'strategies.bollinger' has no attribute 'BOLLINGER'
+[2025-05-17 21:44:30] Fetching data for TRXUSDT...
+[2025-05-17 21:44:31] ⚠️ Strategy ema failed: simulate_trades() missing 2 required positional arguments: 'symbol' and 'target'
+[2025-05-17 21:44:31] ⚠️ Strategy rsi failed: Strategy 'rsi' could not be loaded: module 'strategies.rsi' has no attribute 'RSI'
+[2025-05-17 21:44:31] ⚠️ Strategy macd failed: Strategy 'macd' could not be loaded: module 'strategies.macd' has no attribute 'MACD'
+[2025-05-17 21:44:31] ⚠️ Strategy bollinger failed: Strategy 'bollinger' could not be loaded: module 'strategies.bollinger' has no attribute 'BOLLINGER'
+[2025-05-17 21:44:31] Fetching data for SUIUSDT...
+[2025-05-17 21:44:31] ⚠️ Strategy ema failed: simulate_trades() missing 2 required positional arguments: 'symbol' and 'target'
+[2025-05-17 21:44:31] ⚠️ Strategy rsi failed: Strategy 'rsi' could not be loaded: module 'strategies.rsi' has no attribute 'RSI'
+[2025-05-17 21:44:31] ⚠️ Strategy macd failed: Strategy 'macd' could not be loaded: module 'strategies.macd' has no attribute 'MACD'
+[2025-05-17 21:44:31] ⚠️ Strategy bollinger failed: Strategy 'bollinger' could not be loaded: module 'strategies.bollinger' has no attribute 'BOLLINGER'
+[2025-05-17 22:08:46] Fetching data for BTCUSDT...
+[2025-05-17 22:08:49] ⚠️ Strategy ema failed: 'Series' object has no attribute 'generate_signal'
+[2025-05-17 22:08:49] ⚠️ Strategy rsi failed: 'Series' object has no attribute 'generate_signal'
+[2025-05-17 22:08:49] ⚠️ Strategy macd failed: 'Series' object has no attribute 'generate_signal'
+[2025-05-17 22:08:49] ⚠️ Strategy bollinger failed: 'Series' object has no attribute 'generate_signal'
+[2025-05-17 22:08:49] Fetching data for ETHUSDT...
+[2025-05-17 22:08:50] ⚠️ Strategy ema failed: 'Series' object has no attribute 'generate_signal'
+[2025-05-17 22:08:50] ⚠️ Strategy rsi failed: 'Series' object has no attribute 'generate_signal'
+[2025-05-17 22:08:50] ⚠️ Strategy macd failed: 'Series' object has no attribute 'generate_signal'
+[2025-05-17 22:08:50] ⚠️ Strategy bollinger failed: 'Series' object has no attribute 'generate_signal'
+[2025-05-17 22:08:50] Fetching data for XRPUSDT...
+[2025-05-17 22:08:50] ⚠️ Strategy ema failed: 'Series' object has no attribute 'generate_signal'
+[2025-05-17 22:08:50] ⚠️ Strategy rsi failed: 'Series' object has no attribute 'generate_signal'
+[2025-05-17 22:08:50] ⚠️ Strategy macd failed: 'Series' object has no attribute 'generate_signal'
+[2025-05-17 22:08:50] ⚠️ Strategy bollinger failed: 'Series' object has no attribute 'generate_signal'
+[2025-05-17 22:08:50] Fetching data for BNBUSDT...
+[2025-05-17 22:08:51] ⚠️ Strategy ema failed: 'Series' object has no attribute 'generate_signal'
+[2025-05-17 22:08:51] ⚠️ Strategy rsi failed: 'Series' object has no attribute 'generate_signal'
+[2025-05-17 22:08:51] ⚠️ Strategy macd failed: 'Series' object has no attribute 'generate_signal'
+[2025-05-17 22:08:51] ⚠️ Strategy bollinger failed: 'Series' object has no attribute 'generate_signal'
+[2025-05-17 22:08:51] Fetching data for SOLUSDT...
+[2025-05-17 22:08:51] ⚠️ Strategy ema failed: 'Series' object has no attribute 'generate_signal'
+[2025-05-17 22:08:51] ⚠️ Strategy rsi failed: 'Series' object has no attribute 'generate_signal'
+[2025-05-17 22:08:51] ⚠️ Strategy macd failed: 'Series' object has no attribute 'generate_signal'
+[2025-05-17 22:08:51] ⚠️ Strategy bollinger failed: 'Series' object has no attribute 'generate_signal'
+[2025-05-17 22:08:51] Fetching data for USDCUSDT...
+[2025-05-17 22:08:51] ⚠️ Strategy ema failed: 'Series' object has no attribute 'generate_signal'
+[2025-05-17 22:08:51] ⚠️ Strategy rsi failed: 'Series' object has no attribute 'generate_signal'
+[2025-05-17 22:08:51] ⚠️ Strategy macd failed: 'Series' object has no attribute 'generate_signal'
+[2025-05-17 22:08:51] ⚠️ Strategy bollinger failed: 'Series' object has no attribute 'generate_signal'
+[2025-05-17 22:08:51] Fetching data for DOGEUSDT...
+[2025-05-17 22:08:52] ⚠️ Strategy ema failed: 'Series' object has no attribute 'generate_signal'
+[2025-05-17 22:08:52] ⚠️ Strategy rsi failed: 'Series' object has no attribute 'generate_signal'
+[2025-05-17 22:08:52] ⚠️ Strategy macd failed: 'Series' object has no attribute 'generate_signal'
+[2025-05-17 22:08:52] ⚠️ Strategy bollinger failed: 'Series' object has no attribute 'generate_signal'
+[2025-05-17 22:08:52] Fetching data for ADAUSDT...
+[2025-05-17 22:08:52] ⚠️ Strategy ema failed: 'Series' object has no attribute 'generate_signal'
+[2025-05-17 22:08:52] ⚠️ Strategy rsi failed: 'Series' object has no attribute 'generate_signal'
+[2025-05-17 22:08:52] ⚠️ Strategy macd failed: 'Series' object has no attribute 'generate_signal'
+[2025-05-17 22:08:52] ⚠️ Strategy bollinger failed: 'Series' object has no attribute 'generate_signal'
+[2025-05-17 22:08:52] Fetching data for TRXUSDT...
+[2025-05-17 22:08:53] ⚠️ Strategy ema failed: 'Series' object has no attribute 'generate_signal'
+[2025-05-17 22:08:53] ⚠️ Strategy rsi failed: 'Series' object has no attribute 'generate_signal'
+[2025-05-17 22:08:53] ⚠️ Strategy macd failed: 'Series' object has no attribute 'generate_signal'
+[2025-05-17 22:08:53] ⚠️ Strategy bollinger failed: 'Series' object has no attribute 'generate_signal'
+[2025-05-17 22:08:53] Fetching data for SUIUSDT...
+[2025-05-17 22:08:53] ⚠️ Strategy ema failed: 'Series' object has no attribute 'generate_signal'
+[2025-05-17 22:08:53] ⚠️ Strategy rsi failed: 'Series' object has no attribute 'generate_signal'
+[2025-05-17 22:08:53] ⚠️ Strategy macd failed: 'Series' object has no attribute 'generate_signal'
+[2025-05-17 22:08:53] ⚠️ Strategy bollinger failed: 'Series' object has no attribute 'generate_signal'
+[2025-05-17 22:40:31] Fetching data for BTCUSDT...
+[2025-05-17 22:40:34] ⚠️ Strategy ema failed: 'Series' object has no attribute 'generate_signal'
+[2025-05-17 22:40:34] ⚠️ Strategy rsi failed: 'Series' object has no attribute 'generate_signal'
+[2025-05-17 22:40:34] ⚠️ Strategy macd failed: 'Series' object has no attribute 'generate_signal'
+[2025-05-17 22:40:34] ⚠️ Strategy bollinger failed: 'Series' object has no attribute 'generate_signal'
+[2025-05-17 22:40:34] Fetching data for ETHUSDT...
+[2025-05-17 22:40:35] ⚠️ Strategy ema failed: 'Series' object has no attribute 'generate_signal'
+[2025-05-17 22:40:35] ⚠️ Strategy rsi failed: 'Series' object has no attribute 'generate_signal'
+[2025-05-17 22:40:35] ⚠️ Strategy macd failed: 'Series' object has no attribute 'generate_signal'
+[2025-05-17 22:40:35] ⚠️ Strategy bollinger failed: 'Series' object has no attribute 'generate_signal'
+[2025-05-17 22:40:35] Fetching data for XRPUSDT...
+[2025-05-17 22:40:35] ⚠️ Strategy ema failed: 'Series' object has no attribute 'generate_signal'
+[2025-05-17 22:40:35] ⚠️ Strategy rsi failed: 'Series' object has no attribute 'generate_signal'
+[2025-05-17 22:40:35] ⚠️ Strategy macd failed: 'Series' object has no attribute 'generate_signal'
+[2025-05-17 22:40:35] ⚠️ Strategy bollinger failed: 'Series' object has no attribute 'generate_signal'
+[2025-05-17 22:40:35] Fetching data for BNBUSDT...
+[2025-05-17 22:40:36] ⚠️ Strategy ema failed: 'Series' object has no attribute 'generate_signal'
+[2025-05-17 22:40:36] ⚠️ Strategy rsi failed: 'Series' object has no attribute 'generate_signal'
+[2025-05-17 22:40:36] ⚠️ Strategy macd failed: 'Series' object has no attribute 'generate_signal'
+[2025-05-17 22:40:36] ⚠️ Strategy bollinger failed: 'Series' object has no attribute 'generate_signal'
+[2025-05-17 22:40:36] Fetching data for SOLUSDT...
+[2025-05-17 22:40:36] ⚠️ Strategy ema failed: 'Series' object has no attribute 'generate_signal'
+[2025-05-17 22:40:36] ⚠️ Strategy rsi failed: 'Series' object has no attribute 'generate_signal'
+[2025-05-17 22:40:36] ⚠️ Strategy macd failed: 'Series' object has no attribute 'generate_signal'
+[2025-05-17 22:40:36] ⚠️ Strategy bollinger failed: 'Series' object has no attribute 'generate_signal'
+[2025-05-17 22:40:36] Fetching data for USDCUSDT...
+[2025-05-17 22:40:36] ⚠️ Strategy ema failed: 'Series' object has no attribute 'generate_signal'
+[2025-05-17 22:40:36] ⚠️ Strategy rsi failed: 'Series' object has no attribute 'generate_signal'
+[2025-05-17 22:40:36] ⚠️ Strategy macd failed: 'Series' object has no attribute 'generate_signal'
+[2025-05-17 22:40:36] ⚠️ Strategy bollinger failed: 'Series' object has no attribute 'generate_signal'
+[2025-05-17 22:40:36] Fetching data for DOGEUSDT...
+[2025-05-17 22:40:37] ⚠️ Strategy ema failed: 'Series' object has no attribute 'generate_signal'
+[2025-05-17 22:40:37] ⚠️ Strategy rsi failed: 'Series' object has no attribute 'generate_signal'
+[2025-05-17 22:40:37] ⚠️ Strategy macd failed: 'Series' object has no attribute 'generate_signal'
+[2025-05-17 22:40:37] ⚠️ Strategy bollinger failed: 'Series' object has no attribute 'generate_signal'
+[2025-05-17 22:40:37] Fetching data for ADAUSDT...
+[2025-05-17 22:40:38] ⚠️ Strategy ema failed: 'Series' object has no attribute 'generate_signal'
+[2025-05-17 22:40:38] ⚠️ Strategy rsi failed: 'Series' object has no attribute 'generate_signal'
+[2025-05-17 22:40:38] ⚠️ Strategy macd failed: 'Series' object has no attribute 'generate_signal'
+[2025-05-17 22:40:38] ⚠️ Strategy bollinger failed: 'Series' object has no attribute 'generate_signal'
+[2025-05-17 22:40:38] Fetching data for TRXUSDT...
+[2025-05-17 22:40:38] ⚠️ Strategy ema failed: 'Series' object has no attribute 'generate_signal'
+[2025-05-17 22:40:38] ⚠️ Strategy rsi failed: 'Series' object has no attribute 'generate_signal'
+[2025-05-17 22:40:38] ⚠️ Strategy macd failed: 'Series' object has no attribute 'generate_signal'
+[2025-05-17 22:40:38] ⚠️ Strategy bollinger failed: 'Series' object has no attribute 'generate_signal'
+[2025-05-17 22:40:38] Fetching data for SUIUSDT...
+[2025-05-17 22:40:39] ⚠️ Strategy ema failed: 'Series' object has no attribute 'generate_signal'
+[2025-05-17 22:40:39] ⚠️ Strategy rsi failed: 'Series' object has no attribute 'generate_signal'
+[2025-05-17 22:40:39] ⚠️ Strategy macd failed: 'Series' object has no attribute 'generate_signal'
+[2025-05-17 22:40:39] ⚠️ Strategy bollinger failed: 'Series' object has no attribute 'generate_signal'
+[2025-05-17 22:49:31] Fetching data for BTCUSDT...
+[2025-05-17 22:49:35] ⚠️ Strategy ema failed: 'EMA' object has no attribute 'generate_signals'
+[2025-05-17 22:49:35] ⚠️ Strategy rsi failed: 'RSI' object has no attribute 'generate_signals'
+[2025-05-17 22:49:35] ⚠️ Strategy macd failed: 'MACD' object has no attribute 'generate_signals'
+[2025-05-17 22:49:35] ⚠️ Strategy bollinger failed: 'BOLLINGER' object has no attribute 'generate_signals'
+[2025-05-17 22:49:35] Fetching data for ETHUSDT...
+[2025-05-17 22:49:35] ⚠️ Strategy ema failed: 'EMA' object has no attribute 'generate_signals'
+[2025-05-17 22:49:35] ⚠️ Strategy rsi failed: 'RSI' object has no attribute 'generate_signals'
+[2025-05-17 22:49:35] ⚠️ Strategy macd failed: 'MACD' object has no attribute 'generate_signals'
+[2025-05-17 22:49:35] ⚠️ Strategy bollinger failed: 'BOLLINGER' object has no attribute 'generate_signals'
+[2025-05-17 22:49:35] Fetching data for XRPUSDT...
+[2025-05-17 22:49:36] ⚠️ Strategy ema failed: 'EMA' object has no attribute 'generate_signals'
+[2025-05-17 22:49:36] ⚠️ Strategy rsi failed: 'RSI' object has no attribute 'generate_signals'
+[2025-05-17 22:49:36] ⚠️ Strategy macd failed: 'MACD' object has no attribute 'generate_signals'
+[2025-05-17 22:49:36] ⚠️ Strategy bollinger failed: 'BOLLINGER' object has no attribute 'generate_signals'
+[2025-05-17 22:49:36] Fetching data for BNBUSDT...
+[2025-05-17 22:49:36] ⚠️ Strategy ema failed: 'EMA' object has no attribute 'generate_signals'
+[2025-05-17 22:49:36] ⚠️ Strategy rsi failed: 'RSI' object has no attribute 'generate_signals'
+[2025-05-17 22:49:36] ⚠️ Strategy macd failed: 'MACD' object has no attribute 'generate_signals'
+[2025-05-17 22:49:36] ⚠️ Strategy bollinger failed: 'BOLLINGER' object has no attribute 'generate_signals'
+[2025-05-17 22:49:36] Fetching data for SOLUSDT...
+[2025-05-17 22:49:37] ⚠️ Strategy ema failed: 'EMA' object has no attribute 'generate_signals'
+[2025-05-17 22:49:37] ⚠️ Strategy rsi failed: 'RSI' object has no attribute 'generate_signals'
+[2025-05-17 22:49:37] ⚠️ Strategy macd failed: 'MACD' object has no attribute 'generate_signals'
+[2025-05-17 22:49:37] ⚠️ Strategy bollinger failed: 'BOLLINGER' object has no attribute 'generate_signals'
+[2025-05-17 22:49:37] Fetching data for USDCUSDT...
+[2025-05-17 22:49:37] ⚠️ Strategy ema failed: 'EMA' object has no attribute 'generate_signals'
+[2025-05-17 22:49:37] ⚠️ Strategy rsi failed: 'RSI' object has no attribute 'generate_signals'
+[2025-05-17 22:49:37] ⚠️ Strategy macd failed: 'MACD' object has no attribute 'generate_signals'
+[2025-05-17 22:49:37] ⚠️ Strategy bollinger failed: 'BOLLINGER' object has no attribute 'generate_signals'
+[2025-05-17 22:49:37] Fetching data for DOGEUSDT...
+[2025-05-17 22:49:37] ⚠️ Strategy ema failed: 'EMA' object has no attribute 'generate_signals'
+[2025-05-17 22:49:37] ⚠️ Strategy rsi failed: 'RSI' object has no attribute 'generate_signals'
+[2025-05-17 22:49:37] ⚠️ Strategy macd failed: 'MACD' object has no attribute 'generate_signals'
+[2025-05-17 22:49:37] ⚠️ Strategy bollinger failed: 'BOLLINGER' object has no attribute 'generate_signals'
+[2025-05-17 22:49:37] Fetching data for ADAUSDT...
+[2025-05-17 22:49:38] ⚠️ Strategy ema failed: 'EMA' object has no attribute 'generate_signals'
+[2025-05-17 22:49:38] ⚠️ Strategy rsi failed: 'RSI' object has no attribute 'generate_signals'
+[2025-05-17 22:49:38] ⚠️ Strategy macd failed: 'MACD' object has no attribute 'generate_signals'
+[2025-05-17 22:49:38] ⚠️ Strategy bollinger failed: 'BOLLINGER' object has no attribute 'generate_signals'
+[2025-05-17 22:49:38] Fetching data for TRXUSDT...
+[2025-05-17 22:49:39] ⚠️ Strategy ema failed: 'EMA' object has no attribute 'generate_signals'
+[2025-05-17 22:49:39] ⚠️ Strategy rsi failed: 'RSI' object has no attribute 'generate_signals'
+[2025-05-17 22:49:39] ⚠️ Strategy macd failed: 'MACD' object has no attribute 'generate_signals'
+[2025-05-17 22:49:39] ⚠️ Strategy bollinger failed: 'BOLLINGER' object has no attribute 'generate_signals'
+[2025-05-17 22:49:39] Fetching data for SUIUSDT...
+[2025-05-17 22:49:39] ⚠️ Strategy ema failed: 'EMA' object has no attribute 'generate_signals'
+[2025-05-17 22:49:39] ⚠️ Strategy rsi failed: 'RSI' object has no attribute 'generate_signals'
+[2025-05-17 22:49:39] ⚠️ Strategy macd failed: 'MACD' object has no attribute 'generate_signals'
+[2025-05-17 22:49:39] ⚠️ Strategy bollinger failed: 'BOLLINGER' object has no attribute 'generate_signals'
+[2025-05-17 22:52:18] Fetching data for BTCUSDT...
+[2025-05-17 22:52:19] ⚠️ Strategy ema failed: 'EMA' object has no attribute 'generate_signals'
+[2025-05-17 22:52:19] ⚠️ Strategy rsi failed: 'RSI' object has no attribute 'generate_signals'
+[2025-05-17 22:52:19] ⚠️ Strategy macd failed: 'MACD' object has no attribute 'generate_signals'
+[2025-05-17 22:52:19] ⚠️ Strategy bollinger failed: 'BOLLINGER' object has no attribute 'generate_signals'
+[2025-05-17 22:52:19] Fetching data for ETHUSDT...
+[2025-05-17 22:52:20] ⚠️ Strategy ema failed: 'EMA' object has no attribute 'generate_signals'
+[2025-05-17 22:52:20] ⚠️ Strategy rsi failed: 'RSI' object has no attribute 'generate_signals'
+[2025-05-17 22:52:20] ⚠️ Strategy macd failed: 'MACD' object has no attribute 'generate_signals'
+[2025-05-17 22:52:20] ⚠️ Strategy bollinger failed: 'BOLLINGER' object has no attribute 'generate_signals'
+[2025-05-17 22:52:20] Fetching data for XRPUSDT...
+[2025-05-17 22:52:20] ⚠️ Strategy ema failed: 'EMA' object has no attribute 'generate_signals'
+[2025-05-17 22:52:20] ⚠️ Strategy rsi failed: 'RSI' object has no attribute 'generate_signals'
+[2025-05-17 22:52:20] ⚠️ Strategy macd failed: 'MACD' object has no attribute 'generate_signals'
+[2025-05-17 22:52:20] ⚠️ Strategy bollinger failed: 'BOLLINGER' object has no attribute 'generate_signals'
+[2025-05-17 22:52:20] Fetching data for BNBUSDT...
+[2025-05-17 22:52:20] ⚠️ Strategy ema failed: 'EMA' object has no attribute 'generate_signals'
+[2025-05-17 22:52:20] ⚠️ Strategy rsi failed: 'RSI' object has no attribute 'generate_signals'
+[2025-05-17 22:52:20] ⚠️ Strategy macd failed: 'MACD' object has no attribute 'generate_signals'
+[2025-05-17 22:52:20] ⚠️ Strategy bollinger failed: 'BOLLINGER' object has no attribute 'generate_signals'
+[2025-05-17 22:52:20] Fetching data for SOLUSDT...
+[2025-05-17 22:52:20] ⚠️ Strategy ema failed: 'EMA' object has no attribute 'generate_signals'
+[2025-05-17 22:52:20] ⚠️ Strategy rsi failed: 'RSI' object has no attribute 'generate_signals'
+[2025-05-17 22:52:20] ⚠️ Strategy macd failed: 'MACD' object has no attribute 'generate_signals'
+[2025-05-17 22:52:20] ⚠️ Strategy bollinger failed: 'BOLLINGER' object has no attribute 'generate_signals'
+[2025-05-17 22:52:20] Fetching data for USDCUSDT...
+[2025-05-17 22:52:20] ⚠️ Strategy ema failed: 'EMA' object has no attribute 'generate_signals'
+[2025-05-17 22:52:20] ⚠️ Strategy rsi failed: 'RSI' object has no attribute 'generate_signals'
+[2025-05-17 22:52:20] ⚠️ Strategy macd failed: 'MACD' object has no attribute 'generate_signals'
+[2025-05-17 22:52:20] ⚠️ Strategy bollinger failed: 'BOLLINGER' object has no attribute 'generate_signals'
+[2025-05-17 22:52:20] Fetching data for DOGEUSDT...
+[2025-05-17 22:52:20] ⚠️ Strategy ema failed: 'EMA' object has no attribute 'generate_signals'
+[2025-05-17 22:52:20] ⚠️ Strategy rsi failed: 'RSI' object has no attribute 'generate_signals'
+[2025-05-17 22:52:20] ⚠️ Strategy macd failed: 'MACD' object has no attribute 'generate_signals'
+[2025-05-17 22:52:20] ⚠️ Strategy bollinger failed: 'BOLLINGER' object has no attribute 'generate_signals'
+[2025-05-17 22:52:20] Fetching data for ADAUSDT...
+[2025-05-17 22:52:21] ⚠️ Strategy ema failed: 'EMA' object has no attribute 'generate_signals'
+[2025-05-17 22:52:21] ⚠️ Strategy rsi failed: 'RSI' object has no attribute 'generate_signals'
+[2025-05-17 22:52:21] ⚠️ Strategy macd failed: 'MACD' object has no attribute 'generate_signals'
+[2025-05-17 22:52:21] ⚠️ Strategy bollinger failed: 'BOLLINGER' object has no attribute 'generate_signals'
+[2025-05-17 22:52:21] Fetching data for TRXUSDT...
+[2025-05-17 22:52:21] ⚠️ Strategy ema failed: 'EMA' object has no attribute 'generate_signals'
+[2025-05-17 22:52:21] ⚠️ Strategy rsi failed: 'RSI' object has no attribute 'generate_signals'
+[2025-05-17 22:52:21] ⚠️ Strategy macd failed: 'MACD' object has no attribute 'generate_signals'
+[2025-05-17 22:52:21] ⚠️ Strategy bollinger failed: 'BOLLINGER' object has no attribute 'generate_signals'
+[2025-05-17 22:52:21] Fetching data for SUIUSDT...
+[2025-05-17 22:52:21] ⚠️ Strategy ema failed: 'EMA' object has no attribute 'generate_signals'
+[2025-05-17 22:52:21] ⚠️ Strategy rsi failed: 'RSI' object has no attribute 'generate_signals'
+[2025-05-17 22:52:21] ⚠️ Strategy macd failed: 'MACD' object has no attribute 'generate_signals'
+[2025-05-17 22:52:21] ⚠️ Strategy bollinger failed: 'BOLLINGER' object has no attribute 'generate_signals'

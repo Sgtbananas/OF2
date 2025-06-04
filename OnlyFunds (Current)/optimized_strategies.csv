@@ -1,0 +1,4 @@
+pair,strategies,pnl,win_rate,trades
+BTCUSDT,"('rsi', 'bollinger')",42281.17478740683,0.6,5
+ETHUSDT,"('ema',)",-29.38000000000011,0.0,1
+XRPUSDT,"('rsi',)",-0.0237999999999996,0.33,3

@@ -1,0 +1,190 @@
+[2025-05-28 18:13:00] Fetching data for BTCUSDT...
+[2025-05-28 18:13:02] ✅ BTCUSDT: Best strategy → ('ema',) | PnL: 40.81 | Win rate: 0.47
+[2025-05-28 18:13:02] Fetching data for ETHUSDT...
+[2025-05-28 18:13:03] ✅ ETHUSDT: Best strategy → ('ema',) | PnL: 6.17 | Win rate: 0.44
+[2025-05-28 18:13:03] Fetching data for XRPUSDT...
+[2025-05-28 18:13:03] ✅ XRPUSDT: Best strategy → ('ema',) | PnL: -0.03 | Win rate: 0.30
+[2025-05-28 18:13:03] Fetching data for BNBUSDT...
+[2025-05-28 18:13:03] ✅ BNBUSDT: Best strategy → ('ema',) | PnL: -4.68 | Win rate: 0.26
+[2025-05-28 18:13:03] Fetching data for SOLUSDT...
+[2025-05-28 18:13:04] ✅ SOLUSDT: Best strategy → ('ema',) | PnL: -0.89 | Win rate: 0.29
+[2025-05-28 18:13:04] Fetching data for USDCUSDT...
+[2025-05-28 18:13:04] ✅ USDCUSDT: Best strategy → ('ema',) | PnL: -0.00 | Win rate: 0.00
+[2025-05-28 18:13:04] Fetching data for DOGEUSDT...
+[2025-05-28 18:13:05] ✅ DOGEUSDT: Best strategy → ('ema',) | PnL: -0.00 | Win rate: 0.44
+[2025-05-28 18:13:05] Fetching data for ADAUSDT...
+[2025-05-28 18:13:05] ✅ ADAUSDT: Best strategy → ('ema',) | PnL: -0.01 | Win rate: 0.22
+[2025-05-28 18:13:05] Fetching data for TRXUSDT...
+[2025-05-28 18:13:05] ✅ TRXUSDT: Best strategy → ('ema',) | PnL: -0.00 | Win rate: 0.21
+[2025-05-28 18:13:05] Fetching data for SUIUSDT...
+[2025-05-28 18:13:06] ✅ SUIUSDT: Best strategy → ('ema',) | PnL: 0.04 | Win rate: 0.41
+[2025-05-28 18:23:17] Fetching data for BTCUSDT...
+[2025-05-28 18:23:19] ⚠️ Strategy ema failed: 'pnl'
+[2025-05-28 18:23:19] ⚠️ Strategy rsi failed: 'pnl'
+[2025-05-28 18:23:19] ⚠️ Strategy macd failed: 'pnl'
+[2025-05-28 18:23:19] ⚠️ Strategy bollinger failed: 'pnl'
+[2025-05-28 18:23:19] Fetching data for ETHUSDT...
+[2025-05-28 18:23:20] ⚠️ Strategy ema failed: 'pnl'
+[2025-05-28 18:23:20] ⚠️ Strategy rsi failed: 'pnl'
+[2025-05-28 18:23:20] ⚠️ Strategy macd failed: 'pnl'
+[2025-05-28 18:23:20] ⚠️ Strategy bollinger failed: 'pnl'
+[2025-05-28 18:23:20] Fetching data for XRPUSDT...
+[2025-05-28 18:23:20] ⚠️ Strategy ema failed: 'pnl'
+[2025-05-28 18:23:20] ⚠️ Strategy rsi failed: 'pnl'
+[2025-05-28 18:23:20] ⚠️ Strategy macd failed: 'pnl'
+[2025-05-28 18:23:20] ⚠️ Strategy bollinger failed: 'pnl'
+[2025-05-28 18:23:20] Fetching data for BNBUSDT...
+[2025-05-28 18:23:21] ⚠️ Strategy ema failed: 'pnl'
+[2025-05-28 18:23:21] ⚠️ Strategy rsi failed: 'pnl'
+[2025-05-28 18:23:21] ⚠️ Strategy macd failed: 'pnl'
+[2025-05-28 18:23:21] ⚠️ Strategy bollinger failed: 'pnl'
+[2025-05-28 18:23:21] Fetching data for SOLUSDT...
+[2025-05-28 18:23:22] ⚠️ Strategy ema failed: 'pnl'
+[2025-05-28 18:23:22] ⚠️ Strategy rsi failed: 'pnl'
+[2025-05-28 18:23:22] ⚠️ Strategy macd failed: 'pnl'
+[2025-05-28 18:23:22] ⚠️ Strategy bollinger failed: 'pnl'
+[2025-05-28 18:23:22] Fetching data for USDCUSDT...
+[2025-05-28 18:23:22] ⚠️ Strategy ema failed: 'pnl'
+[2025-05-28 18:23:22] ⚠️ Strategy rsi failed: 'pnl'
+[2025-05-28 18:23:22] ⚠️ Strategy macd failed: 'pnl'
+[2025-05-28 18:23:22] ⚠️ Strategy bollinger failed: 'pnl'
+[2025-05-28 18:23:22] Fetching data for DOGEUSDT...
+[2025-05-28 18:23:23] ⚠️ Strategy ema failed: 'pnl'
+[2025-05-28 18:23:23] ⚠️ Strategy rsi failed: 'pnl'
+[2025-05-28 18:23:23] ⚠️ Strategy macd failed: 'pnl'
+[2025-05-28 18:23:23] ⚠️ Strategy bollinger failed: 'pnl'
+[2025-05-28 18:23:23] Fetching data for ADAUSDT...
+[2025-05-28 18:23:24] ⚠️ Strategy ema failed: 'pnl'
+[2025-05-28 18:23:24] ⚠️ Strategy rsi failed: 'pnl'
+[2025-05-28 18:23:24] ⚠️ Strategy macd failed: 'pnl'
+[2025-05-28 18:23:24] ⚠️ Strategy bollinger failed: 'pnl'
+[2025-05-28 18:23:24] Fetching data for TRXUSDT...
+[2025-05-28 18:23:25] ⚠️ Strategy ema failed: 'pnl'
+[2025-05-28 18:23:25] ⚠️ Strategy rsi failed: 'pnl'
+[2025-05-28 18:23:25] ⚠️ Strategy macd failed: 'pnl'
+[2025-05-28 18:23:25] ⚠️ Strategy bollinger failed: 'pnl'
+[2025-05-28 18:23:25] Fetching data for SUIUSDT...
+[2025-05-28 18:23:25] ⚠️ Strategy ema failed: 'pnl'
+[2025-05-28 18:23:25] ⚠️ Strategy rsi failed: 'pnl'
+[2025-05-28 18:23:25] ⚠️ Strategy macd failed: 'pnl'
+[2025-05-28 18:23:25] ⚠️ Strategy bollinger failed: 'pnl'
+[2025-05-28 18:31:11] Fetching data for BTCUSDT...
+[2025-05-28 18:31:13] ⚠️ Strategy ema failed: 'pnl'
+[2025-05-28 18:31:13] ⚠️ Strategy rsi failed: 'pnl'
+[2025-05-28 18:31:13] ⚠️ Strategy macd failed: 'pnl'
+[2025-05-28 18:31:13] ⚠️ Strategy bollinger failed: 'pnl'
+[2025-05-28 18:31:13] Fetching data for ETHUSDT...
+[2025-05-28 18:31:13] ⚠️ Strategy ema failed: 'pnl'
+[2025-05-28 18:31:13] ⚠️ Strategy rsi failed: 'pnl'
+[2025-05-28 18:31:13] ⚠️ Strategy macd failed: 'pnl'
+[2025-05-28 18:31:13] ⚠️ Strategy bollinger failed: 'pnl'
+[2025-05-28 18:31:13] Fetching data for XRPUSDT...
+[2025-05-28 18:31:13] ⚠️ Strategy ema failed: 'pnl'
+[2025-05-28 18:31:13] ⚠️ Strategy rsi failed: 'pnl'
+[2025-05-28 18:31:13] ⚠️ Strategy macd failed: 'pnl'
+[2025-05-28 18:31:13] ⚠️ Strategy bollinger failed: 'pnl'
+[2025-05-28 18:31:13] Fetching data for BNBUSDT...
+[2025-05-28 18:31:14] ⚠️ Strategy ema failed: 'pnl'
+[2025-05-28 18:31:14] ⚠️ Strategy rsi failed: 'pnl'
+[2025-05-28 18:31:14] ⚠️ Strategy macd failed: 'pnl'
+[2025-05-28 18:31:14] ⚠️ Strategy bollinger failed: 'pnl'
+[2025-05-28 18:31:14] Fetching data for SOLUSDT...
+[2025-05-28 18:31:14] ⚠️ Strategy ema failed: 'pnl'
+[2025-05-28 18:31:14] ⚠️ Strategy rsi failed: 'pnl'
+[2025-05-28 18:31:14] ⚠️ Strategy macd failed: 'pnl'
+[2025-05-28 18:31:14] ⚠️ Strategy bollinger failed: 'pnl'
+[2025-05-28 18:31:14] Fetching data for USDCUSDT...
+[2025-05-28 18:31:14] ⚠️ Strategy ema failed: 'pnl'
+[2025-05-28 18:31:14] ⚠️ Strategy rsi failed: 'pnl'
+[2025-05-28 18:31:14] ⚠️ Strategy macd failed: 'pnl'
+[2025-05-28 18:31:14] ⚠️ Strategy bollinger failed: 'pnl'
+[2025-05-28 18:31:14] Fetching data for DOGEUSDT...
+[2025-05-28 18:31:15] ⚠️ Strategy ema failed: 'pnl'
+[2025-05-28 18:31:15] ⚠️ Strategy rsi failed: 'pnl'
+[2025-05-28 18:31:15] ⚠️ Strategy macd failed: 'pnl'
+[2025-05-28 18:31:15] ⚠️ Strategy bollinger failed: 'pnl'
+[2025-05-28 18:31:15] Fetching data for ADAUSDT...
+[2025-05-28 18:31:16] ⚠️ Strategy ema failed: 'pnl'
+[2025-05-28 18:31:16] ⚠️ Strategy rsi failed: 'pnl'
+[2025-05-28 18:31:16] ⚠️ Strategy macd failed: 'pnl'
+[2025-05-28 18:31:16] ⚠️ Strategy bollinger failed: 'pnl'
+[2025-05-28 18:31:16] Fetching data for TRXUSDT...
+[2025-05-28 18:31:16] ⚠️ Strategy ema failed: 'pnl'
+[2025-05-28 18:31:16] ⚠️ Strategy rsi failed: 'pnl'
+[2025-05-28 18:31:16] ⚠️ Strategy macd failed: 'pnl'
+[2025-05-28 18:31:16] ⚠️ Strategy bollinger failed: 'pnl'
+[2025-05-28 18:31:16] Fetching data for SUIUSDT...
+[2025-05-28 18:36:26] Fetching data for BTCUSDT...
+[2025-05-28 18:36:28] ⚠️ Strategy ema failed: 'pnl'
+[2025-05-28 18:36:28] ⚠️ Strategy rsi failed: 'pnl'
+[2025-05-28 18:36:28] ⚠️ Strategy macd failed: 'pnl'
+[2025-05-28 18:36:28] ⚠️ Strategy bollinger failed: 'pnl'
+[2025-05-28 18:36:28] Fetching data for ETHUSDT...
+[2025-05-28 18:36:29] ⚠️ Strategy ema failed: 'pnl'
+[2025-05-28 18:36:29] ⚠️ Strategy rsi failed: 'pnl'
+[2025-05-28 18:36:29] ⚠️ Strategy macd failed: 'pnl'
+[2025-05-28 18:36:29] ⚠️ Strategy bollinger failed: 'pnl'
+[2025-05-28 18:36:29] Fetching data for XRPUSDT...
+[2025-05-28 18:36:29] ⚠️ Strategy ema failed: 'pnl'
+[2025-05-28 18:36:29] ⚠️ Strategy rsi failed: 'pnl'
+[2025-05-28 18:36:29] ⚠️ Strategy macd failed: 'pnl'
+[2025-05-28 18:36:29] ⚠️ Strategy bollinger failed: 'pnl'
+[2025-05-28 18:36:29] Fetching data for BNBUSDT...
+[2025-05-28 18:36:29] ⚠️ Strategy ema failed: 'pnl'
+[2025-05-28 18:36:29] ⚠️ Strategy rsi failed: 'pnl'
+[2025-05-28 18:36:29] ⚠️ Strategy macd failed: 'pnl'
+[2025-05-28 18:36:29] ⚠️ Strategy bollinger failed: 'pnl'
+[2025-05-28 18:36:29] Fetching data for SOLUSDT...
+[2025-05-28 18:36:30] ⚠️ Strategy ema failed: 'pnl'
+[2025-05-28 18:36:30] ⚠️ Strategy rsi failed: 'pnl'
+[2025-05-28 18:36:30] ⚠️ Strategy macd failed: 'pnl'
+[2025-05-28 18:36:30] ⚠️ Strategy bollinger failed: 'pnl'
+[2025-05-28 18:36:30] Fetching data for USDCUSDT...
+[2025-05-28 18:36:30] ⚠️ Strategy ema failed: 'pnl'
+[2025-05-28 18:36:30] ⚠️ Strategy rsi failed: 'pnl'
+[2025-05-28 18:36:30] ⚠️ Strategy macd failed: 'pnl'
+[2025-05-28 18:36:30] ⚠️ Strategy bollinger failed: 'pnl'
+[2025-05-28 18:36:30] Fetching data for DOGEUSDT...
+[2025-05-28 18:36:30] ⚠️ Strategy ema failed: 'pnl'
+[2025-05-28 18:36:30] ⚠️ Strategy rsi failed: 'pnl'
+[2025-05-28 18:36:30] ⚠️ Strategy macd failed: 'pnl'
+[2025-05-28 18:36:30] ⚠️ Strategy bollinger failed: 'pnl'
+[2025-05-28 18:36:30] Fetching data for ADAUSDT...
+[2025-05-28 18:36:30] ⚠️ Strategy ema failed: 'pnl'
+[2025-05-28 18:36:30] ⚠️ Strategy rsi failed: 'pnl'
+[2025-05-28 18:36:30] ⚠️ Strategy macd failed: 'pnl'
+[2025-05-28 18:36:30] ⚠️ Strategy bollinger failed: 'pnl'
+[2025-05-28 18:36:30] Fetching data for TRXUSDT...
+[2025-05-28 18:36:31] ⚠️ Strategy ema failed: 'pnl'
+[2025-05-28 18:36:31] ⚠️ Strategy rsi failed: 'pnl'
+[2025-05-28 18:36:31] ⚠️ Strategy macd failed: 'pnl'
+[2025-05-28 18:36:31] ⚠️ Strategy bollinger failed: 'pnl'
+[2025-05-28 18:36:31] Fetching data for SUIUSDT...
+[2025-05-28 18:36:31] ⚠️ Strategy ema failed: 'pnl'
+[2025-05-28 18:36:31] ⚠️ Strategy rsi failed: 'pnl'
+[2025-05-28 18:36:31] ⚠️ Strategy macd failed: 'pnl'
+[2025-05-28 18:36:31] ⚠️ Strategy bollinger failed: 'pnl'
+[2025-05-28 18:43:54] Fetching data for BTCUSDT...
+[2025-05-28 18:43:56] ✅ BTCUSDT: Best strategy → ema | PnL: -559.44 | Win rate: 0.38
+[2025-05-28 19:00:43] Fetching data for BTCUSDT...
+[2025-05-28 19:00:46] ✅ BTCUSDT: Best strategy → ema | PnL: -633.70 | Win rate: 0.35
+[2025-05-28 19:03:24] Fetching data for BTCUSDT...
+[2025-05-28 19:03:27] ✅ BTCUSDT: Best strategy → ema | PnL: -633.70 | Win rate: 0.35
+[2025-05-28 19:03:27] Fetching data for ETHUSDT...
+[2025-05-28 19:03:28] ✅ ETHUSDT: Best strategy → ema | PnL: -31.84 | Win rate: 0.22
+[2025-05-28 19:03:28] Fetching data for XRPUSDT...
+[2025-05-28 19:03:28] ✅ XRPUSDT: Best strategy → ema | PnL: -0.02 | Win rate: 0.39
+[2025-05-28 19:03:28] Fetching data for BNBUSDT...
+[2025-05-28 19:03:28] ✅ BNBUSDT: Best strategy → ema | PnL: -8.58 | Win rate: 0.17
+[2025-05-28 19:03:28] Fetching data for SOLUSDT...
+[2025-05-28 19:03:29] ✅ SOLUSDT: Best strategy → ema | PnL: -3.39 | Win rate: 0.18
+[2025-05-28 19:03:29] Fetching data for USDCUSDT...
+[2025-05-28 19:03:29] ✅ USDCUSDT: Best strategy → ema | PnL: -0.00 | Win rate: 0.17
+[2025-05-28 19:03:29] Fetching data for DOGEUSDT...
+[2025-05-28 19:03:30] ✅ DOGEUSDT: Best strategy → ema | PnL: -0.01 | Win rate: 0.28
+[2025-05-28 19:03:30] Fetching data for ADAUSDT...
+[2025-05-28 19:03:30] ✅ ADAUSDT: Best strategy → ema | PnL: -0.01 | Win rate: 0.39
+[2025-05-28 19:03:30] Fetching data for TRXUSDT...
+[2025-05-28 19:03:31] ✅ TRXUSDT: Best strategy → ema | PnL: -0.00 | Win rate: 0.39
+[2025-05-28 19:03:31] Fetching data for SUIUSDT...
+[2025-05-28 19:03:31] ✅ SUIUSDT: Best strategy → ema | PnL: 0.03 | Win rate: 0.50

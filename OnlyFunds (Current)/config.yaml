@@ -1,0 +1,22 @@
+all_strategies:
+  - ema
+  - rsi
+  - macd
+  - bollinger
+  - trend_score
+
+ml_filter: true
+ml_threshold: 0.6
+
+symbols_source: top_200_coinex
+
+timeframe: 5min
+limit: 300
+initial_capital: 10
+threshold: 0.5
+live: false
+coinex:
+  api_key: "YOUR_API_KEY"
+  api_secret: "YOUR_SECRET"
+trailing_stop_pct: 0.03
+trailing_trigger_pct: 0.02
