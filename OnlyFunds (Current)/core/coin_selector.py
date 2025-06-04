@@ -3,19 +3,18 @@ from core.data import fetch_klines, add_indicators
 from optimizer import optimize_strategies
 from core.ml_filter import MLFilter
 
-def get_available_symbols(exchange_name="binance", quote="USDT"):
-    """Get all active trading pairs for the given quote currency."""
+def get_available_symbols(exchange_name="coinex", quote="USDT"):
+    """Get all active trading pairs for the given quote currency on the specified exchange."""
     exchange_class = getattr(ccxt, exchange_name)
     exchange = exchange_class()
     markets = exchange.load_markets()
     return [s for s in markets if s.endswith(f'/{quote}') and markets[s]['active']]
 
-
 def select_top_coins(
     strategy_name=None, 
     all_strategies=None, 
     top_n=5, 
-    exchange_name="binance", 
+    exchange_name="coinex", 
     quote="USDT", 
     timeframe="5m", 
     limit=300, 
@@ -80,6 +79,40 @@ def select_top_coins(
     results.sort(key=lambda x: (x["pnl"], x["win_rate"]), reverse=True)
     return results[:top_n]
 
+def get_top_200_coinex_symbols():
+    """
+    Fetch the top 200 CoinEx spot USDT symbols, sorted by market cap if available, falling back to volume.
+    Returns: List of symbol strings (format: BTCUSDT, ETHUSDT, ...)
+    """
+    try:
+        exchange = ccxt.coinex()
+        markets = exchange.load_markets()
+        # Filter to active, spot, USDT quote pairs
+        spot_markets = [
+            m for m in markets.values()
+            if m.get('spot') and m['active'] and m['quote'] == 'USDT'
+        ]
+        # Try to sort by market cap if available
+        def get_market_cap(m):
+            market_cap = m.get('info', {}).get('market_cap')
+            try:
+                return float(market_cap) if market_cap is not None else 0
+            except Exception:
+                return 0
+        has_market_cap = any(get_market_cap(m) > 0 for m in spot_markets)
+        if has_market_cap:
+            spot_markets.sort(key=lambda x: get_market_cap(x), reverse=True)
+        else:
+            print("[WARNING] No market cap data available, falling back to sorting by volume.")
+            spot_markets.sort(key=lambda x: float(x.get('info', {}).get('volume', 0)), reverse=True)
+        top_symbols = [m["symbol"].replace('/', '') for m in spot_markets[:200]]
+        if not top_symbols or len(top_symbols) < 2:
+            raise Exception("Not enough symbols returned from CoinEx")
+        return top_symbols
+    except Exception as e:
+        print(f"[ERROR] Failed to fetch CoinEx top 200 symbols by market cap: {e}")
+        # Fallback to safe default
+        return ["BTCUSDT", "ETHUSDT"]
 
 if __name__ == "__main__":
     # Example usage: Select top 3 coins for the "ema" strategy with ML filter enabled
@@ -90,16 +123,3 @@ if __name__ == "__main__":
     )
     for c in top_coins:
         print(f"{c['symbol']}: PnL={c['pnl']:.2f} | WinRate={c['win_rate']:.2%} | Strategies={c['strategies']}")
-
-
-def get_top_200_coinex_symbols():
-    """
-    Fetch the top 200 CoinEx spot symbols, sorted by volume.
-    Returns: List of symbol strings.
-    """
-    import ccxt
-    exchange = ccxt.coinex()
-    markets = exchange.load_markets()
-    spot_markets = [m for m in markets.values() if m.get('spot') and m['active']]
-    spot_markets.sort(key=lambda x: float(x.get('info', {}).get('volume', 0)), reverse=True)
-    return [m["symbol"] for m in spot_markets[:200]]

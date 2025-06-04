@@ -10,62 +10,79 @@ st.sidebar.header("Settings")
 
 default_config = "config.yaml"
 config_path = st.sidebar.text_input("Config file path", value=default_config)
-mode = st.sidebar.selectbox("Mode", ["live", "dry_run", "backtest"])
 
-# Advanced date controls for backtest only if the user wants
-show_advanced = st.sidebar.checkbox("Advanced Options", value=False)
-
-# Auto-select backtest dates unless advanced options are enabled
-if mode == "backtest" and show_advanced:
-    start_date = st.sidebar.date_input(
-        "Backtest start date", value=datetime.now() - timedelta(days=90)
-    )
-    end_date = st.sidebar.date_input(
-        "Backtest end date", value=datetime.now()
-    )
-elif mode == "backtest":
-    start_date = datetime.now() - timedelta(days=90)
-    end_date = datetime.now()
-else:
-    start_date = end_date = None
-
-# Helper: (Re)load orchestrator
+# (Re)load orchestrator and config
 def load_orch():
     return get_orchestrator(config_path=config_path)
 
 if "orch" not in st.session_state or st.sidebar.button("Reload Config / Orchestrator"):
     st.session_state["orch"] = load_orch()
+    st.session_state["config"] = st.session_state["orch"].config
+    st.session_state["last_backtest"] = None
 
 orch = st.session_state["orch"]
+config = st.session_state["config"]
 
-# Main actions
+# --- Strategy and risk profile selector ---
+strategy = st.sidebar.selectbox(
+    "Strategy",
+    options=config["all_strategies"],
+    index=config["all_strategies"].index(config.get("strategy", config["all_strategies"][0]))
+)
+risk_profile = st.sidebar.selectbox(
+    "Risk Profile",
+    options=["conservative", "normal", "aggressive"],
+    index=["conservative", "normal", "aggressive"].index(config.get("risk_profile", "normal"))
+)
+
+# Update config in orchestrator if user changes selection
+config["strategy"] = strategy
+config["risk_profile"] = risk_profile
+orch.config = config
+
+# --- Main actions: run or backtest ---
+mode = st.sidebar.selectbox("Mode", ["live", "dry_run", "backtest"], index=["live", "dry_run", "backtest"].index(config.get("mode", "dry_run")))
+
 if mode in ["live", "dry_run"]:
     if st.button("Start Trading Bot", type="primary"):
         try:
-            st.info(f"Starting {mode} trading bot...")
+            st.info(f"Starting {mode} trading bot with strategy: {strategy}, risk: {risk_profile}")
             orch.run(mode=mode)
             st.success("Trading bot started successfully!")
         except Exception as e:
             st.error(f"Failed to start trading bot: {e}")
 
-elif mode == "backtest":
-    if st.button("Run Backtest", type="primary"):
-        try:
-            st.info(f"Running backtest from {start_date.date()} to {end_date.date()}...")
-            result_df = orch.run(
-                mode="backtest",
-                start_date=str(start_date.date()),
-                end_date=str(end_date.date())
-            )
-            if result_df is not None and not result_df.empty:
-                st.success("Backtest complete!")
-                st.dataframe(result_df)
-            else:
-                st.warning("No results from backtest.")
-        except Exception as e:
-            st.error(f"Failed to run backtest: {e}")
+# --- Automatic backtest: run automatically when config/orchestrator is loaded or config changes ---
+def auto_backtest():
+    try:
+        st.info("Running automatic backtest on all available data...")
+        # Use last 90 days by default
+        start_date = (datetime.now() - timedelta(days=90)).date()
+        end_date = datetime.now().date()
+        result_df = orch.run(
+            mode="backtest",
+            start_date=str(start_date),
+            end_date=str(end_date)
+        )
+        st.session_state["last_backtest"] = result_df
+        return result_df
+    except Exception as e:
+        st.error(f"Automatic backtest failed: {e}")
+        return None
 
-# Show logs (if any)
+if mode == "backtest":
+    # Automatically run backtest ONCE per config/orchestrator load, not on every rerun
+    if st.session_state.get("last_backtest") is None:
+        result_df = auto_backtest()
+    else:
+        result_df = st.session_state["last_backtest"]
+    if result_df is not None and not result_df.empty:
+        st.success("Backtest complete!")
+        st.dataframe(result_df)
+    elif result_df is not None:
+        st.warning("No results from backtest.")
+
+# --- Show logs ---
 st.subheader("Logs")
 try:
     with open("logs/latest.log", "r") as f:
