@@ -1,58 +1,62 @@
 import streamlit as st
 from datetime import datetime
-from core import order_manager
-from core.config import load_config
-from core.orchestrator import TradingOrchestrator
+from core.orchestrator import get_orchestrator
 
 st.set_page_config(page_title="OnlyFunds", layout="wide")
 st.title("📈 OnlyFunds Trading Dashboard")
 
-# --- UI: Risk Profile and Mode Selection ---
-config = load_config("config.yaml")
-profile = st.radio("Select Risk Profile", options=["conservative", "normal", "aggressive"], index=["conservative", "normal", "aggressive"].index(config.get("risk", "normal")))
-mode = st.radio("Select Run Mode", options=["dry_run", "live"], index=0 if config.get("mode", "dry_run") == "dry_run" else 1)
+# Sidebar: Config & Mode
+st.sidebar.header("Settings")
 
-# --- Controls (Orchestrator) ---
-col1, col2, col3 = st.columns(3)
-orchestrator = TradingOrchestrator()
+default_config = "config.yaml"
+config_path = st.sidebar.text_input("Config file path", value=default_config)
+mode = st.sidebar.selectbox("Mode", ["live", "dry_run", "backtest"])
 
-if col1.button("▶️ Start Orchestrator"):
-    # Set config profile & mode
-    config["risk"] = profile
-    config["mode"] = mode
-    # Save updated config for orchestrator
-    import yaml
-    with open("config.yaml", "w") as f:
-        yaml.dump(config, f)
-    # Run orchestrator for one full cycle (dry_run or live)
-    st.info(f"Orchestrator running in {mode.upper()} mode — Risk Profile: {profile}")
-    orchestrator.orchestrate(profile=profile, retrain=True, schedule=False)
-    st.success("✅ Orchestrator run completed.")
+# Backtest date selection
+start_date = st.sidebar.date_input("Backtest start date", value=datetime(2024, 1, 1))
+end_date = st.sidebar.date_input("Backtest end date", value=datetime.now())
 
-if col2.button("📤 Export Orders to CSV"):
-    orders = order_manager.load_orders()
-    if orders:
-        import pandas as pd
-        df = pd.DataFrame(orders)
-        df.to_csv("orders_exported.csv", index=False)
-        st.success("✅ Orders exported to orders_exported.csv")
-    else:
-        st.warning("⚠️ No orders to export.")
+# Helper: (Re)load orchestrator
+def load_orch():
+    return get_orchestrator(config_path=config_path)
 
-if col3.button("❌ Close All Open Positions"):
-    order_manager.close_all_open_orders()
-    st.warning("⚠️ All open positions closed (simulated in dry_run).")
+if "orch" not in st.session_state or st.sidebar.button("Reload Config / Orchestrator"):
+    st.session_state["orch"] = load_orch()
 
-# --- Show Orders ---
-st.subheader("🔎 Recent Orders")
-orders = order_manager.load_orders()
-if orders:
-    st.dataframe(orders)
-else:
-    st.info("ℹ️ No orders to display.")
+orch = st.session_state["orch"]
 
-# --- Orchestrator Metrics Display (optional) ---
-if getattr(orchestrator, "metrics", None):
-    st.subheader("🧪 Recent Orchestrator Backtest Results")
-    import pandas as pd
-    st.dataframe(pd.DataFrame(orchestrator.metrics))
+# Main actions
+if mode in ["live", "dry_run"]:
+    if st.button("Start Trading Bot", type="primary"):
+        try:
+            st.info(f"Starting {mode} trading bot...")
+            orch.run(mode=mode)
+            st.success("Trading bot started successfully!")
+        except Exception as e:
+            st.error(f"Failed to start trading bot: {e}")
+
+elif mode == "backtest":
+    if st.button("Run Backtest", type="primary"):
+        try:
+            st.info(f"Running backtest from {start_date} to {end_date}...")
+            result_df = orch.run(
+                mode="backtest",
+                start_date=str(start_date),
+                end_date=str(end_date)
+            )
+            if result_df is not None and not result_df.empty:
+                st.success("Backtest complete!")
+                st.dataframe(result_df)
+            else:
+                st.warning("No results from backtest.")
+        except Exception as e:
+            st.error(f"Failed to run backtest: {e}")
+
+# Show logs (if any)
+st.subheader("Logs")
+try:
+    with open("logs/latest.log", "r") as f:
+        logs = f.read()
+    st.text_area("Latest Logs", logs, height=200)
+except Exception:
+    st.info("No logs yet. Run a trading bot or backtest to see logs.")
