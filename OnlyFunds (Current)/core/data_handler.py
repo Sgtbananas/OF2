@@ -1,40 +1,35 @@
-# core/data_handler.py
 import ccxt
 import pandas as pd
-from datetime import datetime
 
-def fetch_ohlcv(symbol, timeframe="5m", limit=100):
+def fetch_ohlcv(symbol, timeframe="5m", limit=300, exchange=None):
     """
     Fetch historical OHLCV data for a given symbol using ccxt.
-    
-    Args:
-        symbol (str): Trading pair symbol (e.g., "BTC/USDT").
-        timeframe (str): Candlestick interval.
-        limit (int): Number of data points to retrieve.
-    
-    Returns:
-        pd.DataFrame: DataFrame with timestamp index and OHLCV columns.
+    Returns: pd.DataFrame with timestamp index and OHLCV columns.
     """
-    # Initialize exchange with proper rate limit
-    exchange = ccxt.coinex({
-        'rateLimit': 1200,
-        'enableRateLimit': True,
-    })
-    
-    # Load markets to ensure symbol exists
-    exchange.load_markets()
-    
-    # Fetch OHLCV data
+    # Accepts optional ccxt exchange instance (for reuse)
+    if exchange is None:
+        exchange = ccxt.coinex({
+            'rateLimit': 1200,
+            'enableRateLimit': True,
+        })
+    # Ensure market is loaded
+    if not hasattr(exchange, "markets") or not exchange.markets:
+        exchange.load_markets()
+    # ccxt expects 'BTC/USDT' format
     ohlcv = exchange.fetch_ohlcv(symbol, timeframe=timeframe, limit=limit)
-    
-    # Format data into DataFrame
     df = pd.DataFrame(ohlcv, columns=["timestamp", "open", "high", "low", "close", "volume"])
     df["timestamp"] = pd.to_datetime(df["timestamp"], unit="ms")
     df.set_index("timestamp", inplace=True)
-    
     return df
 
-if __name__ == "__main__":
-    # Quick test for functionality
-    df = fetch_ohlcv("BTC/USDT", "1h", 100)
-    print(df.tail())
+def fetch_all_symbols_by_volume(exchange=None, top_n=200):
+    """
+    Fetches all active CoinEx spot symbols, sorted by 24h volume (descending).
+    Returns: List of symbol strings.
+    """
+    if exchange is None:
+        exchange = ccxt.coinex()
+    markets = exchange.load_markets()
+    spot_markets = [m for m in markets.values() if m.get('spot') and m['active']]
+    spot_markets.sort(key=lambda x: float(x.get('info', {}).get('volume', 0)), reverse=True)
+    return [m["symbol"] for m in spot_markets[:top_n]]
