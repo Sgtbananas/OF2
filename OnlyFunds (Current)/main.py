@@ -2,25 +2,33 @@ import streamlit as st
 from datetime import datetime
 from core import order_manager
 from core.config import load_config
-from core.engine import run_bot
+from core.orchestrator import TradingOrchestrator
 
-# Set up Streamlit page
 st.set_page_config(page_title="OnlyFunds", layout="wide")
 st.title("📈 OnlyFunds Trading Dashboard")
 
-# Load configuration
+# --- UI: Risk Profile and Mode Selection ---
 config = load_config("config.yaml")
+profile = st.radio("Select Risk Profile", options=["conservative", "normal", "aggressive"], index=["conservative", "normal", "aggressive"].index(config.get("risk", "normal")))
+mode = st.radio("Select Run Mode", options=["dry_run", "live"], index=0 if config.get("mode", "dry_run") == "dry_run" else 1)
 
-# Main controls
-col1, col2, col3, col4 = st.columns(4)
+# --- Controls (Orchestrator) ---
+col1, col2, col3 = st.columns(3)
+orchestrator = TradingOrchestrator()
 
-# Run Strategy
-if col1.button("▶️ Run Strategy"):
-    st.info(f"Running strategy in {config.get('mode', 'dry_run').upper()} mode — Risk Profile: {config.get('risk', 'normal')}")
-    run_bot(config)
-    st.success("✅ Strategy run completed.")
+if col1.button("▶️ Start Orchestrator"):
+    # Set config profile & mode
+    config["risk"] = profile
+    config["mode"] = mode
+    # Save updated config for orchestrator
+    import yaml
+    with open("config.yaml", "w") as f:
+        yaml.dump(config, f)
+    # Run orchestrator for one full cycle (dry_run or live)
+    st.info(f"Orchestrator running in {mode.upper()} mode — Risk Profile: {profile}")
+    orchestrator.orchestrate(profile=profile, retrain=True, schedule=False)
+    st.success("✅ Orchestrator run completed.")
 
-# Export Orders to CSV
 if col2.button("📤 Export Orders to CSV"):
     orders = order_manager.load_orders()
     if orders:
@@ -31,19 +39,20 @@ if col2.button("📤 Export Orders to CSV"):
     else:
         st.warning("⚠️ No orders to export.")
 
-# Close All Open Positions (Live)
 if col3.button("❌ Close All Open Positions"):
     order_manager.close_all_open_orders()
     st.warning("⚠️ All open positions closed (simulated in dry_run).")
 
-# Stop Live Trading
-if col4.button("🛑 STOP Live Trading"):
-    st.warning("⚠️ Live trading stopped (simulated in dry_run).")
-
-# Show Orders
+# --- Show Orders ---
 st.subheader("🔎 Recent Orders")
 orders = order_manager.load_orders()
 if orders:
     st.dataframe(orders)
 else:
     st.info("ℹ️ No orders to display.")
+
+# --- Orchestrator Metrics Display (optional) ---
+if getattr(orchestrator, "metrics", None):
+    st.subheader("🧪 Recent Orchestrator Backtest Results")
+    import pandas as pd
+    st.dataframe(pd.DataFrame(orchestrator.metrics))
