@@ -1,5 +1,5 @@
 import streamlit as st
-from datetime import datetime
+from datetime import datetime, timedelta
 from core.orchestrator import get_orchestrator
 
 st.set_page_config(page_title="OnlyFunds", layout="wide")
@@ -12,9 +12,22 @@ default_config = "config.yaml"
 config_path = st.sidebar.text_input("Config file path", value=default_config)
 mode = st.sidebar.selectbox("Mode", ["live", "dry_run", "backtest"])
 
-# Backtest date selection
-start_date = st.sidebar.date_input("Backtest start date", value=datetime(2024, 1, 1))
-end_date = st.sidebar.date_input("Backtest end date", value=datetime.now())
+# Advanced date controls for backtest only if the user wants
+show_advanced = st.sidebar.checkbox("Advanced Options", value=False)
+
+# Auto-select backtest dates unless advanced options are enabled
+if mode == "backtest" and show_advanced:
+    start_date = st.sidebar.date_input(
+        "Backtest start date", value=datetime.now() - timedelta(days=90)
+    )
+    end_date = st.sidebar.date_input(
+        "Backtest end date", value=datetime.now()
+    )
+elif mode == "backtest":
+    start_date = datetime.now() - timedelta(days=90)
+    end_date = datetime.now()
+else:
+    start_date = end_date = None
 
 # Helper: (Re)load orchestrator
 def load_orch():
@@ -38,11 +51,11 @@ if mode in ["live", "dry_run"]:
 elif mode == "backtest":
     if st.button("Run Backtest", type="primary"):
         try:
-            st.info(f"Running backtest from {start_date} to {end_date}...")
+            st.info(f"Running backtest from {start_date.date()} to {end_date.date()}...")
             result_df = orch.run(
                 mode="backtest",
-                start_date=str(start_date),
-                end_date=str(end_date)
+                start_date=str(start_date.date()),
+                end_date=str(end_date.date())
             )
             if result_df is not None and not result_df.empty:
                 st.success("Backtest complete!")
