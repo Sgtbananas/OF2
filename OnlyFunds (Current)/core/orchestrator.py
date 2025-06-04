@@ -1,187 +1,166 @@
-import numpy as np
-import pandas as pd
-import time
 import logging
+import pandas as pd
+from typing import Optional, Dict, Any, List, Union
 from core.config import load_config
-from core.engine import run_bot, backtest_bot
+from core.engine import run_bot
 from core.ml_filter import MLFilter
 from core.coin_selector import get_top_200_coinex_symbols
 from core.risk_manager import adjust_risk_based_on_profile
-import os
-
-# --- Logging Setup ---
-LOG_FORMAT = "%(asctime)s [%(levelname)s] %(name)s: %(message)s"
-logging.basicConfig(
-    level=logging.INFO,
-    format=LOG_FORMAT,
-    handlers=[
-        logging.FileHandler("orchestrator.log"),
-        logging.StreamHandler()
-    ]
-)
+from core.logger import log_message, log_error
+from core.backtester import simulate_trades
 
 class TradingOrchestrator:
     """
-    Orchestrates backtesting, ML training, model selection, and live deployment
-    based on a user-selected risk profile (conservative, normal, aggressive).
-    User only needs to choose risk profile; orchestrator does all else.
+    Orchestrates trading and backtesting operations using configuration, 
+    ML filtering, coin selection, and risk management.
     """
 
-    def __init__(self, config_path="OnlyFunds (Current)/config.yaml"):
-        self.logger = logging.getLogger(self.__class__.__name__)
-        self.config_path = config_path
-        self.config = load_config(config_path)
-        self.available_profiles = ["conservative", "normal", "aggressive"]
-        self.available_models = ["none", "logistic_regression", "random_forest"]
-        self.ml_thresholds = {
-            "conservative": 0.7,
-            "normal": 0.6,
-            "aggressive": 0.5
-        }
-        self.metrics = {}  # Holds backtest results
+    def __init__(self, config_path: Optional[str] = None, config: Optional[Dict[str, Any]] = None):
+        """
+        Initializes the orchestrator with configuration.
+        """
+        if config is not None:
+            self.config = config
+            log_message("Config provided directly to orchestrator.")
+        else:
+            self.config = load_config(config_path)
+            log_message(f"Config loaded from {config_path or 'default location'}.")
 
-    def select_profile(self, profile=None):
-        """
-        Set risk profile. If none provided, use config or prompt.
-        """
-        if profile is None:
-            profile = self.config.get("risk", "normal")
-        if profile not in self.available_profiles:
-            self.logger.error(f"Profile must be one of {self.available_profiles}")
-            raise ValueError(f"Profile must be one of {self.available_profiles}")
-        self.config["risk"] = profile
-        self.logger.info(f"Risk profile set to: {profile}")
+        self.ml_filter: Optional[MLFilter] = None
+        self.selected_coins: List[str] = []
+        self._init_ml_filter()
 
-    def orchestrate(self, profile=None, retrain=True, schedule=False):
+    def _init_ml_filter(self):
+        """Initialize ML filter if enabled in config."""
+        ml_cfg = self.config.get("ml_filter", {})
+        if ml_cfg.get("enabled", False):
+            try:
+                self.ml_filter = MLFilter(model_path=ml_cfg.get("model_path", "ml_filter_model.pkl"))
+                log_message("ML filter initialized.")
+            except Exception as e:
+                log_error(f"Failed to initialize ML filter: {e}")
+                self.ml_filter = None
+
+    def select_coins(self):
+        """Selects coins to trade based on exchange and config."""
+        try:
+            if self.config.get("exchange", "coinex").lower() == "coinex":
+                self.selected_coins = get_top_200_coinex_symbols()
+                log_message(f"Selected top {len(self.selected_coins)} CoinEx symbols.")
+            else:
+                self.selected_coins = self.config.get("symbols", [])
+                log_message(f"Loaded symbols from config: {self.selected_coins}")
+        except Exception as e:
+            log_error(f"Error during coin selection: {e}")
+            self.selected_coins = []
+
+    def run_trading(self):
+        """Run the live or dry-run trading bot."""
+        try:
+            strategy = self.config.get("strategy")
+            exchange = self.config.get("exchange")
+            timeframe = self.config.get("timeframe", "5m")
+            capital = self.config.get("capital", 1000)
+            risk_profile = self.config.get("risk_profile", "medium")
+
+            if not self.selected_coins:
+                self.select_coins()
+
+            adjust_risk_based_on_profile(self.config, risk_profile)
+            log_message(f"Running bot for {len(self.selected_coins)} symbols on {exchange} ({timeframe}).")
+
+            run_bot(
+                strategy=strategy,
+                symbols=self.selected_coins,
+                exchange=exchange,
+                timeframe=timeframe,
+                capital=capital,
+                config=self.config,
+                ml_filter=self.ml_filter
+            )
+        except Exception as e:
+            log_error(f"Error running trading bot: {e}")
+            raise
+
+    def backtest(self, start_date: str, end_date: str) -> pd.DataFrame:
         """
-        Main orchestration routine:
-        1. Sets profile.
-        2. Runs candidate pipelines (with/without ML, different models).
-        3. Selects best pipeline based on backtest PnL and winrate.
-        4. Deploys the optimal pipeline for live trading (or dry_run).
+        Run a backtest across selected coins.
 
         Args:
-            profile (str): "conservative", "normal", "aggressive"
-            retrain (bool): Retrain ML models
-            schedule (bool): If True, rerun orchestration every hour.
-        """
-        self.select_profile(profile)
-        while True:
-            best = self._run_and_select_best_pipeline(retrain=retrain)
-            self._deploy(best)
-            if schedule:
-                self.logger.info("Sleeping 1 hour before next orchestration...")
-                time.sleep(3600)
-            else:
-                break
+            start_date: ISO8601 date, e.g. '2024-01-01'
+            end_date: ISO8601 date, e.g. '2024-05-31'
 
-    def _run_and_select_best_pipeline(self, retrain=True):
+        Returns:
+            DataFrame with backtest results.
         """
-        For each ML setting (none, logistic regression, random forest), perform backtest.
-        Store results and select the best by PnL and winrate.
-        """
-        results = []
-        for model_type in self.available_models:
-            self.logger.info(f"Backtesting with model: {model_type}")
-            config = self.config.copy()
-            # Set up ML filter
-            if model_type == "none":
-                config["ml_filter"] = False
-                ml_filter = None
-            else:
-                config["ml_filter"] = True
-                config["ml_filter_type"] = model_type
-                config["ml_threshold"] = self.ml_thresholds[config["risk"]]
-                ml_filter = MLFilter(model_type=model_type)
-                if retrain:
-                    X_train, y_train = self._prepare_ml_data(config)
-                    if len(X_train) > 0:
-                        ml_filter.train(np.array(X_train), np.array(y_train))
-                        self.logger.info(f"Trained {model_type} ML model with {len(X_train)} samples.")
-                    else:
-                        self.logger.warning("Not enough training data for ML filter; skipping training.")
-            # Backtest pipeline
-            bt_result = backtest_bot(config, ml_filter=ml_filter)
-            self.logger.info(f"Model: {model_type} | PnL: {bt_result['total_pnl']:.4f} | Winrate: {bt_result['winrate']:.2%}")
-            results.append({
-                "model": model_type,
-                "pnl": bt_result["total_pnl"],
-                "winrate": bt_result["winrate"],
-                "config": config,
-                "ml_filter": ml_filter
-            })
-        # Select winner (highest PnL, then winrate)
-        results.sort(key=lambda x: (x["pnl"], x["winrate"]), reverse=True)
-        best = results[0]
-        self.logger.info(f"Selected best pipeline: {best['model']} (PnL: {best['pnl']:.4f}, Winrate: {best['winrate']:.2%})")
-        self.metrics = results
-        return best
-
-    def _prepare_ml_data(self, config):
-        """
-        Extracts features & labels from backtest for ML training.
-        Uses backtest pipeline to simulate trades and generate labels.
-        """
-        config_ = config.copy()
-        config_["ml_filter"] = False
-        symbols = config_.get("symbols", get_top_200_coinex_symbols())
-        X, y = [], []
-        for symbol in symbols:
-            df = self._fetch_historical_data(symbol, config_)
-            if df is None or len(df) < 40:
-                self.logger.warning(f"Skipping {symbol} - insufficient data.")
-                continue
-            for i in range(30, len(df)-1):
-                feats = MLFilter.extract_features(df, i)
-                pnl = df["Close"].iloc[i+1] - df["Close"].iloc[i]
-                y.append(int(pnl > 0))
-                X.append(feats)
-        self.logger.info(f"ML data prepared: {len(X)} samples.")
-        return X, y
-
-    def _fetch_historical_data(self, symbol, config):
-        """
-        Robustly fetch OHLCV data for a given symbol.
-        Priority:
-        1. Local CSV at data/{symbol}_{timeframe}.csv
-        2. (Optional) API or database fetch (placeholder, easily patched in)
-        Ensures DataFrame contains 'Close' and 'Volume' columns.
-        Returns None if data is missing or invalid.
-        """
-        import pandas as pd
-
-        timeframe = config.get("timeframe", "5min")
-        safe_symbol = symbol.replace("/", "_").replace("-", "_")
-        fname = f"data/{safe_symbol}_{timeframe}.csv"
         try:
-            if os.path.exists(fname):
-                df = pd.read_csv(fname)
-                df_cols = [col.lower() for col in df.columns]
-                colmap = {}
-                for req in ["close", "volume"]:
-                    matches = [c for c in df.columns if c.lower() == req]
-                    if matches:
-                        colmap[matches[0]] = req.capitalize()
-                df = df.rename(columns=colmap)
-                if "Close" not in df.columns or "Volume" not in df.columns:
-                    self.logger.warning(f"{fname} missing required columns. Found: {df.columns}")
-                    return None
-                df = df.dropna(subset=["Close", "Volume"])
-                if len(df) < 50:
-                    self.logger.warning(f"{fname} has too few rows ({len(df)}).")
-                    return None
-                return df
-            else:
-                self.logger.warning(f"No local CSV for {symbol} ({fname}).")
-                # (Optional) Insert API/database fetch here
-                return None
-        except Exception as e:
-            self.logger.error(f"Error fetching data for {symbol}: {e}")
-            return None
+            strategy = self.config.get("strategy")
+            exchange = self.config.get("exchange")
+            timeframe = self.config.get("timeframe", "5m")
+            capital = self.config.get("capital", 1000)
+            risk_profile = self.config.get("risk_profile", "medium")
 
-    def _deploy(self, best_pipeline):
+            if not self.selected_coins:
+                self.select_coins()
+
+            adjust_risk_based_on_profile(self.config, risk_profile)
+            log_message(f"Backtesting {strategy} on {len(self.selected_coins)} symbols [{start_date} to {end_date}]")
+
+            results = []
+            for symbol in self.selected_coins:
+                try:
+                    df = simulate_trades(
+                        symbol=symbol,
+                        strategy_name=strategy,
+                        exchange_name=exchange,
+                        start_date=start_date,
+                        end_date=end_date,
+                        timeframe=timeframe,
+                        capital=capital,
+                        config=self.config,
+                        ml_filter=self.ml_filter
+                    )
+                    if df is not None:
+                        results.append(df)
+                except Exception as symbol_e:
+                    log_error(f"Backtest failed for {symbol}: {symbol_e}")
+
+            if results:
+                full = pd.concat(results, ignore_index=True)
+                log_message(f"Backtest complete for {len(self.selected_coins)} symbols.")
+                return full
+            else:
+                log_message("No results from backtest.")
+                return pd.DataFrame()
+        except Exception as e:
+            log_error(f"Error during backtesting: {e}")
+            return pd.DataFrame()
+
+    def run(self, mode: str = "live", **kwargs):
         """
-        Deploys the selected pipeline for live or dry_run trading.
+        Entrypoint for orchestrator.
+
+        Args:
+            mode: 'live', 'dry_run', or 'backtest'
+            kwargs: Additional arguments for backtesting (start_date, end_date)
         """
-        self.logger.info(f"Deploying pipeline: {best_pipeline['model']} | Risk: {best_pipeline['config']['risk']}")
-        run_bot(best_pipeline["config"], ml_filter=best_pipeline["ml_filter"])
+        log_message(f"Orchestrator run mode: {mode}")
+        if mode in {"live", "dry_run"}:
+            self.run_trading()
+        elif mode == "backtest":
+            start_date = kwargs.get("start_date")
+            end_date = kwargs.get("end_date")
+            if not start_date or not end_date:
+                raise ValueError("start_date and end_date must be supplied for backtest mode.")
+            return self.backtest(start_date, end_date)
+        else:
+            raise ValueError(f"Unknown mode: {mode}")
+
+# Optional: global factory for integration
+_orch_instance: Optional[TradingOrchestrator] = None
+
+def get_orchestrator(config_path: Optional[str] = None, config: Optional[Dict[str, Any]] = None) -> TradingOrchestrator:
+    global _orch_instance
+    if _orch_instance is None:
+        _orch_instance = TradingOrchestrator(config_path=config_path, config=config)
+    return _orch_instance
