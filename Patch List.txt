@@ -1,0 +1,35 @@
+🛠️ Patch List (To-Do/Upgrades, Docker Last)
+1. Patch historical data fetching in orchestrator
+Implement reliable, robust historical data loading in orchestrator.py:_fetch_historical_data.
+Integrate with your actual data provider or database.
+2. Add or patch MLFilter feature extraction unit tests
+Create/expand tests for MLFilter.extract_features to ensure all columns, edge cases, and data types are handled correctly.
+3. Patch Streamlit UI to integrate orchestrator and profile selection
+User should only select profile (“conservative”, “normal”, “aggressive”).
+Add dedicated buttons for “Dry Run” and “Live Run”.
+The orchestrator handles all pipeline/model logic based on those settings.
+4. Add logging to all major modules
+Especially for orchestrator, MLFilter, trading engine.
+Log key events (start/stop, errors, model choice, wins/losses, retrains, PnL).
+5. Patch/extend CLI scripts for orchestrator
+Add helpful commands for running, status, and error handling.
+6. Patch requirements.txt/pyproject.toml
+Ensure all dependencies are listed and versions pinned.
+7. Add unit/integration tests for orchestrator and ML pipeline
+Simulate backtest, retrain, deploy cycle.
+Validate correct selection and retraining logic.
+8. Patch README/documentation
+Add orchestration, ML, retraining, and deployment instructions.
+🔄 Automated Retraining Patch
+Add a scheduler (e.g., background thread or cron) to the orchestrator to:
+Periodically retrain the ML model (e.g., every N hours or after M new trades).
+Re-run backtests and pipeline selection after retraining.
+Log and notify when retraining happens.
+🖱️ Streamlit UI Improvement Patch
+Integrate new buttons into the UI:
+“Dry Run” → Set mode to dry_run, run orchestrator.
+“Live Run” → Set mode to live, run orchestrator.
+Profile selection → Dropdown or radio, passed to orchestrator.
+Display current mode, profile, and latest PnL/winrate.
+What to Patch Next?
+Let me know which patch you want to start with (historical data, MLFilter tests, Streamlit UI, logging, CLI, requirements, tests, README, or automated retraining), and I’ll generate a precise, production-ready patch for you!
