@@ -83,7 +83,7 @@ def get_top_200_coinex_symbols():
 
     Returns: List of symbol strings (format: BTCUSDT, ETHUSDT, ...)
     """
-    url = "https://api.coinex.com/v2/spot/market/list-market"
+    url = "https://api.coinex.com/v1/market/list"
     fallback_symbols = ["BTCUSDT", "ETHUSDT"]
 
     try:
