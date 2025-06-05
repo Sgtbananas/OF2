@@ -92,22 +92,32 @@ def get_top_200_coinex_symbols():
             m for m in markets.values()
             if m.get('spot') and m['active'] and m['quote'] == 'USDT'
         ]
+        print(f"[DEBUG] Found {len(spot_markets)} active USDT spot pairs on CoinEx.")
+        if spot_markets:
+            print(f"[DEBUG] Example symbol: {spot_markets[0]['symbol']}")
+
         # Try to sort by market cap if available
         def get_market_cap(m):
             market_cap = m.get('info', {}).get('market_cap')
             try:
-                return float(market_cap) if market_cap is not None else 0
+                return float(market_cap) if market_cap not in [None, ""] else 0
             except Exception:
                 return 0
+
         has_market_cap = any(get_market_cap(m) > 0 for m in spot_markets)
         if has_market_cap:
             spot_markets.sort(key=lambda x: get_market_cap(x), reverse=True)
+            print("[INFO] Sorted CoinEx pairs by market cap.")
         else:
             print("[WARNING] No market cap data available, falling back to sorting by volume.")
             spot_markets.sort(key=lambda x: float(x.get('info', {}).get('volume', 0)), reverse=True)
+            print("[INFO] Sorted CoinEx pairs by 24h volume.")
+
         top_symbols = [m["symbol"].replace('/', '') for m in spot_markets[:200]]
         if not top_symbols or len(top_symbols) < 2:
+            print(f"[ERROR] Not enough symbols returned from CoinEx: {len(top_symbols)}")
             raise Exception("Not enough symbols returned from CoinEx")
+        print(f"[DEBUG] Returning {len(top_symbols)} symbols.")
         return top_symbols
     except Exception as e:
         print(f"[ERROR] Failed to fetch CoinEx top 200 symbols by market cap: {e}")

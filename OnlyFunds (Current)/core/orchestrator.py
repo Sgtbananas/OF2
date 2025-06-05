@@ -33,7 +33,13 @@ class TradingOrchestrator:
     def _init_ml_filter(self):
         """Initialize ML filter if enabled in config."""
         ml_cfg = self.config.get("ml_filter", {})
-        if ml_cfg.get("enabled", False):
+        # Handle legacy case where ml_filter is a bool instead of a dict
+        if isinstance(ml_cfg, bool):
+            enabled = ml_cfg
+            ml_cfg = {}
+        else:
+            enabled = ml_cfg.get("enabled", False)
+        if enabled:
             try:
                 self.ml_filter = MLFilter(model_path=ml_cfg.get("model_path", "ml_filter_model.pkl"))
                 log_message("ML filter initialized.")
