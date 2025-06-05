@@ -55,7 +55,6 @@ class TradingOrchestrator:
         Automatically selects the best-performing strategy using ML/optimizer.
         Returns: strategy name (str)
         """
-        # Candidate strategies can be expanded or loaded from config/etc
         candidate_strategies = self.config.get("all_strategies", ["ema", "rsi", "macd", "sma", "bbands"])
         results = select_top_coins(
             all_strategies=candidate_strategies,
@@ -98,6 +97,9 @@ class TradingOrchestrator:
         try:
             if not self.selected_coins:
                 self.select_coins()
+            if not self.selected_coins:  # Fallback safety
+                log_error("No tradable symbols available. Please check your exchange connectivity or configuration.")
+                raise RuntimeError("No tradable symbols available.")
 
             # AI/ML strategy selection if not already set
             strategy = self.config.get("strategy")
@@ -110,7 +112,9 @@ class TradingOrchestrator:
             capital = self.config.get("capital", 1000)
             risk_profile = self.config.get("risk_profile", "medium")
 
-            adjust_risk_based_on_profile(self.config, risk_profile)
+            self.config["risk_profile"] = risk_profile
+            adjust_risk_based_on_profile(self.config)
+
             log_message(f"Running bot for {len(self.selected_coins)} symbols on {exchange} ({timeframe}) with strategy '{strategy}'.")
 
             run_bot(
@@ -138,6 +142,9 @@ class TradingOrchestrator:
         try:
             if not self.selected_coins:
                 self.select_coins()
+            if not self.selected_coins:
+                log_error("No tradable symbols available for backtest. Please check your exchange connectivity or configuration.")
+                return pd.DataFrame()
 
             # AI/ML strategy selection if not already set
             strategy = self.config.get("strategy")
@@ -150,7 +157,9 @@ class TradingOrchestrator:
             capital = self.config.get("capital", 1000)
             risk_profile = self.config.get("risk_profile", "medium")
 
-            adjust_risk_based_on_profile(self.config, risk_profile)
+            self.config["risk_profile"] = risk_profile
+            adjust_risk_based_on_profile(self.config)
+
             log_message(f"Backtesting {strategy} on {len(self.selected_coins)} symbols [{start_date} to {end_date}]")
 
             results = []

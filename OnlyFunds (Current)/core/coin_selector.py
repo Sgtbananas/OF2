@@ -5,10 +5,18 @@ from core.ml_filter import MLFilter
 
 def get_available_symbols(exchange_name="coinex", quote="USDT"):
     """Get all active trading pairs for the given quote currency on the specified exchange."""
-    exchange_class = getattr(ccxt, exchange_name)
-    exchange = exchange_class()
-    markets = exchange.load_markets()
-    return [s for s in markets if s.endswith(f'/{quote}') and markets[s]['active']]
+    try:
+        exchange_class = getattr(ccxt, exchange_name)
+        exchange = exchange_class()
+        markets = exchange.load_markets()
+        symbols = [s for s in markets if s.endswith(f'/{quote}') and markets[s]['active']]
+        if not symbols:
+            print(f"[ERROR] No active {quote} pairs found on {exchange_name}. Using fallback.")
+            return ["BTC/USDT", "ETH/USDT"]
+        return symbols
+    except Exception as e:
+        print(f"[ERROR] Could not fetch symbols from {exchange_name}: {e}. Using fallback.")
+        return ["BTC/USDT", "ETH/USDT"]
 
 def select_top_coins(
     strategy_name=None, 
@@ -24,17 +32,6 @@ def select_top_coins(
 ):
     """
     Select the top N coins based on optimizer results, optionally using ML filtering.
-    :param strategy_name: If specified, rank by this strategy only; otherwise all_strategies must be provided.
-    :param all_strategies: List of strategies to consider (used if strategy_name is None).
-    :param top_n: Number of coins to select.
-    :param exchange_name: Exchange to scan.
-    :param quote: Quote asset to filter by (e.g. USDT).
-    :param timeframe: Candlestick timeframe.
-    :param limit: Number of bars to fetch for backtest.
-    :param ml_enabled: If True, use MLFilter in optimization.
-    :param ml_model_path: Path to ML model for MLFilter.
-    :param config: Optional config dict; if provided, overrides function params.
-    :return: List of dicts: [{"symbol": ..., "pnl": ..., "win_rate": ..., ...}, ...]
     """
     symbols = get_available_symbols(exchange_name, quote)
     ml_filter = MLFilter(model_path=ml_model_path) if ml_enabled else None
@@ -46,7 +43,6 @@ def select_top_coins(
             "limit": limit
         }
     else:
-        # Override with explicit params if provided
         if all_strategies:
             config["all_strategies"] = all_strategies
         if timeframe:
@@ -82,20 +78,19 @@ def select_top_coins(
 def get_top_200_coinex_symbols():
     """
     Fetch the top 200 CoinEx spot USDT symbols, sorted by market cap if available, falling back to volume.
-    Returns: List of symbol strings (format: BTCUSDT, ETHUSDT, ...)
+    Robust fallback: returns ["BTCUSDT", "ETHUSDT"] if CoinEx fails or returns no pairs.
     """
     try:
         exchange = ccxt.coinex()
         markets = exchange.load_markets()
-        # Filter to active, spot, USDT quote pairs
         spot_markets = [
             m for m in markets.values()
             if m.get('spot') and m['active'] and m['quote'] == 'USDT'
         ]
         print(f"[DEBUG] Found {len(spot_markets)} active USDT spot pairs on CoinEx.")
-        if spot_markets:
-            print(f"[DEBUG] Example symbol: {spot_markets[0]['symbol']}")
-
+        if not spot_markets:
+            print("[ERROR] CoinEx returned no spot pairs. Using fallback symbols.")
+            return ["BTCUSDT", "ETHUSDT"]
         # Try to sort by market cap if available
         def get_market_cap(m):
             market_cap = m.get('info', {}).get('market_cap')
@@ -103,7 +98,6 @@ def get_top_200_coinex_symbols():
                 return float(market_cap) if market_cap not in [None, ""] else 0
             except Exception:
                 return 0
-
         has_market_cap = any(get_market_cap(m) > 0 for m in spot_markets)
         if has_market_cap:
             spot_markets.sort(key=lambda x: get_market_cap(x), reverse=True)
@@ -115,13 +109,12 @@ def get_top_200_coinex_symbols():
 
         top_symbols = [m["symbol"].replace('/', '') for m in spot_markets[:200]]
         if not top_symbols or len(top_symbols) < 2:
-            print(f"[ERROR] Not enough symbols returned from CoinEx: {len(top_symbols)}")
-            raise Exception("Not enough symbols returned from CoinEx")
+            print(f"[ERROR] Not enough symbols returned from CoinEx: {len(top_symbols)}. Using fallback symbols.")
+            return ["BTCUSDT", "ETHUSDT"]
         print(f"[DEBUG] Returning {len(top_symbols)} symbols.")
         return top_symbols
     except Exception as e:
-        print(f"[ERROR] Failed to fetch CoinEx top 200 symbols by market cap: {e}")
-        # Fallback to safe default
+        print(f"[ERROR] Failed to fetch CoinEx top 200 symbols by market cap: {e}. Using fallback symbols.")
         return ["BTCUSDT", "ETHUSDT"]
 
 if __name__ == "__main__":

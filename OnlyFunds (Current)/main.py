@@ -1,8 +1,6 @@
 import streamlit as st
 from datetime import datetime
 from core import order_manager
-from core.config import load_config
-from core.engine import run_bot
 from core.orchestrator import get_orchestrator
 
 # Set up Streamlit page
@@ -55,6 +53,8 @@ def run_orchestrated_trading():
     try:
         orch.run(mode=mode)
         st.success("✅ Trading run completed with AI/ML-driven strategy selection.")
+    except RuntimeError as e:
+        st.error(f"❌ {e}")
     except Exception as e:
         st.error(f"❌ Trading run failed: {e}")
 
@@ -111,5 +111,10 @@ if orders:
 else:
     st.info("ℹ️ No orders to display.")
 
-# Remove any downstream code that allowed manual strategy selection.
-# All strategy selection is now handled by the backend (orchestrator, AI, ML).
+# Warn if only fallback coins are being used (user-friendly signal)
+if "orch" in st.session_state and hasattr(orch, "selected_coins"):
+    fallback_set = {"BTCUSDT", "ETHUSDT"}
+    if set(orch.selected_coins) == fallback_set:
+        st.warning(
+            "⚠️ Only fallback coins (BTCUSDT, ETHUSDT) are available. This may indicate an issue fetching symbols from CoinEx."
+        )

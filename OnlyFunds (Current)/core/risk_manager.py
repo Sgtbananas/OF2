@@ -10,33 +10,35 @@ def calculate_position_size(balance, risk_percent, price):
     Returns:
         float: Position size (quantity of asset to buy/sell).
     """
-    # Determine the risk amount in dollars
     risk_amount = balance * risk_percent
-
-    # Calculate position size
     position_size = risk_amount / price if price != 0 else 0
-
     return position_size
 
-
-def adjust_risk_based_on_profile(risk_profile):
+def adjust_risk_based_on_profile(config):
     """
-    Adjusts the risk percentage based on the selected risk profile.
+    Adjusts the risk parameters in the config dict based on 'risk_profile' key.
+    Mutates the config dict in place.
 
     Args:
-        risk_profile (str): One of "conservative", "normal", or "aggressive".
+        config (dict): The configuration dictionary. Must contain 'risk_profile' key.
 
-    Returns:
-        float: Risk percentage (e.g., 0.01 for 1% risk).
+    Side effects:
+        Updates config dict with keys:
+            - "risk_percent"
+            - "max_position_size"
+            - "stop_loss"
     """
-    risk_profile = risk_profile.lower()
+    profile = config.get("risk_profile", "normal").lower()
 
-    if risk_profile == "conservative":
-        return 0.01  # 1% risk
-    elif risk_profile == "normal":
-        return 0.02  # 2% risk
-    elif risk_profile == "aggressive":
-        return 0.05  # 5% risk
-    else:
-        return 0.02  # Default to 2% risk if invalid profile
-
+    if profile == "conservative":
+        config["risk_percent"] = 0.01  # 1% risk
+        config["max_position_size"] = 0.05
+        config["stop_loss"] = 0.02
+    elif profile == "aggressive":
+        config["risk_percent"] = 0.05  # 5% risk
+        config["max_position_size"] = 0.2
+        config["stop_loss"] = 0.08
+    else:  # normal/default
+        config["risk_percent"] = 0.02  # 2% risk
+        config["max_position_size"] = 0.1
+        config["stop_loss"] = 0.05
