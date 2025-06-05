@@ -117,15 +117,19 @@ class TradingOrchestrator:
 
             log_message(f"Running bot for {len(self.selected_coins)} symbols on {exchange} ({timeframe}) with strategy '{strategy}'.")
 
-            run_bot(
-                strategy=strategy,
-                symbols=self.selected_coins,
-                exchange=exchange,
-                timeframe=timeframe,
-                capital=capital,
-                config=self.config,
-                ml_filter=self.ml_filter
-            )
+            # PATCHED SECTION: Use a config dict for run_bot
+            bot_config = {
+                "mode": self.config.get("mode", "dry_run"),
+                "risk": self.config.get("risk", 0.01),
+                "target": self.config.get("target", 0.02),
+                "symbols": self.selected_coins,
+                "all_strategies": self.config.get("all_strategies", [strategy]),
+                "ml_filter": self.ml_filter is not None,
+                "ml_threshold": self.config.get("ml_threshold", 0.6),
+                "timeframe": timeframe,
+                "limit": self.config.get("limit", 300)
+            }
+            run_bot(bot_config)
         except Exception as e:
             log_error(f"Error running trading bot: {e}")
             raise
