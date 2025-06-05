@@ -1,4 +1,5 @@
 import ccxt
+import requests
 from core.data import fetch_klines, add_indicators
 from optimizer import optimize_strategies
 from core.ml_filter import MLFilter
@@ -77,45 +78,52 @@ def select_top_coins(
 
 def get_top_200_coinex_symbols():
     """
-    Fetch the top 200 CoinEx spot USDT symbols, sorted by market cap if available, falling back to volume.
-    Robust fallback: returns ["BTCUSDT", "ETHUSDT"] if CoinEx fails or returns no pairs.
-    """
-    try:
-        exchange = ccxt.coinex()
-        markets = exchange.load_markets()
-        spot_markets = [
-            m for m in markets.values()
-            if m.get('spot') and m['active'] and m['quote'] == 'USDT'
-        ]
-        print(f"[DEBUG] Found {len(spot_markets)} active USDT spot pairs on CoinEx.")
-        if not spot_markets:
-            print("[ERROR] CoinEx returned no spot pairs. Using fallback symbols.")
-            return ["BTCUSDT", "ETHUSDT"]
-        # Try to sort by market cap if available
-        def get_market_cap(m):
-            market_cap = m.get('info', {}).get('market_cap')
-            try:
-                return float(market_cap) if market_cap not in [None, ""] else 0
-            except Exception:
-                return 0
-        has_market_cap = any(get_market_cap(m) > 0 for m in spot_markets)
-        if has_market_cap:
-            spot_markets.sort(key=lambda x: get_market_cap(x), reverse=True)
-            print("[INFO] Sorted CoinEx pairs by market cap.")
-        else:
-            print("[WARNING] No market cap data available, falling back to sorting by volume.")
-            spot_markets.sort(key=lambda x: float(x.get('info', {}).get('volume', 0)), reverse=True)
-            print("[INFO] Sorted CoinEx pairs by 24h volume.")
+    Fetch the top 200 CoinEx spot USDT symbols directly from CoinEx API,
+    sorted by 24h volume, with robust fallback.
 
-        top_symbols = [m["symbol"].replace('/', '') for m in spot_markets[:200]]
+    Returns: List of symbol strings (format: BTCUSDT, ETHUSDT, ...)
+    """
+    url = "https://api.coinex.com/v2/spot/market/list-market"
+    fallback_symbols = ["BTCUSDT", "ETHUSDT"]
+
+    try:
+        resp = requests.get(url, timeout=10)
+        resp.raise_for_status()
+        data = resp.json()
+        if not data or data.get("code") != 0 or "data" not in data:
+            print(f"[ERROR] Unexpected API response: {data}. Using fallback symbols.")
+            return fallback_symbols
+        markets = data["data"]
+        # Filter to active, spot, USDT quote pairs
+        spot_usdt = [
+            m for m in markets
+            if m.get("status") == "normal" and m.get("quote_asset", "").upper() == "USDT"
+        ]
+        print(f"[DEBUG] Fetched {len(spot_usdt)} active USDT spot pairs from CoinEx API.")
+        if not spot_usdt:
+            print("[ERROR] CoinEx API returned no spot pairs. Using fallback symbols.")
+            return fallback_symbols
+
+        # Sort by 24h volume (descending) if available
+        def parse_volume(m):
+            try:
+                return float(m.get("volume_24h", 0))
+            except Exception:
+                return 0.0
+
+        spot_usdt.sort(key=parse_volume, reverse=True)
+        top_symbols = [m["market"].replace('/', '') for m in spot_usdt[:200]]
+
+        # Final fallback if result is empty or too short
         if not top_symbols or len(top_symbols) < 2:
-            print(f"[ERROR] Not enough symbols returned from CoinEx: {len(top_symbols)}. Using fallback symbols.")
-            return ["BTCUSDT", "ETHUSDT"]
-        print(f"[DEBUG] Returning {len(top_symbols)} symbols.")
+            print(f"[ERROR] Not enough symbols returned from CoinEx API: {len(top_symbols)}. Using fallback symbols.")
+            return fallback_symbols
+
+        print(f"[DEBUG] Returning top {len(top_symbols)} CoinEx symbols.")
         return top_symbols
     except Exception as e:
-        print(f"[ERROR] Failed to fetch CoinEx top 200 symbols by market cap: {e}. Using fallback symbols.")
-        return ["BTCUSDT", "ETHUSDT"]
+        print(f"[ERROR] Exception fetching CoinEx symbols: {e}. Using fallback symbols.")
+        return fallback_symbols
 
 if __name__ == "__main__":
     # Example usage: Select top 3 coins for the "ema" strategy with ML filter enabled

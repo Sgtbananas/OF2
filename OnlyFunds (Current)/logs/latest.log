@@ -1,5 +1,6 @@
-2025-06-05 19:09:38,776 [INFO] Config provided directly to orchestrator (merged with file if present).
-2025-06-05 19:09:38,776 [INFO] ML filter initialized.
-2025-06-05 19:09:50,230 [INFO] Orchestrator run mode: dry_run
-2025-06-05 19:09:52,227 [INFO] Selected top 2 CoinEx symbols.
-2025-06-05 19:09:52,227 [ERROR] Error running trading bot: adjust_risk_based_on_profile() takes 1 positional argument but 2 were given
+2025-06-05 19:34:57,463 [INFO] Config provided directly to orchestrator (merged with file if present).
+2025-06-05 19:34:57,463 [INFO] ML filter initialized.
+2025-06-05 19:35:03,000 [INFO] Orchestrator run mode: dry_run
+2025-06-05 19:35:03,160 [INFO] Selected top 2 CoinEx symbols.
+2025-06-05 19:35:03,160 [INFO] Running bot for 2 symbols on coinex (5min) with strategy 'ema'.
+2025-06-05 19:35:03,161 [ERROR] Error running trading bot: run_bot() got an unexpected keyword argument 'strategy'
