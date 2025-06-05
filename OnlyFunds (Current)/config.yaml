@@ -5,7 +5,9 @@ all_strategies:
   - bollinger
   - trend_score
 
-ml_filter: true
+ml_filter:
+  enabled: true
+  model_path: ml_filter_model.pkl
 ml_threshold: 0.6
 
 symbols_source: top_200_coinex
@@ -16,7 +18,7 @@ initial_capital: 10
 threshold: 0.5
 live: false
 coinex:
-  api_key: "YOUR_API_KEY"
-  api_secret: "YOUR_SECRET"
+  api_key: "ECEA61495F674384A6E6189D055237C2"
+  api_secret: "9BFDD9508764F762EDC7FFC279CC1D2A973622ED7FEA548D"
 trailing_stop_pct: 0.03
 trailing_trigger_pct: 0.02
