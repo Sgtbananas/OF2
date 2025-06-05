@@ -1,2 +1,5 @@
 2025-06-05 17:24:19,598 [INFO] Config loaded from config.yaml.
 2025-06-05 17:24:19,598 [INFO] ML filter initialized.
+2025-06-05 17:28:46,412 [INFO] Orchestrator run mode: dry_run
+2025-06-05 17:28:48,430 [INFO] Selected top 2 CoinEx symbols.
+2025-06-05 17:28:48,431 [ERROR] Error running trading bot: adjust_risk_based_on_profile() takes 1 positional argument but 2 were given
