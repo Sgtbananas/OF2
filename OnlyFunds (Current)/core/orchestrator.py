@@ -4,7 +4,7 @@ from typing import Optional, Dict, Any, List, Union
 from core.config import load_config
 from core.engine import run_bot
 from core.ml_filter import MLFilter
-from core.coin_selector import get_top_200_coinex_symbols
+from core.coin_selector import get_top_200_coinex_symbols, select_top_coins
 from core.risk_manager import adjust_risk_based_on_profile
 from core.logger import log_message, log_error
 from core.backtester import simulate_trades
@@ -20,8 +20,11 @@ class TradingOrchestrator:
         Initializes the orchestrator with configuration.
         """
         if config is not None:
-            self.config = config
-            log_message("Config provided directly to orchestrator.")
+            # Merge config with loaded config to ensure all keys present
+            loaded = load_config(config_path) if config_path else {}
+            merged = {**loaded, **config}
+            self.config = merged
+            log_message("Config provided directly to orchestrator (merged with file if present).")
         else:
             self.config = load_config(config_path)
             log_message(f"Config loaded from {config_path or 'default location'}.")
@@ -47,6 +50,36 @@ class TradingOrchestrator:
                 log_error(f"Failed to initialize ML filter: {e}")
                 self.ml_filter = None
 
+    def auto_select_strategy(self):
+        """
+        Automatically selects the best-performing strategy using ML/optimizer.
+        Returns: strategy name (str)
+        """
+        # Candidate strategies can be expanded or loaded from config/etc
+        candidate_strategies = self.config.get("all_strategies", ["ema", "rsi", "macd", "sma", "bbands"])
+        results = select_top_coins(
+            all_strategies=candidate_strategies,
+            top_n=1,
+            exchange_name=self.config.get("exchange", "coinex"),
+            quote="USDT",
+            timeframe=self.config.get("timeframe", "5m"),
+            limit=self.config.get("limit", 300),
+            ml_enabled=(self.ml_filter is not None),
+            ml_model_path=getattr(self.ml_filter, "model_path", "ml_filter_model.pkl"),
+            config=None
+        )
+        if results:
+            best = results[0]
+            # "strategies" can be a str or list; pick the first if list
+            stgy = best.get("strategies")
+            if isinstance(stgy, list):
+                stgy = stgy[0] if stgy else None
+            log_message(f"[AI] Auto-selected strategy: {stgy} for coin {best.get('symbol')}")
+            return stgy
+        else:
+            log_message("[AI] No suitable strategy found, defaulting to 'ema'")
+            return "ema"
+
     def select_coins(self):
         """Selects coins to trade based on exchange and config."""
         try:
@@ -61,19 +94,24 @@ class TradingOrchestrator:
             self.selected_coins = []
 
     def run_trading(self):
-        """Run the live or dry-run trading bot."""
+        """Run the live or dry-run trading bot (AI/ML picks strategy)."""
         try:
+            if not self.selected_coins:
+                self.select_coins()
+
+            # AI/ML strategy selection if not already set
             strategy = self.config.get("strategy")
+            if not strategy:
+                strategy = self.auto_select_strategy()
+                self.config["strategy"] = strategy
+
             exchange = self.config.get("exchange")
             timeframe = self.config.get("timeframe", "5m")
             capital = self.config.get("capital", 1000)
             risk_profile = self.config.get("risk_profile", "medium")
 
-            if not self.selected_coins:
-                self.select_coins()
-
             adjust_risk_based_on_profile(self.config, risk_profile)
-            log_message(f"Running bot for {len(self.selected_coins)} symbols on {exchange} ({timeframe}).")
+            log_message(f"Running bot for {len(self.selected_coins)} symbols on {exchange} ({timeframe}) with strategy '{strategy}'.")
 
             run_bot(
                 strategy=strategy,
@@ -91,23 +129,26 @@ class TradingOrchestrator:
     def backtest(self, start_date: str, end_date: str) -> pd.DataFrame:
         """
         Run a backtest across selected coins.
-
         Args:
             start_date: ISO8601 date, e.g. '2024-01-01'
             end_date: ISO8601 date, e.g. '2024-05-31'
-
         Returns:
             DataFrame with backtest results.
         """
         try:
+            if not self.selected_coins:
+                self.select_coins()
+
+            # AI/ML strategy selection if not already set
             strategy = self.config.get("strategy")
+            if not strategy:
+                strategy = self.auto_select_strategy()
+                self.config["strategy"] = strategy
+
             exchange = self.config.get("exchange")
             timeframe = self.config.get("timeframe", "5m")
             capital = self.config.get("capital", 1000)
             risk_profile = self.config.get("risk_profile", "medium")
-
-            if not self.selected_coins:
-                self.select_coins()
 
             adjust_risk_based_on_profile(self.config, risk_profile)
             log_message(f"Backtesting {strategy} on {len(self.selected_coins)} symbols [{start_date} to {end_date}]")
@@ -145,7 +186,6 @@ class TradingOrchestrator:
     def run(self, mode: str = "live", **kwargs):
         """
         Entrypoint for orchestrator.
-
         Args:
             mode: 'live', 'dry_run', or 'backtest'
             kwargs: Additional arguments for backtesting (start_date, end_date)
