@@ -78,8 +78,8 @@ def select_top_coins(
 
 def get_top_200_coinex_symbols():
     """
-    Fetch the top 200 CoinEx spot USDT symbols directly from CoinEx API,
-    sorted by 24h volume, with robust fallback.
+    Fetch the top 200 CoinEx spot USDT symbols directly from CoinEx API v1,
+    with robust fallback.
 
     Returns: List of symbol strings (format: BTCUSDT, ETHUSDT, ...)
     """
@@ -93,34 +93,9 @@ def get_top_200_coinex_symbols():
         if not data or data.get("code") != 0 or "data" not in data:
             print(f"[ERROR] Unexpected API response: {data}. Using fallback symbols.")
             return fallback_symbols
-        markets = data["data"]
-        # Filter to active, spot, USDT quote pairs
-        spot_usdt = [
-            m for m in markets
-            if m.get("status") == "normal" and m.get("quote_asset", "").upper() == "USDT"
-        ]
-        print(f"[DEBUG] Fetched {len(spot_usdt)} active USDT spot pairs from CoinEx API.")
-        if not spot_usdt:
-            print("[ERROR] CoinEx API returned no spot pairs. Using fallback symbols.")
-            return fallback_symbols
-
-        # Sort by 24h volume (descending) if available
-        def parse_volume(m):
-            try:
-                return float(m.get("volume_24h", 0))
-            except Exception:
-                return 0.0
-
-        spot_usdt.sort(key=parse_volume, reverse=True)
-        top_symbols = [m["market"].replace('/', '') for m in spot_usdt[:200]]
-
-        # Final fallback if result is empty or too short
-        if not top_symbols or len(top_symbols) < 2:
-            print(f"[ERROR] Not enough symbols returned from CoinEx API: {len(top_symbols)}. Using fallback symbols.")
-            return fallback_symbols
-
-        print(f"[DEBUG] Returning top {len(top_symbols)} CoinEx symbols.")
-        return top_symbols
+        symbols = [s for s in data["data"] if s.endswith("USDT")]
+        print(f"[DEBUG] Fetched {len(symbols)} USDT pairs from CoinEx API v1.")
+        return symbols[:200] if len(symbols) >= 2 else fallback_symbols
     except Exception as e:
         print(f"[ERROR] Exception fetching CoinEx symbols: {e}. Using fallback symbols.")
         return fallback_symbols
