@@ -1,35 +1,31 @@
-2025-06-06 07:40:45,751 [INFO] Config provided directly to orchestrator (merged with file if present).
-2025-06-06 07:40:45,752 [INFO] ML filter initialized.
-2025-06-06 07:40:47,639 [INFO] Orchestrator run mode: dry_run
-2025-06-06 07:40:47,782 [INFO] Selected top 200 CoinEx symbols.
-2025-06-06 07:40:47,782 [INFO] Running bot for 200 symbols on coinex (5min) with strategy 'ema'.
-2025-06-06 07:40:47,782 [INFO] Fetching data for CWIFUSDT...
-2025-06-06 07:40:51,725 [INFO] ⚠️ Strategy ema failed: simulate_trades() got an unexpected keyword argument 'ml_filter'
-2025-06-06 07:40:51,735 [INFO] ⚠️ Strategy rsi failed: simulate_trades() got an unexpected keyword argument 'ml_filter'
-2025-06-06 07:40:51,744 [INFO] ⚠️ Strategy macd failed: simulate_trades() got an unexpected keyword argument 'ml_filter'
-2025-06-06 07:40:51,753 [INFO] ⚠️ Strategy bollinger failed: simulate_trades() got an unexpected keyword argument 'ml_filter'
-2025-06-06 07:40:51,760 [INFO] ⚠️ Strategy trend_score failed: simulate_trades() got an unexpected keyword argument 'ml_filter'
-2025-06-06 07:40:51,761 [INFO] ❌ No successful strategies for CWIFUSDT. Skipping.
-2025-06-06 07:40:51,761 [INFO] Fetching data for PSPUSDT...
-2025-06-06 07:40:55,587 [INFO] ⚠️ Strategy ema failed: simulate_trades() got an unexpected keyword argument 'ml_filter'
-2025-06-06 07:40:55,588 [INFO] ⚠️ Strategy rsi failed: simulate_trades() got an unexpected keyword argument 'ml_filter'
-2025-06-06 07:40:55,590 [INFO] ⚠️ Strategy macd failed: simulate_trades() got an unexpected keyword argument 'ml_filter'
-2025-06-06 07:40:55,591 [INFO] ⚠️ Strategy bollinger failed: simulate_trades() got an unexpected keyword argument 'ml_filter'
-2025-06-06 07:40:55,591 [INFO] ⚠️ Strategy trend_score failed: simulate_trades() got an unexpected keyword argument 'ml_filter'
-2025-06-06 07:40:55,591 [INFO] ❌ No successful strategies for PSPUSDT. Skipping.
-2025-06-06 07:40:55,591 [INFO] Fetching data for BITCOINUSDT...
-2025-06-06 07:40:59,403 [INFO] ⚠️ Strategy ema failed: simulate_trades() got an unexpected keyword argument 'ml_filter'
-2025-06-06 07:40:59,405 [INFO] ⚠️ Strategy rsi failed: simulate_trades() got an unexpected keyword argument 'ml_filter'
-2025-06-06 07:40:59,407 [INFO] ⚠️ Strategy macd failed: simulate_trades() got an unexpected keyword argument 'ml_filter'
-2025-06-06 07:40:59,408 [INFO] ⚠️ Strategy bollinger failed: simulate_trades() got an unexpected keyword argument 'ml_filter'
-2025-06-06 07:40:59,409 [INFO] ⚠️ Strategy trend_score failed: simulate_trades() got an unexpected keyword argument 'ml_filter'
-2025-06-06 07:40:59,409 [INFO] ❌ No successful strategies for BITCOINUSDT. Skipping.
-2025-06-06 07:40:59,409 [INFO] Fetching data for BROCCOLIUSDT...
-2025-06-06 07:41:03,243 [INFO] ⚠️ Strategy ema failed: simulate_trades() got an unexpected keyword argument 'ml_filter'
-2025-06-06 07:41:03,245 [INFO] ⚠️ Strategy rsi failed: simulate_trades() got an unexpected keyword argument 'ml_filter'
-2025-06-06 07:41:03,247 [INFO] ⚠️ Strategy macd failed: simulate_trades() got an unexpected keyword argument 'ml_filter'
-2025-06-06 07:41:03,248 [INFO] ⚠️ Strategy bollinger failed: simulate_trades() got an unexpected keyword argument 'ml_filter'
-2025-06-06 07:41:03,249 [INFO] ⚠️ Strategy trend_score failed: simulate_trades() got an unexpected keyword argument 'ml_filter'
-2025-06-06 07:41:03,249 [INFO] ❌ No successful strategies for BROCCOLIUSDT. Skipping.
-2025-06-06 07:41:03,249 [INFO] Fetching data for TAPUSDT...
-2025-06-06 07:41:06,020 [ERROR] Error running trading bot: coinex does not have market symbol TAPUSDT
+2025-06-06 16:12:27,660 [INFO] Config provided directly to orchestrator (merged with file if present).
+2025-06-06 16:12:27,660 [INFO] ML filter initialized.
+2025-06-06 16:12:30,738 [INFO] Orchestrator run mode: dry_run
+2025-06-06 16:12:31,028 [INFO] Selected top 200 CoinEx symbols.
+2025-06-06 16:12:31,029 [INFO] Running bot for 200 symbols on coinex (5min) with strategy 'ema'.
+2025-06-06 16:12:31,029 [INFO] Fetching data for CWIFUSDT...
+2025-06-06 16:12:34,851 [INFO] ⚠️ Strategy ema failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 16:12:34,853 [INFO] ⚠️ Strategy rsi failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 16:12:34,855 [INFO] ⚠️ Strategy macd failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 16:12:34,857 [INFO] ⚠️ Strategy bollinger failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 16:12:34,868 [INFO] ✅ CWIFUSDT: Best strategy → trend_score | PnL: 0.00 | Win rate: 0.00
+2025-06-06 16:12:34,872 [INFO] Fetching data for PSPUSDT...
+2025-06-06 16:12:38,977 [INFO] ⚠️ Strategy ema failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 16:12:38,978 [INFO] ⚠️ Strategy rsi failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 16:12:38,979 [INFO] ⚠️ Strategy macd failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 16:12:38,981 [INFO] ⚠️ Strategy bollinger failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 16:12:38,991 [INFO] ✅ PSPUSDT: Best strategy → trend_score | PnL: 0.00 | Win rate: 0.00
+2025-06-06 16:12:39,005 [INFO] Fetching data for BITCOINUSDT...
+2025-06-06 16:12:42,805 [INFO] ⚠️ Strategy ema failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 16:12:42,807 [INFO] ⚠️ Strategy rsi failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 16:12:42,808 [INFO] ⚠️ Strategy macd failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 16:12:42,809 [INFO] ⚠️ Strategy bollinger failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 16:12:42,818 [INFO] ✅ BITCOINUSDT: Best strategy → trend_score | PnL: 0.00 | Win rate: 0.00
+2025-06-06 16:12:42,830 [INFO] Fetching data for BROCCOLIUSDT...
+2025-06-06 16:12:46,670 [INFO] ⚠️ Strategy ema failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 16:12:46,671 [INFO] ⚠️ Strategy rsi failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 16:12:46,673 [INFO] ⚠️ Strategy macd failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 16:12:46,674 [INFO] ⚠️ Strategy bollinger failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 16:12:46,683 [INFO] ✅ BROCCOLIUSDT: Best strategy → trend_score | PnL: 0.00 | Win rate: 0.00
+2025-06-06 16:12:46,695 [INFO] Fetching data for TAPUSDT...
+2025-06-06 16:12:49,460 [ERROR] Error running trading bot: coinex does not have market symbol TAPUSDT
