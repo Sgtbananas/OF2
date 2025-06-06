@@ -6,7 +6,7 @@ all_strategies:
   - trend_score
 
 ml_filter:
-  enabled: true
+  enabled: false
   model_path: ml_filter_model.pkl
 ml_threshold: 0.6
 
