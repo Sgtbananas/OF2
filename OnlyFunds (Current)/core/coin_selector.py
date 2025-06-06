@@ -11,12 +11,13 @@ def get_available_symbols(exchange_name="coinex", quote="USDT"):
         exchange = exchange_class()
         markets = exchange.load_markets()
         symbols = [s for s in markets if s.endswith(f'/{quote}') and markets[s]['active']]
+        print(f"[COIN_SELECTOR][DEBUG] Fetched {len(symbols)} active {quote} pairs from {exchange_name} via ccxt.")
         if not symbols:
-            print(f"[ERROR] No active {quote} pairs found on {exchange_name}. Using fallback.")
+            print(f"[COIN_SELECTOR][ERROR] No active {quote} pairs found on {exchange_name}. Using fallback.")
             return ["BTC/USDT", "ETH/USDT"]
         return symbols
     except Exception as e:
-        print(f"[ERROR] Could not fetch symbols from {exchange_name}: {e}. Using fallback.")
+        print(f"[COIN_SELECTOR][ERROR] Could not fetch symbols from {exchange_name}: {e}. Using fallback.")
         return ["BTC/USDT", "ETH/USDT"]
 
 def get_top_200_coinex_symbols(
@@ -27,20 +28,10 @@ def get_top_200_coinex_symbols(
     """
     Fetch the top 200 CoinEx spot USDT symbols by true market cap using CoinGecko,
     cross-referenced with tradable CoinEx pairs, with robust fallback.
-    - Excludes stablecoins by default.
-    - Filters by minimum 24h volume (USD) by default.
-    - Uses production-ready error handling and logging.
-
-    Args:
-        min_usd_volume (float): Minimum 24h volume in USD to include a coin.
-        exclude_stablecoins (bool): Whether to filter out stablecoins.
-        log_prefix (str): Prefix for log messages.
-
-    Returns: List of symbol strings (format: BTCUSDT, ETHUSDT, ...)
+    Includes additional debugging to diagnose filtering issues.
     """
     fallback_symbols = ["BTCUSDT", "ETHUSDT"]
 
-    # List of known stablecoin tickers (add more as needed)
     stablecoins = {
         "USDT", "USDC", "BUSD", "TUSD", "USDP", "USDD", "GUSD", "DAI", "USDS",
         "USDN", "USDX", "EUR", "EURC", "EURS", "EURT", "USDSB", "FDUSD", "PYUSD"
@@ -56,9 +47,10 @@ def get_top_200_coinex_symbols(
             print(f"{log_prefix} [ERROR] Unexpected CoinEx API response: {data}. Using fallback symbols.")
             return fallback_symbols
         all_coinex_symbols = [s for s in data["data"] if s.endswith("USDT")]
+        print(f"{log_prefix} [DEBUG] CoinEx USDT pairs available: {len(all_coinex_symbols)}")
         coinex_symbol_set = set(all_coinex_symbols)
 
-        # Step 2: Get CoinEx 24h volume data for all pairs (for minimum volume filtering)
+        # Step 2: Get CoinEx 24h volume data for all pairs
         coinex_ticker_url = "https://api.coinex.com/v1/market/ticker/all"
         ticker_resp = requests.get(coinex_ticker_url, timeout=10)
         ticker_resp.raise_for_status()
@@ -66,20 +58,19 @@ def get_top_200_coinex_symbols(
         if not ticker_data or ticker_data.get("code") != 0 or "data" not in ticker_data:
             print(f"{log_prefix} [ERROR] Unexpected CoinEx ticker API response: {ticker_data}. Using fallback symbols.")
             return fallback_symbols
-        # Map symbol -> 24h USDT volume
         coinex_volume_map = {}
         for sym, info in ticker_data["data"].items():
             if sym in coinex_symbol_set:
                 try:
                     vol = float(info.get("vol", 0))
                     last = float(info.get("last", 0))
-                    # Estimate volume in USD
                     vol_usd = vol * last
                 except Exception:
                     vol_usd = 0
                 coinex_volume_map[sym] = vol_usd
+        print(f"{log_prefix} [DEBUG] USDT pairs above min volume {min_usd_volume}: {len([s for s in coinex_volume_map if coinex_volume_map[s] >= min_usd_volume])}")
 
-        # Step 3: Fetch top 300 coins by market cap from CoinGecko (to ensure we get 200 tradable on CoinEx)
+        # Step 3: Fetch top 300 coins by market cap from CoinGecko
         cg_url = "https://api.coingecko.com/api/v3/coins/markets"
         cg_params = {
             "vs_currency": "usd",
@@ -94,30 +85,41 @@ def get_top_200_coinex_symbols(
         if not isinstance(cg_data, list):
             print(f"{log_prefix} [ERROR] Unexpected CoinGecko API response: {cg_data}. Using fallback symbols.")
             return fallback_symbols
+        print(f"{log_prefix} [DEBUG] Fetched {len(cg_data)} coins from CoinGecko.")
 
+        # Step 4: Map CoinGecko coins to CoinEx symbols and apply filters
         top_symbols = []
         seen = set()
-        for coin in cg_data:
+        for idx, coin in enumerate(cg_data):
             cg_symbol = coin.get("symbol", "").upper()
             cg_id = coin.get("id", "")
             cg_name = coin.get("name", "")
 
             if exclude_stablecoins and (
                 cg_symbol in stablecoins or
-                cg_id.lower() in ["tether", "usd-coin", "binance-usd", "true-usd", "paxos-standard", "dai", "gemini-dollar", "usdd", "usdp", "usds", "usdn", "stasis-eurs", "tether-eurt", "fdusd", "paypal-usd"]
+                cg_id.lower() in [
+                    "tether", "usd-coin", "binance-usd", "true-usd", "paxos-standard", "dai",
+                    "gemini-dollar", "usdd", "usdp", "usds", "usdn", "stasis-eurs", "tether-eurt",
+                    "fdusd", "paypal-usd"
+                ]
             ):
                 continue
 
             candidate = f"{cg_symbol}USDT"
             if candidate in coinex_symbol_set and candidate not in seen:
-                # Check minimum volume on CoinEx
                 vol_usd = coinex_volume_map.get(candidate, 0)
                 if vol_usd >= min_usd_volume:
                     top_symbols.append(candidate)
                     seen.add(candidate)
+                else:
+                    print(f"{log_prefix} [DEBUG] Skipping {candidate}: volume ${vol_usd:,.0f} below threshold.")
+            else:
+                if candidate not in coinex_symbol_set:
+                    print(f"{log_prefix} [DEBUG] {candidate} not in CoinEx symbols.")
             if len(top_symbols) >= 200:
                 break
 
+        print(f"{log_prefix} [DEBUG] Top symbols selected after all filters: {len(top_symbols)}")
         if len(top_symbols) < 2:
             print(f"{log_prefix} [WARN] Unable to find enough top CoinEx symbols by CoinGecko market cap. Using fallback.")
             return fallback_symbols
