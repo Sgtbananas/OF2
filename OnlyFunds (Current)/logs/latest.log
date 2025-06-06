@@ -16,3 +16,302 @@
 2025-06-06 17:01:30,397 [INFO] ⚠️ Strategy bollinger failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
 2025-06-06 17:01:30,407 [INFO] ✅ ETHUSDT: Best strategy → trend_score | PnL: 0.00 | Win rate: 0.00
 2025-06-06 17:01:30,456 [INFO] Fetching data for XRPUSDT...
+2025-06-06 17:01:34,289 [INFO] ⚠️ Strategy ema failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:01:34,291 [INFO] ⚠️ Strategy rsi failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:01:34,292 [INFO] ⚠️ Strategy macd failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:01:34,294 [INFO] ⚠️ Strategy bollinger failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:01:34,303 [INFO] ✅ XRPUSDT: Best strategy → trend_score | PnL: 0.00 | Win rate: 0.00
+2025-06-06 17:01:34,343 [INFO] Fetching data for BNBUSDT...
+2025-06-06 17:01:38,148 [INFO] ⚠️ Strategy ema failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:01:38,150 [INFO] ⚠️ Strategy rsi failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:01:38,151 [INFO] ⚠️ Strategy macd failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:01:38,152 [INFO] ⚠️ Strategy bollinger failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:01:38,161 [INFO] ✅ BNBUSDT: Best strategy → trend_score | PnL: 0.00 | Win rate: 0.00
+2025-06-06 17:01:38,210 [INFO] Fetching data for SOLUSDT...
+2025-06-06 17:01:41,995 [INFO] ⚠️ Strategy ema failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:01:41,996 [INFO] ⚠️ Strategy rsi failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:01:41,998 [INFO] ⚠️ Strategy macd failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:01:41,999 [INFO] ⚠️ Strategy bollinger failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:01:42,008 [INFO] ✅ SOLUSDT: Best strategy → trend_score | PnL: 0.00 | Win rate: 0.00
+2025-06-06 17:01:42,048 [INFO] Fetching data for DOGEUSDT...
+2025-06-06 17:01:45,863 [INFO] ⚠️ Strategy ema failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:01:45,865 [INFO] ⚠️ Strategy rsi failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:01:45,866 [INFO] ⚠️ Strategy macd failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:01:45,867 [INFO] ⚠️ Strategy bollinger failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:01:45,877 [INFO] ✅ DOGEUSDT: Best strategy → trend_score | PnL: 0.00 | Win rate: 0.00
+2025-06-06 17:01:45,925 [INFO] Fetching data for TRXUSDT...
+2025-06-06 17:01:49,799 [INFO] ⚠️ Strategy ema failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:01:49,801 [INFO] ⚠️ Strategy rsi failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:01:49,802 [INFO] ⚠️ Strategy macd failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:01:49,804 [INFO] ⚠️ Strategy bollinger failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:01:49,813 [INFO] ✅ TRXUSDT: Best strategy → trend_score | PnL: 0.00 | Win rate: 0.00
+2025-06-06 17:01:49,862 [INFO] Fetching data for ADAUSDT...
+2025-06-06 17:01:53,665 [INFO] ⚠️ Strategy ema failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:01:53,667 [INFO] ⚠️ Strategy rsi failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:01:53,668 [INFO] ⚠️ Strategy macd failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:01:53,669 [INFO] ⚠️ Strategy bollinger failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:01:53,678 [INFO] ✅ ADAUSDT: Best strategy → trend_score | PnL: 0.00 | Win rate: 0.00
+2025-06-06 17:01:53,726 [INFO] Fetching data for HYPEUSDT...
+2025-06-06 17:01:57,528 [INFO] ⚠️ Strategy ema failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:01:57,530 [INFO] ⚠️ Strategy rsi failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:01:57,531 [INFO] ⚠️ Strategy macd failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:01:57,533 [INFO] ⚠️ Strategy bollinger failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:01:57,542 [INFO] ✅ HYPEUSDT: Best strategy → trend_score | PnL: 0.00 | Win rate: 0.00
+2025-06-06 17:01:57,595 [INFO] Fetching data for SUIUSDT...
+2025-06-06 17:02:01,477 [INFO] ⚠️ Strategy ema failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:02:01,478 [INFO] ⚠️ Strategy rsi failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:02:01,479 [INFO] ⚠️ Strategy macd failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:02:01,481 [INFO] ⚠️ Strategy bollinger failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:02:01,489 [INFO] ✅ SUIUSDT: Best strategy → trend_score | PnL: 0.00 | Win rate: 0.00
+2025-06-06 17:02:01,539 [INFO] Fetching data for LINKUSDT...
+2025-06-06 17:02:05,340 [INFO] ⚠️ Strategy ema failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:02:05,341 [INFO] ⚠️ Strategy rsi failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:02:05,342 [INFO] ⚠️ Strategy macd failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:02:05,344 [INFO] ⚠️ Strategy bollinger failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:02:05,353 [INFO] ✅ LINKUSDT: Best strategy → trend_score | PnL: 0.00 | Win rate: 0.00
+2025-06-06 17:02:05,400 [INFO] Fetching data for AVAXUSDT...
+2025-06-06 17:02:09,261 [INFO] ⚠️ Strategy ema failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:02:09,262 [INFO] ⚠️ Strategy rsi failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:02:09,264 [INFO] ⚠️ Strategy macd failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:02:09,265 [INFO] ⚠️ Strategy bollinger failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:02:09,278 [INFO] ✅ AVAXUSDT: Best strategy → trend_score | PnL: 0.00 | Win rate: 0.00
+2025-06-06 17:02:09,326 [INFO] Fetching data for XLMUSDT...
+2025-06-06 17:02:13,128 [INFO] ⚠️ Strategy ema failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:02:13,130 [INFO] ⚠️ Strategy rsi failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:02:13,132 [INFO] ⚠️ Strategy macd failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:02:13,133 [INFO] ⚠️ Strategy bollinger failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:02:13,142 [INFO] ✅ XLMUSDT: Best strategy → trend_score | PnL: 0.00 | Win rate: 0.00
+2025-06-06 17:02:13,189 [INFO] Fetching data for BCHUSDT...
+2025-06-06 17:02:16,988 [INFO] ⚠️ Strategy ema failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:02:16,989 [INFO] ⚠️ Strategy rsi failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:02:16,991 [INFO] ⚠️ Strategy macd failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:02:16,992 [INFO] ⚠️ Strategy bollinger failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:02:17,001 [INFO] ✅ BCHUSDT: Best strategy → trend_score | PnL: 0.00 | Win rate: 0.00
+2025-06-06 17:02:17,048 [INFO] Fetching data for TONUSDT...
+2025-06-06 17:02:20,845 [INFO] ⚠️ Strategy ema failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:02:20,847 [INFO] ⚠️ Strategy rsi failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:02:20,848 [INFO] ⚠️ Strategy macd failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:02:20,849 [INFO] ⚠️ Strategy bollinger failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:02:20,859 [INFO] ✅ TONUSDT: Best strategy → trend_score | PnL: 0.00 | Win rate: 0.00
+2025-06-06 17:02:20,908 [INFO] Fetching data for SHIBUSDT...
+2025-06-06 17:02:24,694 [INFO] ⚠️ Strategy ema failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:02:24,696 [INFO] ⚠️ Strategy rsi failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:02:24,697 [INFO] ⚠️ Strategy macd failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:02:24,698 [INFO] ⚠️ Strategy bollinger failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:02:24,707 [INFO] ✅ SHIBUSDT: Best strategy → trend_score | PnL: 0.00 | Win rate: 0.00
+2025-06-06 17:02:24,754 [INFO] Fetching data for HBARUSDT...
+2025-06-06 17:02:28,577 [INFO] ⚠️ Strategy ema failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:02:28,578 [INFO] ⚠️ Strategy rsi failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:02:28,580 [INFO] ⚠️ Strategy macd failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:02:28,581 [INFO] ⚠️ Strategy bollinger failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:02:28,590 [INFO] ✅ HBARUSDT: Best strategy → trend_score | PnL: 0.00 | Win rate: 0.00
+2025-06-06 17:02:28,638 [INFO] Fetching data for LTCUSDT...
+2025-06-06 17:02:32,464 [INFO] ⚠️ Strategy ema failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:02:32,466 [INFO] ⚠️ Strategy rsi failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:02:32,467 [INFO] ⚠️ Strategy macd failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:02:32,469 [INFO] ⚠️ Strategy bollinger failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:02:32,477 [INFO] ✅ LTCUSDT: Best strategy → trend_score | PnL: 0.00 | Win rate: 0.00
+2025-06-06 17:02:32,525 [INFO] Fetching data for DOTUSDT...
+2025-06-06 17:02:36,323 [INFO] ⚠️ Strategy ema failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:02:36,324 [INFO] ⚠️ Strategy rsi failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:02:36,326 [INFO] ⚠️ Strategy macd failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:02:36,327 [INFO] ⚠️ Strategy bollinger failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:02:36,336 [INFO] ✅ DOTUSDT: Best strategy → trend_score | PnL: 0.00 | Win rate: 0.00
+2025-06-06 17:02:36,384 [INFO] Fetching data for XMRUSDT...
+2025-06-06 17:02:40,195 [INFO] ⚠️ Strategy ema failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:02:40,197 [INFO] ⚠️ Strategy rsi failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:02:40,198 [INFO] ⚠️ Strategy macd failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:02:40,200 [INFO] ⚠️ Strategy bollinger failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:02:40,209 [INFO] ✅ XMRUSDT: Best strategy → trend_score | PnL: 0.00 | Win rate: 0.00
+2025-06-06 17:02:40,257 [INFO] Fetching data for PEPEUSDT...
+2025-06-06 17:02:44,043 [INFO] ⚠️ Strategy ema failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:02:44,045 [INFO] ⚠️ Strategy rsi failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:02:44,047 [INFO] ⚠️ Strategy macd failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:02:44,048 [INFO] ⚠️ Strategy bollinger failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:02:44,057 [INFO] ✅ PEPEUSDT: Best strategy → trend_score | PnL: 0.00 | Win rate: 0.00
+2025-06-06 17:02:44,105 [INFO] Fetching data for AAVEUSDT...
+2025-06-06 17:02:47,877 [INFO] ⚠️ Strategy ema failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:02:47,878 [INFO] ⚠️ Strategy rsi failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:02:47,880 [INFO] ⚠️ Strategy macd failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:02:47,881 [INFO] ⚠️ Strategy bollinger failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:02:47,890 [INFO] ✅ AAVEUSDT: Best strategy → trend_score | PnL: 0.00 | Win rate: 0.00
+2025-06-06 17:02:47,940 [INFO] Fetching data for UNIUSDT...
+2025-06-06 17:02:51,742 [INFO] ⚠️ Strategy ema failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:02:51,744 [INFO] ⚠️ Strategy rsi failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:02:51,745 [INFO] ⚠️ Strategy macd failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:02:51,747 [INFO] ⚠️ Strategy bollinger failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:02:51,756 [INFO] ✅ UNIUSDT: Best strategy → trend_score | PnL: 0.00 | Win rate: 0.00
+2025-06-06 17:02:51,806 [INFO] Fetching data for TAOUSDT...
+2025-06-06 17:02:55,595 [INFO] ⚠️ Strategy ema failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:02:55,596 [INFO] ⚠️ Strategy rsi failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:02:55,598 [INFO] ⚠️ Strategy macd failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:02:55,599 [INFO] ⚠️ Strategy bollinger failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:02:55,608 [INFO] ✅ TAOUSDT: Best strategy → trend_score | PnL: 0.00 | Win rate: 0.00
+2025-06-06 17:02:55,657 [INFO] Fetching data for APTUSDT...
+2025-06-06 17:02:59,487 [INFO] ⚠️ Strategy ema failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:02:59,488 [INFO] ⚠️ Strategy rsi failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:02:59,490 [INFO] ⚠️ Strategy macd failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:02:59,492 [INFO] ⚠️ Strategy bollinger failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:02:59,501 [INFO] ✅ APTUSDT: Best strategy → trend_score | PnL: 0.00 | Win rate: 0.00
+2025-06-06 17:02:59,550 [INFO] Fetching data for NEARUSDT...
+2025-06-06 17:03:03,326 [INFO] ⚠️ Strategy ema failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:03:03,328 [INFO] ⚠️ Strategy rsi failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:03:03,329 [INFO] ⚠️ Strategy macd failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:03:03,330 [INFO] ⚠️ Strategy bollinger failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:03:03,340 [INFO] ✅ NEARUSDT: Best strategy → trend_score | PnL: 0.00 | Win rate: 0.00
+2025-06-06 17:03:03,389 [INFO] Fetching data for ICPUSDT...
+2025-06-06 17:03:07,266 [INFO] ⚠️ Strategy ema failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:03:07,268 [INFO] ⚠️ Strategy rsi failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:03:07,269 [INFO] ⚠️ Strategy macd failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:03:07,271 [INFO] ⚠️ Strategy bollinger failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:03:07,279 [INFO] ✅ ICPUSDT: Best strategy → trend_score | PnL: 0.00 | Win rate: 0.00
+2025-06-06 17:03:07,368 [INFO] Fetching data for ONDOUSDT...
+2025-06-06 17:03:11,172 [INFO] ⚠️ Strategy ema failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:03:11,174 [INFO] ⚠️ Strategy rsi failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:03:11,175 [INFO] ⚠️ Strategy macd failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:03:11,177 [INFO] ⚠️ Strategy bollinger failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:03:11,186 [INFO] ✅ ONDOUSDT: Best strategy → trend_score | PnL: 0.00 | Win rate: 0.00
+2025-06-06 17:03:11,235 [INFO] Fetching data for ETCUSDT...
+2025-06-06 17:03:15,104 [INFO] ⚠️ Strategy ema failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:03:15,105 [INFO] ⚠️ Strategy rsi failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:03:15,107 [INFO] ⚠️ Strategy macd failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:03:15,108 [INFO] ⚠️ Strategy bollinger failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:03:15,118 [INFO] ✅ ETCUSDT: Best strategy → trend_score | PnL: 0.00 | Win rate: 0.00
+2025-06-06 17:03:15,166 [INFO] Fetching data for KASUSDT...
+2025-06-06 17:03:18,971 [INFO] ⚠️ Strategy ema failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:03:18,973 [INFO] ⚠️ Strategy rsi failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:03:18,974 [INFO] ⚠️ Strategy macd failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:03:18,975 [INFO] ⚠️ Strategy bollinger failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:03:18,984 [INFO] ✅ KASUSDT: Best strategy → trend_score | PnL: 0.00 | Win rate: 0.00
+2025-06-06 17:03:19,034 [INFO] Fetching data for VETUSDT...
+2025-06-06 17:03:22,828 [INFO] ⚠️ Strategy ema failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:03:22,830 [INFO] ⚠️ Strategy rsi failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:03:22,831 [INFO] ⚠️ Strategy macd failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:03:22,832 [INFO] ⚠️ Strategy bollinger failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:03:22,842 [INFO] ✅ VETUSDT: Best strategy → trend_score | PnL: 0.00 | Win rate: 0.00
+2025-06-06 17:03:22,891 [INFO] Fetching data for TRUMPUSDT...
+2025-06-06 17:03:26,684 [INFO] ⚠️ Strategy ema failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:03:26,685 [INFO] ⚠️ Strategy rsi failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:03:26,687 [INFO] ⚠️ Strategy macd failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:03:26,688 [INFO] ⚠️ Strategy bollinger failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:03:26,697 [INFO] ✅ TRUMPUSDT: Best strategy → trend_score | PnL: 0.00 | Win rate: 0.00
+2025-06-06 17:03:26,748 [INFO] Fetching data for FETUSDT...
+2025-06-06 17:03:30,540 [INFO] ⚠️ Strategy ema failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:03:30,542 [INFO] ⚠️ Strategy rsi failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:03:30,544 [INFO] ⚠️ Strategy macd failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:03:30,545 [INFO] ⚠️ Strategy bollinger failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:03:30,554 [INFO] ✅ FETUSDT: Best strategy → trend_score | PnL: 0.00 | Win rate: 0.00
+2025-06-06 17:03:30,603 [INFO] Fetching data for RENDERUSDT...
+2025-06-06 17:03:34,892 [INFO] ⚠️ Strategy ema failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:03:34,893 [INFO] ⚠️ Strategy rsi failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:03:34,895 [INFO] ⚠️ Strategy macd failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:03:34,896 [INFO] ⚠️ Strategy bollinger failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:03:34,906 [INFO] ✅ RENDERUSDT: Best strategy → trend_score | PnL: 0.00 | Win rate: 0.00
+2025-06-06 17:03:34,954 [INFO] Fetching data for ATOMUSDT...
+2025-06-06 17:03:38,768 [INFO] ⚠️ Strategy ema failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:03:38,770 [INFO] ⚠️ Strategy rsi failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:03:38,771 [INFO] ⚠️ Strategy macd failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:03:38,773 [INFO] ⚠️ Strategy bollinger failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:03:38,782 [INFO] ✅ ATOMUSDT: Best strategy → trend_score | PnL: 0.00 | Win rate: 0.00
+2025-06-06 17:03:38,829 [INFO] Fetching data for POLUSDT...
+2025-06-06 17:03:42,602 [INFO] ⚠️ Strategy ema failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:03:42,604 [INFO] ⚠️ Strategy rsi failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:03:42,605 [INFO] ⚠️ Strategy macd failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:03:42,607 [INFO] ⚠️ Strategy bollinger failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:03:42,616 [INFO] ✅ POLUSDT: Best strategy → trend_score | PnL: 0.00 | Win rate: 0.00
+2025-06-06 17:03:42,664 [INFO] Fetching data for ENAUSDT...
+2025-06-06 17:03:46,512 [INFO] ⚠️ Strategy ema failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:03:46,513 [INFO] ⚠️ Strategy rsi failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:03:46,515 [INFO] ⚠️ Strategy macd failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:03:46,516 [INFO] ⚠️ Strategy bollinger failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:03:46,526 [INFO] ✅ ENAUSDT: Best strategy → trend_score | PnL: 0.00 | Win rate: 0.00
+2025-06-06 17:03:46,574 [INFO] Fetching data for WLDUSDT...
+2025-06-06 17:03:50,426 [INFO] ⚠️ Strategy ema failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:03:50,427 [INFO] ⚠️ Strategy rsi failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:03:50,429 [INFO] ⚠️ Strategy macd failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:03:50,430 [INFO] ⚠️ Strategy bollinger failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:03:50,438 [INFO] ✅ WLDUSDT: Best strategy → trend_score | PnL: 0.00 | Win rate: 0.00
+2025-06-06 17:03:50,490 [INFO] Fetching data for QNTUSDT...
+2025-06-06 17:03:54,298 [INFO] ⚠️ Strategy ema failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:03:54,300 [INFO] ⚠️ Strategy rsi failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:03:54,301 [INFO] ⚠️ Strategy macd failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:03:54,303 [INFO] ⚠️ Strategy bollinger failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:03:54,312 [INFO] ✅ QNTUSDT: Best strategy → trend_score | PnL: 0.00 | Win rate: 0.00
+2025-06-06 17:03:54,360 [INFO] Fetching data for FILUSDT...
+2025-06-06 17:03:58,150 [INFO] ⚠️ Strategy ema failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:03:58,152 [INFO] ⚠️ Strategy rsi failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:03:58,153 [INFO] ⚠️ Strategy macd failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:03:58,155 [INFO] ⚠️ Strategy bollinger failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:03:58,164 [INFO] ✅ FILUSDT: Best strategy → trend_score | PnL: 0.00 | Win rate: 0.00
+2025-06-06 17:03:58,217 [INFO] Fetching data for ARBUSDT...
+2025-06-06 17:04:02,033 [INFO] ⚠️ Strategy ema failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:04:02,035 [INFO] ⚠️ Strategy rsi failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:04:02,036 [INFO] ⚠️ Strategy macd failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:04:02,037 [INFO] ⚠️ Strategy bollinger failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:04:02,046 [INFO] ✅ ARBUSDT: Best strategy → trend_score | PnL: 0.00 | Win rate: 0.00
+2025-06-06 17:04:02,097 [INFO] Fetching data for ALGOUSDT...
+2025-06-06 17:04:05,881 [INFO] ⚠️ Strategy ema failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:04:05,883 [INFO] ⚠️ Strategy rsi failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:04:05,884 [INFO] ⚠️ Strategy macd failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:04:05,885 [INFO] ⚠️ Strategy bollinger failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:04:05,894 [INFO] ✅ ALGOUSDT: Best strategy → trend_score | PnL: 0.00 | Win rate: 0.00
+2025-06-06 17:04:05,942 [INFO] Fetching data for JUPUSDT...
+2025-06-06 17:04:09,739 [INFO] ⚠️ Strategy ema failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:04:09,740 [INFO] ⚠️ Strategy rsi failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:04:09,742 [INFO] ⚠️ Strategy macd failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:04:09,743 [INFO] ⚠️ Strategy bollinger failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:04:09,752 [INFO] ✅ JUPUSDT: Best strategy → trend_score | PnL: 0.00 | Win rate: 0.00
+2025-06-06 17:04:09,799 [INFO] Fetching data for TIAUSDT...
+2025-06-06 17:04:13,612 [INFO] ⚠️ Strategy ema failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:04:13,613 [INFO] ⚠️ Strategy rsi failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:04:13,615 [INFO] ⚠️ Strategy macd failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:04:13,616 [INFO] ⚠️ Strategy bollinger failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:04:13,625 [INFO] ✅ TIAUSDT: Best strategy → trend_score | PnL: 0.00 | Win rate: 0.00
+2025-06-06 17:04:13,674 [INFO] Fetching data for SUSDT...
+2025-06-06 17:04:17,471 [INFO] ⚠️ Strategy ema failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:04:17,472 [INFO] ⚠️ Strategy rsi failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:04:17,474 [INFO] ⚠️ Strategy macd failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:04:17,475 [INFO] ⚠️ Strategy bollinger failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:04:17,484 [INFO] ✅ SUSDT: Best strategy → trend_score | PnL: 0.00 | Win rate: 0.00
+2025-06-06 17:04:17,533 [INFO] Fetching data for BONKUSDT...
+2025-06-06 17:04:21,316 [INFO] ⚠️ Strategy ema failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:04:21,318 [INFO] ⚠️ Strategy rsi failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:04:21,319 [INFO] ⚠️ Strategy macd failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:04:21,320 [INFO] ⚠️ Strategy bollinger failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:04:21,329 [INFO] ✅ BONKUSDT: Best strategy → trend_score | PnL: 0.00 | Win rate: 0.00
+2025-06-06 17:04:21,378 [INFO] Fetching data for INJUSDT...
+2025-06-06 17:04:25,165 [INFO] ⚠️ Strategy ema failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:04:25,168 [INFO] ⚠️ Strategy rsi failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:04:25,169 [INFO] ⚠️ Strategy macd failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:04:25,170 [INFO] ⚠️ Strategy bollinger failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:04:25,179 [INFO] ✅ INJUSDT: Best strategy → trend_score | PnL: 0.00 | Win rate: 0.00
+2025-06-06 17:04:25,228 [INFO] Fetching data for VIRTUALUSDT...
+2025-06-06 17:04:29,050 [INFO] ⚠️ Strategy ema failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:04:29,052 [INFO] ⚠️ Strategy rsi failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:04:29,053 [INFO] ⚠️ Strategy macd failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:04:29,054 [INFO] ⚠️ Strategy bollinger failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:04:29,063 [INFO] ✅ VIRTUALUSDT: Best strategy → trend_score | PnL: 0.00 | Win rate: 0.00
+2025-06-06 17:04:29,113 [INFO] Fetching data for FARTCOINUSDT...
+2025-06-06 17:04:32,910 [INFO] ⚠️ Strategy ema failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:04:32,912 [INFO] ⚠️ Strategy rsi failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:04:32,914 [INFO] ⚠️ Strategy macd failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:04:32,915 [INFO] ⚠️ Strategy bollinger failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:04:32,924 [INFO] ✅ FARTCOINUSDT: Best strategy → trend_score | PnL: 0.00 | Win rate: 0.00
+2025-06-06 17:04:32,972 [INFO] Fetching data for SPXUSDT...
+2025-06-06 17:04:36,904 [INFO] ⚠️ Strategy ema failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:04:36,906 [INFO] ⚠️ Strategy rsi failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:04:36,908 [INFO] ⚠️ Strategy macd failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:04:36,909 [INFO] ⚠️ Strategy bollinger failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:04:36,918 [INFO] ✅ SPXUSDT: Best strategy → trend_score | PnL: 0.00 | Win rate: 0.00
+2025-06-06 17:04:36,967 [INFO] Fetching data for OPUSDT...
+2025-06-06 17:04:40,760 [INFO] ⚠️ Strategy ema failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:04:40,762 [INFO] ⚠️ Strategy rsi failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:04:40,763 [INFO] ⚠️ Strategy macd failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:04:40,765 [INFO] ⚠️ Strategy bollinger failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:04:40,773 [INFO] ✅ OPUSDT: Best strategy → trend_score | PnL: 0.00 | Win rate: 0.00
+2025-06-06 17:04:40,822 [INFO] Fetching data for SEIUSDT...
+2025-06-06 17:04:44,596 [INFO] ⚠️ Strategy ema failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:04:44,598 [INFO] ⚠️ Strategy rsi failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:04:44,599 [INFO] ⚠️ Strategy macd failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:04:44,601 [INFO] ⚠️ Strategy bollinger failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 17:04:44,610 [INFO] ✅ SEIUSDT: Best strategy → trend_score | PnL: 0.00 | Win rate: 0.00
