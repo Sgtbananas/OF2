@@ -114,11 +114,27 @@ def main():
     X = X.select_dtypes(include=[np.number])
     print(f"[ML_TRAINER] Using {X.shape[1]} numeric features.")
 
+    # --- NaN/Inf Handling ---
+    X = X.replace([np.inf, -np.inf], np.nan)
+    before = len(X)
+    X = X.dropna()
+    dropped = before - len(X)
+    if dropped > 0:
+        print(f"[ML_TRAINER] Dropped {dropped} rows with NaN or Inf values in features.")
+    y = y.loc[X.index]
+
     # Feature selection
     X_selected, selected_features, selector = automatic_feature_selection(X, y)
 
+    # Remove any NaNs from selected features (should not happen, but for safety)
+    nan_mask = ~np.isnan(X_selected).any(axis=1)
+    finite_mask = np.isfinite(X_selected).all(axis=1)
+    valid_mask = nan_mask & finite_mask
+    X_selected = X_selected[valid_mask]
+    y_valid = y.iloc[valid_mask]
+
     # Train/test split
-    X_train, X_test, y_train, y_test = train_test_split(X_selected, y, test_size=0.2, random_state=42, stratify=y)
+    X_train, X_test, y_train, y_test = train_test_split(X_selected, y_valid, test_size=0.2, random_state=42, stratify=y_valid)
 
     # Model comparison
     results = compare_models(X_train, X_test, y_train, y_test)
