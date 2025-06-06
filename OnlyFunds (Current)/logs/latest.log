@@ -1,31 +1,17 @@
-2025-06-06 16:12:27,660 [INFO] Config provided directly to orchestrator (merged with file if present).
-2025-06-06 16:12:27,660 [INFO] ML filter initialized.
-2025-06-06 16:12:30,738 [INFO] Orchestrator run mode: dry_run
-2025-06-06 16:12:31,028 [INFO] Selected top 200 CoinEx symbols.
-2025-06-06 16:12:31,029 [INFO] Running bot for 200 symbols on coinex (5min) with strategy 'ema'.
-2025-06-06 16:12:31,029 [INFO] Fetching data for CWIFUSDT...
-2025-06-06 16:12:34,851 [INFO] ⚠️ Strategy ema failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
-2025-06-06 16:12:34,853 [INFO] ⚠️ Strategy rsi failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
-2025-06-06 16:12:34,855 [INFO] ⚠️ Strategy macd failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
-2025-06-06 16:12:34,857 [INFO] ⚠️ Strategy bollinger failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
-2025-06-06 16:12:34,868 [INFO] ✅ CWIFUSDT: Best strategy → trend_score | PnL: 0.00 | Win rate: 0.00
-2025-06-06 16:12:34,872 [INFO] Fetching data for PSPUSDT...
-2025-06-06 16:12:38,977 [INFO] ⚠️ Strategy ema failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
-2025-06-06 16:12:38,978 [INFO] ⚠️ Strategy rsi failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
-2025-06-06 16:12:38,979 [INFO] ⚠️ Strategy macd failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
-2025-06-06 16:12:38,981 [INFO] ⚠️ Strategy bollinger failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
-2025-06-06 16:12:38,991 [INFO] ✅ PSPUSDT: Best strategy → trend_score | PnL: 0.00 | Win rate: 0.00
-2025-06-06 16:12:39,005 [INFO] Fetching data for BITCOINUSDT...
-2025-06-06 16:12:42,805 [INFO] ⚠️ Strategy ema failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
-2025-06-06 16:12:42,807 [INFO] ⚠️ Strategy rsi failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
-2025-06-06 16:12:42,808 [INFO] ⚠️ Strategy macd failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
-2025-06-06 16:12:42,809 [INFO] ⚠️ Strategy bollinger failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
-2025-06-06 16:12:42,818 [INFO] ✅ BITCOINUSDT: Best strategy → trend_score | PnL: 0.00 | Win rate: 0.00
-2025-06-06 16:12:42,830 [INFO] Fetching data for BROCCOLIUSDT...
-2025-06-06 16:12:46,670 [INFO] ⚠️ Strategy ema failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
-2025-06-06 16:12:46,671 [INFO] ⚠️ Strategy rsi failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
-2025-06-06 16:12:46,673 [INFO] ⚠️ Strategy macd failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
-2025-06-06 16:12:46,674 [INFO] ⚠️ Strategy bollinger failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
-2025-06-06 16:12:46,683 [INFO] ✅ BROCCOLIUSDT: Best strategy → trend_score | PnL: 0.00 | Win rate: 0.00
-2025-06-06 16:12:46,695 [INFO] Fetching data for TAPUSDT...
-2025-06-06 16:12:49,460 [ERROR] Error running trading bot: coinex does not have market symbol TAPUSDT
+2025-06-06 16:19:36,492 [INFO] Config provided directly to orchestrator (merged with file if present).
+2025-06-06 16:19:36,493 [INFO] ML filter initialized.
+2025-06-06 16:19:37,356 [INFO] Orchestrator run mode: dry_run
+2025-06-06 16:19:38,137 [INFO] Selected top 2 CoinEx symbols.
+2025-06-06 16:19:38,137 [INFO] Running bot for 2 symbols on coinex (5min) with strategy 'ema'.
+2025-06-06 16:19:38,137 [INFO] Fetching data for BTCUSDT...
+2025-06-06 16:19:41,902 [INFO] ⚠️ Strategy ema failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 16:19:41,904 [INFO] ⚠️ Strategy rsi failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 16:19:41,906 [INFO] ⚠️ Strategy macd failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 16:19:41,908 [INFO] ⚠️ Strategy bollinger failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 16:19:41,918 [INFO] ✅ BTCUSDT: Best strategy → trend_score | PnL: 0.00 | Win rate: 0.00
+2025-06-06 16:19:41,923 [INFO] Fetching data for ETHUSDT...
+2025-06-06 16:19:45,697 [INFO] ⚠️ Strategy ema failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 16:19:45,698 [INFO] ⚠️ Strategy rsi failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 16:19:45,700 [INFO] ⚠️ Strategy macd failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 16:19:45,701 [INFO] ⚠️ Strategy bollinger failed: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+2025-06-06 16:19:45,710 [INFO] ✅ ETHUSDT: Best strategy → trend_score | PnL: 0.00 | Win rate: 0.00
