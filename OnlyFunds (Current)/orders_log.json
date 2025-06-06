@@ -1798,5 +1798,365 @@
         "timestamp": "2025-06-06T16:27:52.929381",
         "reason": "signal",
         "type": "dry_run"
+    },
+    {
+        "symbol": "BTCUSDT",
+        "entry_price": 104645.52,
+        "exit_price": 104597.28,
+        "pnl": -48.24000000000524,
+        "timestamp": "2025-06-06T16:31:48.854546",
+        "reason": "signal",
+        "type": "dry_run"
+    },
+    {
+        "symbol": "BTCUSDT",
+        "entry_price": 104615.59,
+        "exit_price": 104555.15,
+        "pnl": -60.44000000000233,
+        "timestamp": "2025-06-06T16:31:48.854546",
+        "reason": "signal",
+        "type": "dry_run"
+    },
+    {
+        "symbol": "BTCUSDT",
+        "entry_price": 104470.99,
+        "exit_price": 104497.96,
+        "pnl": 26.970000000001164,
+        "timestamp": "2025-06-06T16:31:48.854546",
+        "reason": "signal",
+        "type": "dry_run"
+    },
+    {
+        "symbol": "BTCUSDT",
+        "entry_price": 104509.3,
+        "exit_price": 104533.75,
+        "pnl": 24.44999999999709,
+        "timestamp": "2025-06-06T16:31:48.854546",
+        "reason": "signal",
+        "type": "dry_run"
+    },
+    {
+        "symbol": "BTCUSDT",
+        "entry_price": 104536.46,
+        "exit_price": 104743.46,
+        "pnl": 207.0,
+        "timestamp": "2025-06-06T16:31:48.854546",
+        "reason": "signal",
+        "type": "dry_run"
+    },
+    {
+        "symbol": "BTCUSDT",
+        "entry_price": 104737.5,
+        "exit_price": 104833.99,
+        "pnl": 96.49000000000524,
+        "timestamp": "2025-06-06T16:31:48.854546",
+        "reason": "signal",
+        "type": "dry_run"
+    },
+    {
+        "symbol": "BTCUSDT",
+        "entry_price": 104609.25,
+        "exit_price": 104570.85,
+        "pnl": -38.39999999999418,
+        "timestamp": "2025-06-06T16:31:48.854546",
+        "reason": "signal",
+        "type": "dry_run"
+    },
+    {
+        "symbol": "BTCUSDT",
+        "entry_price": 104710.1,
+        "exit_price": 104800.36,
+        "pnl": 90.25999999999476,
+        "timestamp": "2025-06-06T16:31:48.854546",
+        "reason": "signal",
+        "type": "dry_run"
+    },
+    {
+        "symbol": "BTCUSDT",
+        "entry_price": 104836.4,
+        "exit_price": 105324.34,
+        "pnl": 487.9400000000023,
+        "timestamp": "2025-06-06T16:31:48.854546",
+        "reason": "signal",
+        "type": "dry_run"
+    },
+    {
+        "symbol": "BTCUSDT",
+        "entry_price": 105389.97,
+        "exit_price": 105602.86,
+        "pnl": 212.88999999999942,
+        "timestamp": "2025-06-06T16:31:48.854546",
+        "reason": "signal",
+        "type": "dry_run"
+    },
+    {
+        "symbol": "BTCUSDT",
+        "entry_price": 105739.54,
+        "exit_price": 105725.18,
+        "pnl": -14.360000000000582,
+        "timestamp": "2025-06-06T16:31:48.854546",
+        "reason": "signal",
+        "type": "dry_run"
+    },
+    {
+        "symbol": "BTCUSDT",
+        "entry_price": 104236.26,
+        "exit_price": 104442.38,
+        "pnl": 206.1200000000099,
+        "timestamp": "2025-06-06T16:31:48.854546",
+        "reason": "signal",
+        "type": "dry_run"
+    },
+    {
+        "symbol": "BTCUSDT",
+        "entry_price": 104599.14,
+        "exit_price": 104431.85,
+        "pnl": -167.2899999999936,
+        "timestamp": "2025-06-06T16:31:48.854546",
+        "reason": "signal",
+        "type": "dry_run"
+    },
+    {
+        "symbol": "BTCUSDT",
+        "entry_price": 104407.55,
+        "exit_price": 104741.15,
+        "pnl": 333.59999999999127,
+        "timestamp": "2025-06-06T16:31:48.854546",
+        "reason": "signal",
+        "type": "dry_run"
+    },
+    {
+        "symbol": "BTCUSDT",
+        "entry_price": 103422.24,
+        "exit_price": 103390.92,
+        "pnl": -31.320000000006985,
+        "timestamp": "2025-06-06T16:31:48.854546",
+        "reason": "signal",
+        "type": "dry_run"
+    },
+    {
+        "symbol": "BTCUSDT",
+        "entry_price": 103531.6,
+        "exit_price": 103451.73,
+        "pnl": -79.8700000000099,
+        "timestamp": "2025-06-06T16:31:48.854546",
+        "reason": "signal",
+        "type": "dry_run"
+    },
+    {
+        "symbol": "BTCUSDT",
+        "entry_price": 102989.61,
+        "exit_price": 103149.28,
+        "pnl": 159.66999999999825,
+        "timestamp": "2025-06-06T16:31:48.854546",
+        "reason": "signal",
+        "type": "dry_run"
+    },
+    {
+        "symbol": "BTCUSDT",
+        "entry_price": 103086.77,
+        "exit_price": 103002.13,
+        "pnl": -84.63999999999942,
+        "timestamp": "2025-06-06T16:31:48.854546",
+        "reason": "signal",
+        "type": "dry_run"
+    },
+    {
+        "symbol": "BTCUSDT",
+        "entry_price": 102940.31,
+        "exit_price": 102631.49,
+        "pnl": -308.81999999999243,
+        "timestamp": "2025-06-06T16:31:48.854546",
+        "reason": "signal",
+        "type": "dry_run"
+    },
+    {
+        "symbol": "BTCUSDT",
+        "entry_price": 102172.86,
+        "exit_price": 102187.9,
+        "pnl": 15.039999999993597,
+        "timestamp": "2025-06-06T16:31:48.854546",
+        "reason": "signal",
+        "type": "dry_run"
+    },
+    {
+        "symbol": "BTCUSDT",
+        "entry_price": 102052.83,
+        "exit_price": 101826.47,
+        "pnl": -226.36000000000058,
+        "timestamp": "2025-06-06T16:31:48.854546",
+        "reason": "signal",
+        "type": "dry_run"
+    },
+    {
+        "symbol": "BTCUSDT",
+        "entry_price": 101452.95,
+        "exit_price": 101236.27,
+        "pnl": -216.67999999999302,
+        "timestamp": "2025-06-06T16:31:48.854546",
+        "reason": "signal",
+        "type": "dry_run"
+    },
+    {
+        "symbol": "BTCUSDT",
+        "entry_price": 101141.65,
+        "exit_price": 100700.0,
+        "pnl": -441.6499999999942,
+        "timestamp": "2025-06-06T16:31:48.854546",
+        "reason": "signal",
+        "type": "dry_run"
+    },
+    {
+        "symbol": "BTCUSDT",
+        "entry_price": 100991.88,
+        "exit_price": 100510.64,
+        "pnl": -481.24000000000524,
+        "timestamp": "2025-06-06T16:31:48.854546",
+        "reason": "signal",
+        "type": "dry_run"
+    },
+    {
+        "symbol": "BTCUSDT",
+        "entry_price": 100776.66,
+        "exit_price": 101294.21,
+        "pnl": 517.5500000000029,
+        "timestamp": "2025-06-06T16:31:48.854546",
+        "reason": "signal",
+        "type": "dry_run"
+    },
+    {
+        "symbol": "BTCUSDT",
+        "entry_price": 101484.69,
+        "exit_price": 101135.99,
+        "pnl": -348.6999999999971,
+        "timestamp": "2025-06-06T16:31:48.854546",
+        "reason": "signal",
+        "type": "dry_run"
+    },
+    {
+        "symbol": "BTCUSDT",
+        "entry_price": 101167.95,
+        "exit_price": 101511.22,
+        "pnl": 343.2700000000041,
+        "timestamp": "2025-06-06T16:31:48.854546",
+        "reason": "signal",
+        "type": "dry_run"
+    },
+    {
+        "symbol": "BTCUSDT",
+        "entry_price": 101665.95,
+        "exit_price": 101658.86,
+        "pnl": -7.0899999999965075,
+        "timestamp": "2025-06-06T16:31:48.854546",
+        "reason": "signal",
+        "type": "dry_run"
+    },
+    {
+        "symbol": "BTCUSDT",
+        "entry_price": 101713.75,
+        "exit_price": 101674.58,
+        "pnl": -39.169999999998254,
+        "timestamp": "2025-06-06T16:31:48.854546",
+        "reason": "signal",
+        "type": "dry_run"
+    },
+    {
+        "symbol": "BTCUSDT",
+        "entry_price": 101595.2,
+        "exit_price": 101531.27,
+        "pnl": -63.929999999993015,
+        "timestamp": "2025-06-06T16:31:48.854546",
+        "reason": "signal",
+        "type": "dry_run"
+    },
+    {
+        "symbol": "BTCUSDT",
+        "entry_price": 101447.3,
+        "exit_price": 101850.91,
+        "pnl": 403.6100000000006,
+        "timestamp": "2025-06-06T16:31:48.854546",
+        "reason": "signal",
+        "type": "dry_run"
+    },
+    {
+        "symbol": "BTCUSDT",
+        "entry_price": 101895.65,
+        "exit_price": 101773.32,
+        "pnl": -122.3299999999872,
+        "timestamp": "2025-06-06T16:31:48.854546",
+        "reason": "signal",
+        "type": "dry_run"
+    },
+    {
+        "symbol": "BTCUSDT",
+        "entry_price": 101838.03,
+        "exit_price": 101895.03,
+        "pnl": 57.0,
+        "timestamp": "2025-06-06T16:31:48.854546",
+        "reason": "signal",
+        "type": "dry_run"
+    },
+    {
+        "symbol": "BTCUSDT",
+        "entry_price": 101594.27,
+        "exit_price": 102116.46,
+        "pnl": 522.1900000000023,
+        "timestamp": "2025-06-06T16:31:48.854546",
+        "reason": "signal",
+        "type": "dry_run"
+    },
+    {
+        "symbol": "BTCUSDT",
+        "entry_price": 102268.31,
+        "exit_price": 102487.28,
+        "pnl": 218.97000000000116,
+        "timestamp": "2025-06-06T16:31:48.854546",
+        "reason": "signal",
+        "type": "dry_run"
+    },
+    {
+        "symbol": "BTCUSDT",
+        "entry_price": 102474.18,
+        "exit_price": 102458.33,
+        "pnl": -15.849999999991269,
+        "timestamp": "2025-06-06T16:31:48.854546",
+        "reason": "signal",
+        "type": "dry_run"
+    },
+    {
+        "symbol": "BTCUSDT",
+        "entry_price": 102520.1,
+        "exit_price": 102727.17,
+        "pnl": 207.06999999999243,
+        "timestamp": "2025-06-06T16:31:48.854546",
+        "reason": "signal",
+        "type": "dry_run"
+    },
+    {
+        "symbol": "BTCUSDT",
+        "entry_price": 102771.0,
+        "exit_price": 102791.07,
+        "pnl": 20.070000000006985,
+        "timestamp": "2025-06-06T16:31:48.854546",
+        "reason": "signal",
+        "type": "dry_run"
+    },
+    {
+        "symbol": "BTCUSDT",
+        "entry_price": 102764.05,
+        "exit_price": 102830.87,
+        "pnl": 66.81999999999243,
+        "timestamp": "2025-06-06T16:31:48.854546",
+        "reason": "signal",
+        "type": "dry_run"
+    },
+    {
+        "symbol": "BTCUSDT",
+        "entry_price": 102907.44,
+        "exit_price": 102931.86,
+        "pnl": 24.419999999998254,
+        "timestamp": "2025-06-06T16:31:48.854546",
+        "reason": "signal",
+        "type": "dry_run"
     }
 ]
