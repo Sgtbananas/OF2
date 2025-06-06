@@ -3,6 +3,7 @@ import requests
 from core.data import fetch_klines, add_indicators
 from optimizer import optimize_strategies
 from core.ml_filter import MLFilter
+from core.strategy_loader import get_available_strategies  # <-- Import for automation
 
 def get_available_symbols(exchange_name="coinex", quote="USDT"):
     """Get all active trading pairs for the given quote currency on the specified exchange."""
@@ -195,7 +196,18 @@ def select_top_coins(
     """
     Select the top N coins based on optimizer results, optionally using ML filtering.
     Always uses CoinGecko + CoinEx cross-referencing for CoinEx.
+    Automatically tests all available strategies if none specified.
     """
+    # Always use all available strategies unless user explicitly specifies
+    strategies_to_test = all_strategies
+    if not strategies_to_test or not isinstance(strategies_to_test, list) or len(strategies_to_test) == 0:
+        try:
+            strategies_to_test = get_available_strategies()
+            print(f"[COIN_SELECTOR] [INFO] Automatically testing all available strategies: {strategies_to_test}")
+        except Exception as e:
+            print(f"[COIN_SELECTOR] [ERROR] Failed to load strategies: {e}")
+            strategies_to_test = [strategy_name] if strategy_name else []
+
     symbols = (
         get_top_200_coinex_symbols(
             min_usd_volume=min_usd_volume,
@@ -206,15 +218,15 @@ def select_top_coins(
     )
     ml_filter = MLFilter(model_path=ml_model_path) if ml_enabled else None
 
+    # Always set config['all_strategies'] to strategies_to_test
     if config is None:
         config = {
-            "all_strategies": all_strategies if all_strategies else [strategy_name],
+            "all_strategies": strategies_to_test,
             "timeframe": timeframe,
             "limit": limit,
         }
     else:
-        if all_strategies:
-            config["all_strategies"] = all_strategies
+        config["all_strategies"] = strategies_to_test
         if timeframe:
             config["timeframe"] = timeframe
         if limit:
@@ -247,9 +259,8 @@ def select_top_coins(
     return results[:top_n]
 
 if __name__ == "__main__":
-    # Example usage: Select top 3 coins for the "ema" strategy with ML filter enabled
+    # Example usage: Select top 3 coins for all available strategies with ML filter enabled
     top_coins = select_top_coins(
-        strategy_name="ema",
         top_n=3,
         ml_enabled=True
     )
