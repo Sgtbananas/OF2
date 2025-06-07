@@ -54,31 +54,23 @@ def run_bot(config):
 
         df = add_all_features(df)  # PATCH: Ensure all features present before passing to strategies/ML
 
-        # PATCH: World-class guarantee for both MLFilter and strategy features
-        ml_required = list(ml_filter.features) if (ml_filter is not None and hasattr(ml_filter, "features") and ml_filter.features) else []
-        strat_required = set(NUMERIC_FEATURES)
-        # But also keep all columns needed by strategies (e.g., close, high, etc)
-        keep_cols = set(df.columns) | set(ml_required) | strat_required
-
-        for feat in keep_cols:
+        # PATCH: GUARANTEE MLFilter gets the correct full feature set in the correct order
+        ml_required = list(ml_filter.features) if (ml_filter is not None and hasattr(ml_filter, "features") and ml_filter.features) else list(NUMERIC_FEATURES)
+        # Add any missing columns as np.nan (or 0.0 if you prefer)
+        for feat in ml_required:
             if feat not in df.columns:
                 df[feat] = np.nan
-
-        # Order the columns for MLFilter (for ML), but keep all for strategies
-        if ml_required:
-            df_for_ml = df[ml_required].copy()
-        else:
-            df_for_ml = df[[col for col in NUMERIC_FEATURES if col in df.columns]].copy()
+        # Reorder columns so MLFilter gets the right order
+        df = df[[col for col in ml_required if col in df.columns]]
 
         print("[DEBUG][LIVE] Features after add_all_features:", list(df.columns))
-        print("[DEBUG][LIVE] Features for MLFilter:", list(df_for_ml.columns))
+        print("[DEBUG][LIVE] Features for MLFilter:", list(df.columns))  # Always the full set for MLFilter
 
         strategies = {}
         for strat_name in all_strats:
             try:
                 strategy = load_strategy(strat_name)
                 signals = strategy.generate_signals(df)
-                # Pass both: df (all features) and df_for_ml (ordered for MLFilter)
                 result = simulate_trades(df, signals, symbol, target, ml_filter=ml_filter)
                 strategies[strat_name] = result
             except Exception as e:
