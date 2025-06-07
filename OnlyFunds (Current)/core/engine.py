@@ -6,6 +6,7 @@ from core.order_manager import execute_trade, dry_run_trade, log_backtest
 from core.logger import log_message
 from core.visuals import print_summary
 from core.ml_filter import MLFilter
+from core.features import add_all_features  # PATCH: Import feature engineering
 import os
 
 def run_bot(config):
@@ -40,6 +41,8 @@ def run_bot(config):
         if df is None or df.empty:
             log_message(f"❌ Failed to fetch data for {symbol}")
             continue
+
+        df = add_all_features(df)  # PATCH: Ensure all features present before passing to strategies/ML
 
         strategies = {}
         for strat_name in all_strats:
