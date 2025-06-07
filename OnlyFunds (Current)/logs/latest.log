@@ -35,3 +35,94 @@
 2025-06-07 21:35:28,974 [INFO] ⚠️ Strategy trend_score failed: 'close'
 2025-06-07 21:35:28,974 [INFO] ❌ No successful strategies for BNBUSDT. Skipping.
 2025-06-07 21:35:28,974 [INFO] Fetching data for SOLUSDT...
+2025-06-07 21:35:33,009 [INFO] ⚠️ Strategy ema failed: 'close'
+2025-06-07 21:35:33,009 [INFO] ⚠️ Strategy rsi failed: 'close'
+2025-06-07 21:35:33,009 [INFO] ⚠️ Strategy macd failed: 'close'
+2025-06-07 21:35:33,010 [INFO] ⚠️ Strategy bollinger failed: 'close'
+2025-06-07 21:35:33,010 [INFO] ⚠️ Strategy trend_score failed: 'close'
+2025-06-07 21:35:33,010 [INFO] ❌ No successful strategies for SOLUSDT. Skipping.
+2025-06-07 21:35:33,010 [INFO] Fetching data for DOGEUSDT...
+2025-06-07 21:35:36,843 [INFO] ⚠️ Strategy ema failed: 'close'
+2025-06-07 21:35:36,843 [INFO] ⚠️ Strategy rsi failed: 'close'
+2025-06-07 21:35:36,844 [INFO] ⚠️ Strategy macd failed: 'close'
+2025-06-07 21:35:36,844 [INFO] ⚠️ Strategy bollinger failed: 'close'
+2025-06-07 21:35:36,845 [INFO] ⚠️ Strategy trend_score failed: 'close'
+2025-06-07 21:35:36,845 [INFO] ❌ No successful strategies for DOGEUSDT. Skipping.
+2025-06-07 21:35:36,845 [INFO] Fetching data for TRXUSDT...
+2025-06-07 21:35:41,043 [INFO] ⚠️ Strategy ema failed: 'close'
+2025-06-07 21:35:41,043 [INFO] ⚠️ Strategy rsi failed: 'close'
+2025-06-07 21:35:41,043 [INFO] ⚠️ Strategy macd failed: 'close'
+2025-06-07 21:35:41,044 [INFO] ⚠️ Strategy bollinger failed: 'close'
+2025-06-07 21:35:41,044 [INFO] ⚠️ Strategy trend_score failed: 'close'
+2025-06-07 21:35:41,044 [INFO] ❌ No successful strategies for TRXUSDT. Skipping.
+2025-06-07 21:35:41,044 [INFO] Fetching data for ADAUSDT...
+2025-06-07 21:35:44,951 [INFO] ⚠️ Strategy ema failed: 'close'
+2025-06-07 21:35:44,952 [INFO] ⚠️ Strategy rsi failed: 'close'
+2025-06-07 21:35:44,952 [INFO] ⚠️ Strategy macd failed: 'close'
+2025-06-07 21:35:44,952 [INFO] ⚠️ Strategy bollinger failed: 'close'
+2025-06-07 21:35:44,952 [INFO] ⚠️ Strategy trend_score failed: 'close'
+2025-06-07 21:35:44,953 [INFO] ❌ No successful strategies for ADAUSDT. Skipping.
+2025-06-07 21:35:44,953 [INFO] Fetching data for HYPEUSDT...
+2025-06-07 21:35:48,760 [INFO] ⚠️ Strategy ema failed: 'close'
+2025-06-07 21:35:48,761 [INFO] ⚠️ Strategy rsi failed: 'close'
+2025-06-07 21:35:48,761 [INFO] ⚠️ Strategy macd failed: 'close'
+2025-06-07 21:35:48,761 [INFO] ⚠️ Strategy bollinger failed: 'close'
+2025-06-07 21:35:48,762 [INFO] ⚠️ Strategy trend_score failed: 'close'
+2025-06-07 21:35:48,762 [INFO] ❌ No successful strategies for HYPEUSDT. Skipping.
+2025-06-07 21:35:48,762 [INFO] Fetching data for SUIUSDT...
+2025-06-07 21:35:52,571 [INFO] ⚠️ Strategy ema failed: 'close'
+2025-06-07 21:35:52,572 [INFO] ⚠️ Strategy rsi failed: 'close'
+2025-06-07 21:35:52,572 [INFO] ⚠️ Strategy macd failed: 'close'
+2025-06-07 21:35:52,572 [INFO] ⚠️ Strategy bollinger failed: 'close'
+2025-06-07 21:35:52,572 [INFO] ⚠️ Strategy trend_score failed: 'close'
+2025-06-07 21:35:52,572 [INFO] ❌ No successful strategies for SUIUSDT. Skipping.
+2025-06-07 21:35:52,573 [INFO] Fetching data for LINKUSDT...
+2025-06-07 21:35:56,616 [INFO] ⚠️ Strategy ema failed: 'close'
+2025-06-07 21:35:56,616 [INFO] ⚠️ Strategy rsi failed: 'close'
+2025-06-07 21:35:56,616 [INFO] ⚠️ Strategy macd failed: 'close'
+2025-06-07 21:35:56,616 [INFO] ⚠️ Strategy bollinger failed: 'close'
+2025-06-07 21:35:56,617 [INFO] ⚠️ Strategy trend_score failed: 'close'
+2025-06-07 21:35:56,618 [INFO] ❌ No successful strategies for LINKUSDT. Skipping.
+2025-06-07 21:35:56,618 [INFO] Fetching data for AVAXUSDT...
+2025-06-07 21:36:00,452 [INFO] ⚠️ Strategy ema failed: 'close'
+2025-06-07 21:36:00,453 [INFO] ⚠️ Strategy rsi failed: 'close'
+2025-06-07 21:36:00,453 [INFO] ⚠️ Strategy macd failed: 'close'
+2025-06-07 21:36:00,453 [INFO] ⚠️ Strategy bollinger failed: 'close'
+2025-06-07 21:36:00,454 [INFO] ⚠️ Strategy trend_score failed: 'close'
+2025-06-07 21:36:00,454 [INFO] ❌ No successful strategies for AVAXUSDT. Skipping.
+2025-06-07 21:36:00,454 [INFO] Fetching data for XLMUSDT...
+2025-06-07 21:36:04,350 [INFO] ⚠️ Strategy ema failed: 'close'
+2025-06-07 21:36:04,350 [INFO] ⚠️ Strategy rsi failed: 'close'
+2025-06-07 21:36:04,350 [INFO] ⚠️ Strategy macd failed: 'close'
+2025-06-07 21:36:04,350 [INFO] ⚠️ Strategy bollinger failed: 'close'
+2025-06-07 21:36:04,351 [INFO] ⚠️ Strategy trend_score failed: 'close'
+2025-06-07 21:36:04,351 [INFO] ❌ No successful strategies for XLMUSDT. Skipping.
+2025-06-07 21:36:04,351 [INFO] Fetching data for BCHUSDT...
+2025-06-07 21:36:08,454 [INFO] ⚠️ Strategy ema failed: 'close'
+2025-06-07 21:36:08,454 [INFO] ⚠️ Strategy rsi failed: 'close'
+2025-06-07 21:36:08,455 [INFO] ⚠️ Strategy macd failed: 'close'
+2025-06-07 21:36:08,455 [INFO] ⚠️ Strategy bollinger failed: 'close'
+2025-06-07 21:36:08,456 [INFO] ⚠️ Strategy trend_score failed: 'close'
+2025-06-07 21:36:08,456 [INFO] ❌ No successful strategies for BCHUSDT. Skipping.
+2025-06-07 21:36:08,456 [INFO] Fetching data for TONUSDT...
+2025-06-07 21:36:12,513 [INFO] ⚠️ Strategy ema failed: 'close'
+2025-06-07 21:36:12,513 [INFO] ⚠️ Strategy rsi failed: 'close'
+2025-06-07 21:36:12,514 [INFO] ⚠️ Strategy macd failed: 'close'
+2025-06-07 21:36:12,514 [INFO] ⚠️ Strategy bollinger failed: 'close'
+2025-06-07 21:36:12,514 [INFO] ⚠️ Strategy trend_score failed: 'close'
+2025-06-07 21:36:12,515 [INFO] ❌ No successful strategies for TONUSDT. Skipping.
+2025-06-07 21:36:12,515 [INFO] Fetching data for SHIBUSDT...
+2025-06-07 21:36:16,545 [INFO] ⚠️ Strategy ema failed: 'close'
+2025-06-07 21:36:16,545 [INFO] ⚠️ Strategy rsi failed: 'close'
+2025-06-07 21:36:16,546 [INFO] ⚠️ Strategy macd failed: 'close'
+2025-06-07 21:36:16,546 [INFO] ⚠️ Strategy bollinger failed: 'close'
+2025-06-07 21:36:16,546 [INFO] ⚠️ Strategy trend_score failed: 'close'
+2025-06-07 21:36:16,546 [INFO] ❌ No successful strategies for SHIBUSDT. Skipping.
+2025-06-07 21:36:16,546 [INFO] Fetching data for HBARUSDT...
+2025-06-07 21:36:20,363 [INFO] ⚠️ Strategy ema failed: 'close'
+2025-06-07 21:36:20,364 [INFO] ⚠️ Strategy rsi failed: 'close'
+2025-06-07 21:36:20,364 [INFO] ⚠️ Strategy macd failed: 'close'
+2025-06-07 21:36:20,364 [INFO] ⚠️ Strategy bollinger failed: 'close'
+2025-06-07 21:36:20,365 [INFO] ⚠️ Strategy trend_score failed: 'close'
+2025-06-07 21:36:20,365 [INFO] ❌ No successful strategies for HBARUSDT. Skipping.
+2025-06-07 21:36:20,365 [INFO] Fetching data for LTCUSDT...
