@@ -7,10 +7,9 @@ from core.order_manager import execute_trade, dry_run_trade, log_backtest
 from core.logger import log_message
 from core.visuals import print_summary
 from core.ml_filter import MLFilter
-from core.features import add_all_features  # PATCH: Import feature engineering
+from core.features import add_all_features
 import os
 
-# PATCH: Use the exact same features as training
 NUMERIC_FEATURES = [
     'open', 'high', 'low', 'close', 'volume', 'tr', 'atr14', 'log_return', 'realized_vol_10', 'return_3',
     'roll_close_std_5', 'roll_vol_mean_5', 'roll_vol_std_5',
@@ -31,7 +30,6 @@ def run_bot(config):
     ml_threshold = config.get("ml_threshold", 0.6)
     ledger = []
 
-    # Optionally set up MLFilter
     ml_filter = None
     if ml_enabled:
         if os.path.exists(model_path):
@@ -52,25 +50,33 @@ def run_bot(config):
             log_message(f"❌ Failed to fetch data for {symbol}")
             continue
 
-        df = add_all_features(df)  # PATCH: Ensure all features present before passing to strategies/ML
+        df = add_all_features(df)
 
-        # PATCH: GUARANTEE MLFilter gets the correct full feature set in the correct order
-        ml_required = list(ml_filter.features) if (ml_filter is not None and hasattr(ml_filter, "features") and ml_filter.features) else list(NUMERIC_FEATURES)
-        # Add any missing columns as np.nan (or 0.0 if you prefer)
-        for feat in ml_required:
-            if feat not in df.columns:
-                df[feat] = np.nan
-        # Reorder columns so MLFilter gets the right order
-        df = df[[col for col in ml_required if col in df.columns]]
+        # --- PATCH: Ensure ALL features needed by ML and strategies are present ---
+        required = set(NUMERIC_FEATURES)
+        if ml_filter is not None and hasattr(ml_filter, "features") and ml_filter.features:
+            required |= set(ml_filter.features)
+        # STRATEGY columns (these are typically required always)
+        required |= {"open", "high", "low", "close", "volume", "tr"}
+        missing = [col for col in required if col not in df.columns]
+        for col in missing:
+            df[col] = np.nan  # or 0.0 if you prefer
+
+        # For MLFilter: order columns for ML input (but do not drop from df!)
+        if ml_filter is not None and hasattr(ml_filter, "features") and ml_filter.features:
+            ml_feature_cols = list(ml_filter.features)
+        else:
+            ml_feature_cols = NUMERIC_FEATURES
 
         print("[DEBUG][LIVE] Features after add_all_features:", list(df.columns))
-        print("[DEBUG][LIVE] Features for MLFilter:", list(df.columns))  # Always the full set for MLFilter
+        print("[DEBUG][LIVE] Features for MLFilter:", ml_feature_cols)
 
         strategies = {}
         for strat_name in all_strats:
             try:
                 strategy = load_strategy(strat_name)
                 signals = strategy.generate_signals(df)
+                # simulate_trades expects the full df for strategies, MLFilter expects ordered features inside
                 result = simulate_trades(df, signals, symbol, target, ml_filter=ml_filter)
                 strategies[strat_name] = result
             except Exception as e:
@@ -80,7 +86,6 @@ def run_bot(config):
             log_message(f"❌ No successful strategies for {symbol}. Skipping.")
             continue
 
-        # Select best strategy by PnL
         best_strategy = max(strategies.items(), key=lambda x: x[1]["pnl"])[0]
         best_result = strategies[best_strategy]
         log_message(
