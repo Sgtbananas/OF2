@@ -8,6 +8,7 @@ from core.coin_selector import get_top_200_coinex_symbols, select_top_coins
 from core.risk_manager import adjust_risk_based_on_profile
 from core.logger import log_message, log_error
 from core.backtester import simulate_trades
+from core.features import add_all_features  # PATCH: Import feature engineering
 
 class TradingOrchestrator:
     """
@@ -180,7 +181,9 @@ class TradingOrchestrator:
                         config=self.config,
                         ml_filter=self.ml_filter
                     )
+                    # PATCH: Add features to each DataFrame before MLFilter is used
                     if df is not None:
+                        df = add_all_features(df)
                         results.append(df)
                 except Exception as symbol_e:
                     log_error(f"Backtest failed for {symbol}: {symbol_e}")
