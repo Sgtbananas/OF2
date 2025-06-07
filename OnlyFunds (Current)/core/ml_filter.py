@@ -69,8 +69,17 @@ class MLFilter:
         arr = np.array(feats, dtype=np.float32).reshape(1, -1)
         logging.debug(f"MLFilter: Features extracted for prediction: {dict(zip(self.features, arr.flatten()))}")
 
-        # Apply selector if present
+        # --- WORLD-CLASS PATCH: SHAPE CHECK BEFORE SELECTOR ---
         if self.selector is not None:
+            expected_shape = len(self.features)
+            if arr.shape[1] != expected_shape:
+                msg = (
+                    f"MLFilter: Feature count mismatch before selector.transform! "
+                    f"Got shape {arr.shape}, expected ({1}, {expected_shape}). "
+                    f"Feature order: {self.features}"
+                )
+                logging.error(msg)
+                raise RuntimeError(msg)
             try:
                 arr = self.selector.transform(arr)
                 logging.debug(f"MLFilter: Selector reduced features to shape {arr.shape}")
@@ -177,6 +186,16 @@ class MLFilter:
 
             # Features after selector (if any)
             if self.selector is not None:
+                # --- WORLD-CLASS PATCH: SHAPE CHECK ---
+                expected_shape = len(self.features)
+                if arr.shape[1] != expected_shape:
+                    msg = (
+                        f"MLFilter: Feature count mismatch before selector.transform in explain! "
+                        f"Got shape {arr.shape}, expected ({1}, {expected_shape}). "
+                        f"Feature order: {self.features}"
+                    )
+                    logging.error(msg)
+                    raise RuntimeError(msg)
                 try:
                     arr_selected = self.selector.transform(arr)
                     support_mask = self.selector.get_support() if hasattr(self.selector, 'get_support') else None
