@@ -6,11 +6,12 @@ all_strategies:
   - trend_score
 
 ml_filter:
-  enabled: true
+  enabled: true     
   model_path: ml_filter_model.pkl
 ml_threshold: 0.6
 
-symbols_source: top_200_coinex
+symbols_source: top_200_coinex  # If you want to use the top 200 coins as symbols
+# symbols: [BTCUSDT, ETHUSDT, ...]  # Optionally, list manually if needed
 
 timeframe: 5min
 limit: 300

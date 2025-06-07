@@ -6,22 +6,33 @@ from core.order_manager import execute_trade, dry_run_trade, log_backtest
 from core.logger import log_message
 from core.visuals import print_summary
 from core.ml_filter import MLFilter
+import os
 
 def run_bot(config):
-    mode = config["mode"]
-    risk = config["risk"]
-    target = float(config["target"])
-    symbols = config["symbols"]
-    all_strats = config["all_strategies"]
-    ml_enabled = config.get("ml_filter", False)
+    mode = config.get("mode", "backtest")
+    risk = config.get("risk", 1)
+    target = float(config.get("target", 1))
+    symbols = config.get("symbols", [])
+    all_strats = config.get("all_strategies", [])
+    ml_cfg = config.get("ml_filter", {})
+    ml_enabled = ml_cfg.get("enabled", False) if isinstance(ml_cfg, dict) else bool(ml_cfg)
+    model_path = ml_cfg.get("model_path", "ml_filter_model.pkl") if isinstance(ml_cfg, dict) else "ml_filter_model.pkl"
     ml_threshold = config.get("ml_threshold", 0.6)
     ledger = []
 
     # Optionally set up MLFilter
     ml_filter = None
     if ml_enabled:
-        ml_filter = MLFilter()
-        # TODO: train ml_filter here with available data, or load pre-trained model
+        if os.path.exists(model_path):
+            try:
+                ml_filter = MLFilter(model_path=model_path)
+                log_message(f"✅ ML filter loaded from {model_path}")
+            except Exception as e:
+                log_message(f"❌ Failed to load ML filter model: {e}. Disabling ML filter.")
+                ml_filter = None
+        else:
+            log_message(f"❌ ML model file '{model_path}' not found. Disabling ML filter.")
+            ml_filter = None
 
     for symbol in symbols:
         log_message(f"Fetching data for {symbol}...")

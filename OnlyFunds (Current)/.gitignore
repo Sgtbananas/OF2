@@ -1,0 +1,13 @@
+state/
+logs/
+*.log
+*.tmp
+*.pyc
+__pycache__/
+.DS_Store
+data/logs/
+data/models/
+signals_log.json
+.vscode/
+.idea/
+Thumbs.db
