@@ -74,7 +74,7 @@ class MLFilter:
             expected_shape = len(self.features)
             if arr.shape[1] != expected_shape:
                 msg = (
-                    f"MLFilter: Feature count mismatch before selector.transform! "
+                    f"MLFilter: Feature count/order mismatch before selector.transform! "
                     f"Got shape {arr.shape}, expected ({1}, {expected_shape}). "
                     f"Feature order: {self.features}"
                 )
@@ -186,11 +186,10 @@ class MLFilter:
 
             # Features after selector (if any)
             if self.selector is not None:
-                # --- WORLD-CLASS PATCH: SHAPE CHECK ---
                 expected_shape = len(self.features)
                 if arr.shape[1] != expected_shape:
                     msg = (
-                        f"MLFilter: Feature count mismatch before selector.transform in explain! "
+                        f"MLFilter: Feature count/order mismatch before selector.transform in explain! "
                         f"Got shape {arr.shape}, expected ({1}, {expected_shape}). "
                         f"Feature order: {self.features}"
                     )
