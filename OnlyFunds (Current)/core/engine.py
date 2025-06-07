@@ -52,24 +52,23 @@ def run_bot(config):
 
         df = add_all_features(df)
 
-        # --- PATCH: Ensure ALL features needed by ML and strategies are present ---
-        required = set(NUMERIC_FEATURES)
-        if ml_filter is not None and hasattr(ml_filter, "features") and ml_filter.features:
-            required |= set(ml_filter.features)
-        # STRATEGY columns (these are typically required always)
-        required |= {"open", "high", "low", "close", "volume", "tr"}
-        missing = [col for col in required if col not in df.columns]
-        for col in missing:
-            df[col] = np.nan  # or 0.0 if you prefer
-
-        # For MLFilter: order columns for ML input (but do not drop from df!)
+        # --- PATCH: ensure ALL features for MLFilter are present (in correct order for ML) ---
+        # 1. Get required list (MLFilter features if available, else NUMERIC_FEATURES)
         if ml_filter is not None and hasattr(ml_filter, "features") and ml_filter.features:
             ml_feature_cols = list(ml_filter.features)
         else:
-            ml_feature_cols = NUMERIC_FEATURES
+            ml_feature_cols = list(NUMERIC_FEATURES)
+
+        # 2. Fill missing features with np.nan (or 0.0 if you prefer)
+        for col in ml_feature_cols:
+            if col not in df.columns:
+                df[col] = np.nan
+
+        # 3. For MLFilter: always maintain column order as in ml_feature_cols
+        df = df[ml_feature_cols + [c for c in df.columns if c not in ml_feature_cols]]
 
         print("[DEBUG][LIVE] Features after add_all_features:", list(df.columns))
-        print("[DEBUG][LIVE] Features for MLFilter:", ml_feature_cols)
+        print("[DEBUG][LIVE] MLFilter expects features:", ml_feature_cols)
 
         strategies = {}
         for strat_name in all_strats:
