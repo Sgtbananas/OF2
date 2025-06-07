@@ -43,7 +43,7 @@ def run_bot(config):
             continue
 
         df = add_all_features(df)  # PATCH: Ensure all features present before passing to strategies/ML
-	print("[DEBUG][LIVE] Features after add_all_features:", list(df.columns))
+        print("[DEBUG][LIVE] Features after add_all_features:", list(df.columns))  # PATCH: Print feature list
 
         strategies = {}
         for strat_name in all_strats:
