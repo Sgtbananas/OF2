@@ -69,7 +69,7 @@ class MLFilter:
         arr = np.array(feats, dtype=np.float32).reshape(1, -1)
         logging.debug(f"MLFilter: Features extracted for prediction: {dict(zip(self.features, arr.flatten()))}")
 
-        # --- WORLD-CLASS PATCH: SHAPE CHECK BEFORE SELECTOR ---
+        # ---- WORLD-CLASS PATCH: SHAPE/ORDER CHECK BEFORE SELECTOR ----
         if self.selector is not None:
             expected_shape = len(self.features)
             if arr.shape[1] != expected_shape:
@@ -87,7 +87,6 @@ class MLFilter:
                 msg = f"MLFilter: Feature selector transform failed: {e}"
                 logging.error(msg)
                 raise RuntimeError(msg)
-
         return arr
 
     def predict(self, X: np.ndarray) -> np.ndarray:
