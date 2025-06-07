@@ -108,7 +108,7 @@ def main():
     print(f"[ML_TRAINER] Loaded {len(df)} rows.")
 
     df = add_all_features(df)  # PATCH: Add all features before any further processing
-
+    print("[DEBUG][TRAIN] Features after add_all_features:", list(df.columns))
     df = df.dropna(subset=[TARGET_COL])
     y = df[TARGET_COL]
     X = df.drop(columns=[TARGET_COL])
