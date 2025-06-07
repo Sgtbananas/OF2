@@ -8,7 +8,7 @@ from sklearn.model_selection import train_test_split, GridSearchCV
 from sklearn.metrics import classification_report, accuracy_score, confusion_matrix, roc_auc_score
 from sklearn.feature_selection import SelectFromModel
 import matplotlib.pyplot as plt
-from core.features import add_all_features  # PATCH: Use feature engineering
+from core.features import add_all_features  # PATCH: Import feature engineering
 
 try:
     from xgboost import XGBClassifier
@@ -19,6 +19,15 @@ except ImportError:
 CSV_PATH = "ml_training_data.csv"
 MODEL_PATH = "ml_filter_model.pkl"
 TARGET_COL = "label"
+
+# PATCH: Define the set of features to use for both train and live
+NUMERIC_FEATURES = [
+    'open', 'high', 'low', 'close', 'volume', 'tr', 'atr14', 'log_return', 'realized_vol_10', 'return_3',
+    'roll_close_std_5', 'roll_vol_mean_5', 'roll_vol_std_5',
+    'roll_close_std_10', 'roll_vol_mean_10', 'roll_vol_std_10',
+    'roll_close_std_20', 'roll_vol_mean_20', 'roll_vol_std_20',
+    'entry_idx', 'exit_idx', 'pnl'
+]
 
 def safe_input(prompt, default="y"):
     try:
@@ -107,16 +116,22 @@ def main():
     df = pd.read_csv(CSV_PATH)
     print(f"[ML_TRAINER] Loaded {len(df)} rows.")
 
-    df = add_all_features(df)  # PATCH: Add all features before any further processing
+    df = add_all_features(df)
     print("[DEBUG][TRAIN] Features after add_all_features:", list(df.columns))
+
+    # PATCH: Select only the agreed numeric features + target for training
+    features_for_training = [col for col in NUMERIC_FEATURES if col in df.columns]
+    if TARGET_COL in df.columns:
+        features_for_training.append(TARGET_COL)
+    df = df[features_for_training]
 
     df = df.dropna(subset=[TARGET_COL])
     y = df[TARGET_COL]
     X = df.drop(columns=[TARGET_COL])
 
-    # Remove non-numeric columns
+    # Remove non-numeric columns (shouldn't be needed but for safety)
     X = X.select_dtypes(include=[np.number])
-    print(f"[ML_TRAINER] Using {X.shape[1]} numeric features.")
+    print(f"[ML_TRAINER] Using {X.shape[1]} numeric features: {list(X.columns)}")
 
     # --- NaN/Inf Handling ---
     X = X.replace([np.inf, -np.inf], np.nan)

@@ -9,6 +9,15 @@ from core.ml_filter import MLFilter
 from core.features import add_all_features  # PATCH: Import feature engineering
 import os
 
+# PATCH: Use the exact same features as training
+NUMERIC_FEATURES = [
+    'open', 'high', 'low', 'close', 'volume', 'tr', 'atr14', 'log_return', 'realized_vol_10', 'return_3',
+    'roll_close_std_5', 'roll_vol_mean_5', 'roll_vol_std_5',
+    'roll_close_std_10', 'roll_vol_mean_10', 'roll_vol_std_10',
+    'roll_close_std_20', 'roll_vol_mean_20', 'roll_vol_std_20',
+    'entry_idx', 'exit_idx', 'pnl'
+]
+
 def run_bot(config):
     mode = config.get("mode", "backtest")
     risk = config.get("risk", 1)
@@ -43,6 +52,11 @@ def run_bot(config):
             continue
 
         df = add_all_features(df)  # PATCH: Ensure all features present before passing to strategies/ML
+
+        # PATCH: Select only the agreed numeric features for live
+        selected_live_features = [col for col in NUMERIC_FEATURES if col in df.columns]
+        df = df[selected_live_features]
+
         print("[DEBUG][LIVE] Features after add_all_features:", list(df.columns))  # PATCH: Print feature list
 
         strategies = {}
