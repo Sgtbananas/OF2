@@ -8,6 +8,7 @@ from sklearn.model_selection import train_test_split, GridSearchCV
 from sklearn.metrics import classification_report, accuracy_score, confusion_matrix, roc_auc_score
 from sklearn.feature_selection import SelectFromModel
 import matplotlib.pyplot as plt
+from core.features import add_all_features  # PATCH: Use feature engineering
 
 try:
     from xgboost import XGBClassifier
@@ -105,6 +106,9 @@ def main():
     print("[ML_TRAINER] Loading training data...")
     df = pd.read_csv(CSV_PATH)
     print(f"[ML_TRAINER] Loaded {len(df)} rows.")
+
+    df = add_all_features(df)  # PATCH: Add all features before any further processing
+    print("[DEBUG][TRAIN] Features after add_all_features:", list(df.columns))
 
     df = df.dropna(subset=[TARGET_COL])
     y = df[TARGET_COL]
