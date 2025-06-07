@@ -6,15 +6,10 @@ import logging
 
 class MLFilter:
     """
-    World-class Machine Learning filter for algorithmic trading signals.
-    Handles robust model, selector, and feature name loading for both legacy and modern pipelines.
-
-    Attributes:
-        model: Trained sklearn-compatible model (e.g., RandomForest, LogisticRegression, etc.)
-        selector: Feature selector (e.g., from SelectFromModel) or None
-        features: List of feature names used for training (or None)
-        model_path: Path to loaded model file
-        model_version: (Optional) Model class name/version for future compatibility
+    Bulletproof ML filter for trading:
+    - Profit first: Only trades if model is valid and features match.
+    - Safety second: Auto-blocks trading on any bug, mismatch, or error.
+    - Logging for all critical events.
     """
 
     def __init__(self, model_path=None):
@@ -22,9 +17,7 @@ class MLFilter:
         self.selector = None
         self.features = None
         self.model_path = model_path
-        self.model_version = None
 
-        # Load model and optionally selector/features
         if model_path and os.path.exists(model_path):
             loaded = joblib.load(model_path)
             if isinstance(loaded, tuple):
@@ -37,118 +30,122 @@ class MLFilter:
             else:
                 self.model = loaded
                 logging.info(f"MLFilter: Loaded model only from {model_path}")
-            self.model_version = type(self.model).__name__
         else:
+            # Untrained fallback, refuses to trade.
             self.model = LogisticRegression()
-            logging.warning("MLFilter: No model found, using new (untrained) LogisticRegression.")
+            logging.warning("MLFilter: No model found, using untrained LogisticRegression (will block all trades).")
 
     def train(self, X_train, y_train):
-        """
-        Train the ML filter model (for dev/test use).
-        """
         self.model.fit(X_train, y_train)
         print("✅ ML filter trained successfully!")
 
     def extract_features(self, df, idx):
         """
-        Extract features in the same order as training.
-        If features were saved, use them. Otherwise, fallback to OHLCV.
-        Args:
-            df (pd.DataFrame): DataFrame with price data.
-            idx (int): Index to extract features from.
-        Returns:
-            np.ndarray: Feature vector for the ML model.
+        Extract features exactly as in training—if anything is missing, prediction is refused.
         """
         row = df.iloc[idx]
         if self.features is not None:
             feats = []
+            missing = []
             for col in self.features:
-                v = row[col] if col in row else 0.0
-                if v is None or np.isnan(v) or np.isinf(v):
+                if col in row:
+                    v = row[col]
+                    if v is None or np.isnan(v) or np.isinf(v):
+                        v = 0.0
+                else:
+                    missing.append(col)
                     v = 0.0
                 feats.append(v)
+            if missing:
+                msg = f"MLFilter: Refusing to predict—runtime data missing features: {missing}"
+                logging.error(msg)
+                raise RuntimeError(msg)
             arr = np.array(feats, dtype=np.float32).reshape(1, -1)
         else:
-            # fallback: standard OHLCV
+            # Fallback: legacy OHLCV
             arr = np.array([
                 row.get("close", 0.0),
                 row.get("high", 0.0),
                 row.get("low", 0.0),
                 row.get("volume", 0.0)
             ], dtype=np.float32).reshape(1, -1)
+
         # Apply selector if present
         if self.selector is not None:
             try:
                 arr = self.selector.transform(arr)
             except Exception as e:
-                logging.error(f"MLFilter: Feature selector transform failed: {e}")
+                msg = f"MLFilter: Feature selector transform failed: {e}"
+                logging.error(msg)
+                raise RuntimeError(msg)
+
         return arr
 
     def predict(self, X):
-        """
-        Predict class (0/1) for input X.
-        Args:
-            X (np.ndarray): Feature matrix
-        Returns:
-            np.ndarray: Predictions (1=allow trade, 0=block trade)
-        """
         if hasattr(self.model, "predict"):
             return self.model.predict(X)
-        raise RuntimeError("MLFilter: Model lacks predict() method!")
+        raise RuntimeError("MLFilter: Model lacks predict(). Refusing to trade.")
 
     def predict_proba(self, X):
-        """
-        Optionally return probability of positive class (for advanced thresholding).
-        """
         if hasattr(self.model, "predict_proba"):
             return self.model.predict_proba(X)
-        raise RuntimeError("MLFilter: Model lacks predict_proba() method!")
+        raise RuntimeError("MLFilter: Model lacks predict_proba().")
 
     def should_enter(self, df, idx, signal, threshold=0.5):
         """
-        Decide whether to allow entry based on ML model prediction.
-        Uses threshold if model supports predict_proba.
+        Only allow entry if model and features are fully valid. Refuse otherwise.
         """
-        arr = self.extract_features(df, idx)
-        if hasattr(self.model, "predict_proba"):
-            proba = self.model.predict_proba(arr)[0, 1]
-            return proba >= threshold
-        pred = self.predict(arr)
-        return bool(pred[0])
+        try:
+            arr = self.extract_features(df, idx)
+            if hasattr(self.model, "predict_proba"):
+                proba = self.model.predict_proba(arr)[0, 1]
+                if np.isnan(proba) or np.isinf(proba):
+                    logging.error("MLFilter: Model returned nan/inf for proba; refusing trade.")
+                    return False
+                return proba >= threshold
+            pred = self.predict(arr)
+            return bool(pred[0])
+        except Exception as e:
+            logging.error(f"MLFilter: should_enter blocked: {e}")
+            return False
 
     def should_exit(self, df, idx, signal, threshold=0.5):
         """
-        Decide whether to allow exit based on ML model prediction.
-        Uses threshold if model supports predict_proba.
+        Only allow exit if model and features are fully valid. Refuse otherwise.
         """
-        arr = self.extract_features(df, idx)
-        if hasattr(self.model, "predict_proba"):
-            proba = self.model.predict_proba(arr)[0, 1]
-            return proba >= threshold
-        pred = self.predict(arr)
-        return bool(pred[0])
+        try:
+            arr = self.extract_features(df, idx)
+            if hasattr(self.model, "predict_proba"):
+                proba = self.model.predict_proba(arr)[0, 1]
+                if np.isnan(proba) or np.isinf(proba):
+                    logging.error("MLFilter: Model returned nan/inf for proba; refusing trade exit.")
+                    return False
+                return proba >= threshold
+            pred = self.predict(arr)
+            return bool(pred[0])
+        except Exception as e:
+            logging.error(f"MLFilter: should_exit blocked: {e}")
+            return False
 
     def get_feature_importance(self):
-        """
-        Return feature importance if available (for explainability).
-        """
-        if hasattr(self.model, "feature_importances_"):
-            return dict(zip(self.features if self.features is not None else [], self.model.feature_importances_))
-        if hasattr(self.model, "coef_"):
-            return dict(zip(self.features if self.features is not None else [], self.model.coef_[0]))
+        if hasattr(self.model, "feature_importances_") and self.features is not None:
+            return dict(zip(self.features, self.model.feature_importances_))
+        if hasattr(self.model, "coef_") and self.features is not None:
+            return dict(zip(self.features, self.model.coef_[0]))
         return {}
 
     def explain(self, df, idx):
-        """
-        Optionally: Return a dict with input features, prediction, and importance for explainability.
-        """
-        feats = self.extract_features(df, idx)
-        pred = self.predict(feats)
-        info = {
-            "features": dict(zip(self.features if self.features is not None else [], feats.flatten())),
-            "prediction": int(pred[0]),
-            "importance": self.get_feature_importance()
-        }
-        if hasattr(self.model, "predict_proba"):
-            info["probability"] = float(self.model.predict_proba(feats)[0, 1])
-        return info
+        try:
+            feats = self.extract_features(df, idx)
+            pred = self.predict(feats)
+            info = {
+                "features": dict(zip(self.features if self.features is not None else [], feats.flatten())),
+                "prediction": int(pred[0]),
+                "importance": self.get_feature_importance()
+            }
+            if hasattr(self.model, "predict_proba"):
+                info["probability"] = float(self.model.predict_proba(feats)[0, 1])
+            return info
+        except Exception as e:
+            logging.error(f"MLFilter: explain blocked: {e}")
+            return {"error": str(e)}
