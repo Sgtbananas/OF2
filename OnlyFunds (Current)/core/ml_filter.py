@@ -50,14 +50,13 @@ class MLFilter:
         if self.features is None:
             raise RuntimeError("MLFilter: Model loaded without feature names. Cannot extract features.")
 
-        # ---- Bulletproof: Check columns in DataFrame match features expected ----
+        # == BULLETPROOF: Ensure DataFrame columns are exactly the model features, in order, no extras ==
         missing_cols = [col for col in self.features if col not in df.columns]
-        extra_cols = [col for col in df.columns if col not in self.features]
         if missing_cols:
             msg = f"MLFilter: DataFrame is missing required features: {missing_cols}"
             logging.error(msg)
             raise RuntimeError(msg)
-        if len(df.columns) != len(self.features) or list(df.columns) != list(self.features):
+        if list(df.columns) != list(self.features):
             msg = (
                 "MLFilter: DataFrame columns do not match the order/length of model features!\n"
                 f"Expected columns: {self.features}\n"
@@ -85,7 +84,7 @@ class MLFilter:
         arr = np.array(feats, dtype=np.float32).reshape(1, -1)
         logging.debug(f"MLFilter: Features extracted for prediction: {dict(zip(self.features, arr.flatten()))}")
 
-        # ---- WORLD-CLASS PATCH: SHAPE/ORDER CHECK BEFORE SELECTOR ----
+        # ---- SHAPE/ORDER CHECK BEFORE SELECTOR ----
         if self.selector is not None:
             expected_shape = len(self.features)
             if arr.shape[1] != expected_shape:
@@ -178,14 +177,13 @@ class MLFilter:
         including feature values, importance, and probabilities.
         """
         try:
-            # ---- Bulletproof: Check columns in DataFrame match features expected ----
+            # == Ensure DataFrame columns are exactly the model features, in order, no extras ==
             missing_cols = [col for col in self.features if col not in df.columns]
-            extra_cols = [col for col in df.columns if col not in self.features]
             if missing_cols:
                 msg = f"MLFilter: DataFrame is missing required features: {missing_cols}"
                 logging.error(msg)
                 raise RuntimeError(msg)
-            if len(df.columns) != len(self.features) or list(df.columns) != list(self.features):
+            if list(df.columns) != list(self.features):
                 msg = (
                     "MLFilter: DataFrame columns do not match the order/length of model features!\n"
                     f"Expected columns: {self.features}\n"
@@ -197,7 +195,6 @@ class MLFilter:
             feats = []
             feature_values = {}
             missing = []
-            # Always show features before selector
             row = df.iloc[idx]
             for col in self.features:
                 if col in row:
