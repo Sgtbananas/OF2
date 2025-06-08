@@ -52,7 +52,8 @@ def run_bot(config):
 
         df = add_all_features(df)
 
-        # === WORLD-CLASS PATCH: Build df_ml for MLFilter, only exact features in order ===
+        # === BULLETPROOF PATCH: Build df_ml for MLFilter, with only required features and order ===
+        df_ml = None
         if ml_filter is not None and hasattr(ml_filter, "features") and ml_filter.features:
             for col in ml_filter.features:
                 if col not in df.columns:
@@ -60,22 +61,21 @@ def run_bot(config):
             df_ml = df[ml_filter.features]
             print("[DEBUG][LIVE] MLFilter expects features:", ml_filter.features)
             print("[DEBUG][LIVE] DataFrame columns for MLFilter:", list(df_ml.columns))
-        else:
-            df_ml = None
+        # else: strategies get the full df, MLFilter gets None
 
         strategies = {}
         for strat_name in all_strats:
             try:
                 strategy = load_strategy(strat_name)
                 signals = strategy.generate_signals(df)
-                # Pass both the full df (for strategies) and df_ml (for MLFilter, if needed)
+                # Pass both the full df (for strategies) and df_ml (for MLFilter)
                 result = simulate_trades(
                     df,
                     signals,
                     symbol,
                     target,
                     ml_filter=ml_filter,
-                    ml_features=df_ml  # Pass as kwarg so trade code can use the correct one
+                    ml_features=df_ml
                 )
                 strategies[strat_name] = result
             except Exception as e:

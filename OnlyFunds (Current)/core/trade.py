@@ -23,7 +23,7 @@ def backtest_strategy(df, signal, config, symbol, ml_filter=None, ml_features=No
     losses = 0
     total_return = 0
 
-    # If ml_features is not supplied but ml_filter is, build it now
+    # PATCH: Guarantee correct MLFilter features
     if ml_filter is not None and ml_features is None:
         for col in ml_filter.features:
             if col not in df.columns:
@@ -38,7 +38,6 @@ def backtest_strategy(df, signal, config, symbol, ml_filter=None, ml_features=No
 
         allow_trade = True
         if ml_filter:
-            # Use only the features DataFrame in the right order!
             allow_trade = ml_filter.should_enter(ml_features, i, sig, threshold)
 
         if not in_position and sig > threshold and allow_trade:

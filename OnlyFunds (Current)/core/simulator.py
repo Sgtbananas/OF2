@@ -140,26 +140,12 @@ def simulate_trades(
     log_ml_data: bool = True,  # Always log ML data unless explicitly disabled
     ml_logfile: str = "ml_training_data.csv",
     verbose_ml_log: bool = False,
-    hyperparams: dict = None   # Pass hyperparameters for logging
+    hyperparams: dict = None,
+    ml_features=None  # PATCH: Accept pre-prepared ML features DataFrame
 ):
     """
     Simulates trades based on provided signals and optional ML filtering and risk management.
     Optionally logs trade data for ML training.
-    Args:
-        df (pd.DataFrame): DataFrame with price data.
-        signals (pd.Series): Series with 1 (buy), -1 (sell), 0 (hold) signals.
-        symbol (str): The trading symbol (e.g., "BTCUSDT").
-        target (float): Target profit/loss per trade.
-        ml_filter (optional): ML filter object for filtering trades.
-        stop_loss (float, optional): Stop loss as a fraction (e.g. 0.02 for 2%).
-        trailing_stop (float, optional): Trailing stop as a fraction (e.g. 0.01 for 1%).
-        log_ml_data (bool): If True, log trade data for ML training.
-        ml_logfile (str): Path to the CSV file for logging trade data.
-        verbose_ml_log (bool): Print every ML log row for debug.
-        hyperparams (dict): Hyperparameters used for the strategy (for logging).
-
-    Returns:
-        dict: Contains trades (list of dicts), total PnL, and win rate.
     """
     trades = []
     position = None
@@ -176,37 +162,42 @@ def simulate_trades(
         "hour_of_day", "day_of_week", "market_regime",
         "atr14", "realized_vol_10", "return_3"
     ]
-    # Add all indicator columns from df if present (excluding duplicates)
     ml_feature_fields = base_features + [
         col for col in df.columns if col not in base_features
     ]
-    # Add engineered rolling features and hyperparameters
     for window in [5, 10, 20]:
         ml_feature_fields += [
             f"roll_close_mean_{window}", f"roll_close_std_{window}",
             f"roll_vol_mean_{window}", f"roll_vol_std_{window}"
         ]
-    # Add hyperparameter fields if present
     if hyperparams is not None:
         ml_feature_fields += [f"hp_{k}" for k in hyperparams.keys()]
     ml_feature_fields += ["label"]
+
+    # === BULLETPROOF PATCH: Guarantee MLFilter gets only and exactly the features it expects ===
+    if ml_filter is not None and hasattr(ml_filter, "features") and ml_filter.features:
+        # Use precomputed ml_features if given, else build it now
+        if ml_features is None:
+            for col in ml_filter.features:
+                if col not in df.columns:
+                    df[col] = None
+            ml_features = df[ml_filter.features]
 
     for i in range(len(df)):
         price = df.iloc[i]["close"]
         signal = signals.iloc[i]
 
         # Entry signal with ML filter
-        if position is None and signal == 1:
-            should_enter = True
-            if ml_filter is not None and hasattr(ml_filter, "should_enter"):
-                should_enter = ml_filter.should_enter(df, i, signal)
-            if should_enter:
-                position = "long"
-                entry_price = price
-                highest_price = price
-                entry_idx = i
-                entry_row = df.iloc[i]
-                entry_time = entry_row.get("timestamp", None) or datetime.now().isoformat()
+        should_enter = True
+        if position is None and signal == 1 and ml_filter is not None:
+            should_enter = ml_filter.should_enter(ml_features, i, signal)
+        if position is None and signal == 1 and should_enter:
+            position = "long"
+            entry_price = price
+            highest_price = price
+            entry_idx = i
+            entry_row = df.iloc[i]
+            entry_time = entry_row.get("timestamp", None) or datetime.now().isoformat()
 
         # If in position, update trailing stop and check stop loss
         if position == "long":
@@ -258,37 +249,34 @@ def simulate_trades(
                 continue
 
         # Exit signal with ML filter
-        if position == "long" and signal == -1:
-            should_exit = True
-            if ml_filter is not None and hasattr(ml_filter, "should_exit"):
-                should_exit = ml_filter.should_exit(df, i, signal)
-            if should_exit:
-                pnl = price - entry_price
-                cumulative_pnl += pnl
-                trades.append({
-                    "symbol": symbol,
-                    "entry_price": entry_price,
-                    "exit_price": price,
-                    "pnl": pnl,
-                    "timestamp": datetime.now().isoformat(),
-                    "reason": "signal"
-                })
-                if pnl > 0:
-                    win_count += 1
-                if log_ml_data:
-                    log_row = enrich_features(
-                        df, i, symbol, entry_idx, entry_time, entry_price, price, pnl, "signal", signal, hyperparams=hyperparams
-                    )
-                    log_trade_sample(ml_logfile, log_row, header=ml_feature_fields, verbose=verbose_ml_log)
-                position = None
+        should_exit = True
+        if position == "long" and signal == -1 and ml_filter is not None:
+            should_exit = ml_filter.should_exit(ml_features, i, signal)
+        if position == "long" and signal == -1 and should_exit:
+            pnl = price - entry_price
+            cumulative_pnl += pnl
+            trades.append({
+                "symbol": symbol,
+                "entry_price": entry_price,
+                "exit_price": price,
+                "pnl": pnl,
+                "timestamp": datetime.now().isoformat(),
+                "reason": "signal"
+            })
+            if pnl > 0:
+                win_count += 1
+            if log_ml_data:
+                log_row = enrich_features(
+                    df, i, symbol, entry_idx, entry_time, entry_price, price, pnl, "signal", signal, hyperparams=hyperparams
+                )
+                log_trade_sample(ml_logfile, log_row, header=ml_feature_fields, verbose=verbose_ml_log)
+            position = None
 
     total_trades = len(trades)
     win_rate = win_count / total_trades if total_trades else 0.0
 
-    # World-class: print summary stats
     print(f"\n[SIMULATOR] {symbol}: {total_trades} trades | PnL: {cumulative_pnl:.4f} | Win rate: {win_rate:.2%}")
 
-    # World-class: autosave all trades for later analysis
     try:
         pd.DataFrame(trades).to_csv(f"trades_{symbol}_debug.csv", index=False)
         print(f"[SIMULATOR] Trade log saved to trades_{symbol}_debug.csv")
