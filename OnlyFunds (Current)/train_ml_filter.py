@@ -18,6 +18,7 @@ except ImportError:
 
 CSV_PATH = "ml_training_data.csv"
 MODEL_PATH = "ml_filter_model.pkl"
+SELECTOR_PATH = "feature_selector.pkl"
 TARGET_COL = "label"
 
 # PATCH: Define the set of features to use for both train and live
@@ -43,6 +44,13 @@ def automatic_feature_selection(X, y):
     X_selected = selector.transform(X)
     selected_features = X.columns[selector.get_support()]
     print(f"[ML_TRAINER] Selected {len(selected_features)} features out of {X.shape[1]}.")
+    # PATCH: Save selector, feature names, and selection mask for bulletproof inference
+    joblib.dump({
+        "model": selector,
+        "selected_features": list(selected_features),
+        "feature_mask": selector.get_support()
+    }, SELECTOR_PATH)
+    print(f"[ML_TRAINER] Feature selector and selected feature names saved to {SELECTOR_PATH}")
     return X_selected, selected_features, selector
 
 def hyperparameter_search(model, param_grid, X, y):
@@ -145,6 +153,11 @@ def main():
     # Feature selection
     X_selected, selected_features, selector = automatic_feature_selection(X, y)
 
+    # Defensive shape check
+    assert X_selected.shape[1] == selector.get_support().sum(), (
+        f"Selector mask mismatch: selected {X_selected.shape[1]}, mask sum {selector.get_support().sum()}"
+    )
+
     # Remove any NaNs from selected features (should not happen, but for safety)
     nan_mask = ~np.isnan(X_selected).any(axis=1)
     finite_mask = np.isfinite(X_selected).all(axis=1)
@@ -174,6 +187,7 @@ def main():
             print("[ML_TRAINER] Model not overwritten. Exiting.")
             return
 
+    # PATCH: Save model, selector, and feature names for bulletproof inference
     joblib.dump((model, selector, list(selected_features)), MODEL_PATH)
     print(f"[ML_TRAINER] Model and feature selector saved to {MODEL_PATH}")
 

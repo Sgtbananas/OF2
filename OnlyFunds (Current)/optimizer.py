@@ -2,16 +2,32 @@ import itertools
 import pandas as pd
 from core.signals import generate_signals
 from core.trade import backtest_strategy
+import joblib
+import os
+
+SELECTOR_PATH = "feature_selector.pkl"
+
+def get_selector_and_features():
+    if os.path.exists(SELECTOR_PATH):
+        fs_data = joblib.load(SELECTOR_PATH)
+        selector = fs_data["model"]
+        selected_features = fs_data["selected_features"]
+        feature_mask = fs_data["feature_mask"]
+        return selector, selected_features, feature_mask
+    return None, None, None
 
 def optimize_strategies(df, all_strategies, config, ml_filter=None):
     results = []
-    # PATCH: Always ensure MLFilter gets only the features it expects, in the correct order!
+    # PATCH: Robust feature alignment for ML inference
+    selector, selected_features, feature_mask = get_selector_and_features()
     ml_features = None
-    if ml_filter is not None and hasattr(ml_filter, "features") and ml_filter.features:
-        for col in ml_filter.features:
+    if ml_filter is not None and selected_features is not None:
+        for col in selected_features:
             if col not in df.columns:
-                df[col] = None
-        ml_features = df[ml_filter.features]
+                df[col] = 0  # or np.nan or other default
+        ml_features = df[selected_features]
+        assert ml_features.shape[1] == len(feature_mask), \
+            f"Feature mismatch: ml_features has {ml_features.shape[1]} cols, mask has {len(feature_mask)}"
 
     for r in range(1, len(all_strategies) + 1):
         for strat_combo in itertools.combinations(all_strategies, r):
@@ -24,7 +40,7 @@ def optimize_strategies(df, all_strategies, config, ml_filter=None):
                 test_config,
                 config.get("symbol", "TEST"),
                 ml_filter=ml_filter,
-                ml_features=ml_features  # Pass clean feature DataFrame every time
+                ml_features=ml_features
             )
 
             if trades:
