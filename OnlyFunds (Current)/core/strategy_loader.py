@@ -43,3 +43,5 @@ def strategy_doc(name):
         return strat.__doc__
     except Exception:
         return None
+
+# PATCH: No changes needed, but this file is kept for completeness and future extensibility.

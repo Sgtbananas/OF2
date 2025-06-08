@@ -13,21 +13,32 @@ def get_selector_and_features():
         selector = fs_data["model"]
         selected_features = fs_data["selected_features"]
         feature_mask = fs_data["feature_mask"]
-        return selector, selected_features, feature_mask
-    return None, None, None
+        # Save the full original feature list if available
+        full_feature_list = fs_data.get("full_feature_list", None)
+        return selector, selected_features, feature_mask, full_feature_list
+    return None, None, None, None
+
+def align_features_for_ml(df, full_feature_list):
+    """
+    Returns a DataFrame with exactly the columns in full_feature_list, in order, filling missing with 0.
+    """
+    aligned = df.copy()
+    for col in full_feature_list:
+        if col not in aligned.columns:
+            aligned[col] = 0
+    # Drop any extra columns and order as required
+    aligned = aligned[full_feature_list]
+    return aligned
 
 def optimize_strategies(df, all_strategies, config, ml_filter=None):
     results = []
-    # PATCH: Robust feature alignment for ML inference
-    selector, selected_features, feature_mask = get_selector_and_features()
-    ml_features = None
-    if ml_filter is not None and selected_features is not None:
-        for col in selected_features:
-            if col not in df.columns:
-                df[col] = 0  # or np.nan or other default
-        ml_features = df[selected_features]
-        assert ml_features.shape[1] == len(feature_mask), \
-            f"Feature mismatch: ml_features has {ml_features.shape[1]} cols, mask has {len(feature_mask)}"
+    selector, selected_features, feature_mask, full_feature_list = get_selector_and_features()
+    ml_features_df = None
+
+    # Robust ML feature alignment: always align to full feature set before selector/model
+    if ml_filter is not None and full_feature_list is not None:
+        ml_features_df = align_features_for_ml(df, full_feature_list)
+        # No selector.transform here! Let MLFilter handle feature selection and order.
 
     for r in range(1, len(all_strategies) + 1):
         for strat_combo in itertools.combinations(all_strategies, r):
@@ -40,7 +51,7 @@ def optimize_strategies(df, all_strategies, config, ml_filter=None):
                 test_config,
                 config.get("symbol", "TEST"),
                 ml_filter=ml_filter,
-                ml_features=ml_features
+                ml_features=ml_features_df
             )
 
             if trades:
