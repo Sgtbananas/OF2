@@ -52,31 +52,31 @@ def run_bot(config):
 
         df = add_all_features(df)
 
-        # --- PATCH: ensure ALL features for MLFilter are present (in correct order for ML) ---
-        # 1. Get required list (MLFilter features if available, else NUMERIC_FEATURES)
+        # === WORLD-CLASS PATCH: Build df_ml for MLFilter, only exact features in order ===
         if ml_filter is not None and hasattr(ml_filter, "features") and ml_filter.features:
-            ml_feature_cols = list(ml_filter.features)
+            for col in ml_filter.features:
+                if col not in df.columns:
+                    df[col] = np.nan  # or 0.0 if you prefer
+            df_ml = df[ml_filter.features]
+            print("[DEBUG][LIVE] MLFilter expects features:", ml_filter.features)
+            print("[DEBUG][LIVE] DataFrame columns for MLFilter:", list(df_ml.columns))
         else:
-            ml_feature_cols = list(NUMERIC_FEATURES)
-
-        # 2. Fill missing features with np.nan (or 0.0 if you prefer)
-        for col in ml_feature_cols:
-            if col not in df.columns:
-                df[col] = np.nan
-
-        # 3. For MLFilter: always maintain column order as in ml_feature_cols
-        df = df[ml_feature_cols + [c for c in df.columns if c not in ml_feature_cols]]
-
-        print("[DEBUG][LIVE] Features after add_all_features:", list(df.columns))
-        print("[DEBUG][LIVE] MLFilter expects features:", ml_feature_cols)
+            df_ml = None
 
         strategies = {}
         for strat_name in all_strats:
             try:
                 strategy = load_strategy(strat_name)
                 signals = strategy.generate_signals(df)
-                # simulate_trades expects the full df for strategies, MLFilter expects ordered features inside
-                result = simulate_trades(df, signals, symbol, target, ml_filter=ml_filter)
+                # Pass both the full df (for strategies) and df_ml (for MLFilter, if needed)
+                result = simulate_trades(
+                    df,
+                    signals,
+                    symbol,
+                    target,
+                    ml_filter=ml_filter,
+                    ml_features=df_ml  # Pass as kwarg so trade code can use the correct one
+                )
                 strategies[strat_name] = result
             except Exception as e:
                 log_message(f"⚠️ Strategy {strat_name} failed: {e}")

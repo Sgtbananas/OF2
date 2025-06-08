@@ -50,6 +50,22 @@ class MLFilter:
         if self.features is None:
             raise RuntimeError("MLFilter: Model loaded without feature names. Cannot extract features.")
 
+        # ---- Bulletproof: Check columns in DataFrame match features expected ----
+        missing_cols = [col for col in self.features if col not in df.columns]
+        extra_cols = [col for col in df.columns if col not in self.features]
+        if missing_cols:
+            msg = f"MLFilter: DataFrame is missing required features: {missing_cols}"
+            logging.error(msg)
+            raise RuntimeError(msg)
+        if len(df.columns) != len(self.features) or list(df.columns) != list(self.features):
+            msg = (
+                "MLFilter: DataFrame columns do not match the order/length of model features!\n"
+                f"Expected columns: {self.features}\n"
+                f"Actual columns:   {list(df.columns)}"
+            )
+            logging.error(msg)
+            raise RuntimeError(msg)
+
         row = df.iloc[idx]
         feats = []
         missing = []
@@ -162,6 +178,22 @@ class MLFilter:
         including feature values, importance, and probabilities.
         """
         try:
+            # ---- Bulletproof: Check columns in DataFrame match features expected ----
+            missing_cols = [col for col in self.features if col not in df.columns]
+            extra_cols = [col for col in df.columns if col not in self.features]
+            if missing_cols:
+                msg = f"MLFilter: DataFrame is missing required features: {missing_cols}"
+                logging.error(msg)
+                raise RuntimeError(msg)
+            if len(df.columns) != len(self.features) or list(df.columns) != list(self.features):
+                msg = (
+                    "MLFilter: DataFrame columns do not match the order/length of model features!\n"
+                    f"Expected columns: {self.features}\n"
+                    f"Actual columns:   {list(df.columns)}"
+                )
+                logging.error(msg)
+                raise RuntimeError(msg)
+
             feats = []
             feature_values = {}
             missing = []

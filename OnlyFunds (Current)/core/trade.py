@@ -2,8 +2,9 @@ import time
 import requests
 import hmac
 import hashlib
+import numpy as np
 
-def backtest_strategy(df, signal, config, symbol, ml_filter=None):
+def backtest_strategy(df, signal, config, symbol, ml_filter=None, ml_features=None):
     trades = []
     in_position = False
     entry_price = 0
@@ -22,6 +23,13 @@ def backtest_strategy(df, signal, config, symbol, ml_filter=None):
     losses = 0
     total_return = 0
 
+    # If ml_features is not supplied but ml_filter is, build it now
+    if ml_filter is not None and ml_features is None:
+        for col in ml_filter.features:
+            if col not in df.columns:
+                df[col] = np.nan
+        ml_features = df[ml_filter.features]
+
     for i in range(1, len(df)):
         price = df["Close"].iloc[i]
         sig = signal.iloc[i]
@@ -30,11 +38,8 @@ def backtest_strategy(df, signal, config, symbol, ml_filter=None):
 
         allow_trade = True
         if ml_filter:
-            features = [[
-                df["Close"].pct_change().rolling(5).std().iloc[i] or 0,
-                df["Close"].diff().iloc[i] or 0
-            ]]
-            allow_trade = ml_filter.predict(features)[0]
+            # Use only the features DataFrame in the right order!
+            allow_trade = ml_filter.should_enter(ml_features, i, sig, threshold)
 
         if not in_position and sig > threshold and allow_trade:
             entry_price = price
