@@ -1,6 +1,5 @@
 import yaml
 import os
-from core.coin_selector import get_top_200_coinex_symbols
 
 def load_config(config_path=None):
     """
@@ -22,6 +21,8 @@ def load_config(config_path=None):
     # 2. Symbols logic: prefer config["symbols"], else symbols_source, else fallback
     if not config.get("symbols") or not isinstance(config["symbols"], list) or not config["symbols"]:
         if config.get("symbols_source") == "top_200_coinex":
+            # PATCH: Import inside function to avoid circular import
+            from core.coin_selector import get_top_200_coinex_symbols
             config["symbols"] = get_top_200_coinex_symbols()
         else:
             # Fallback: at least BTCUSDT so the app never fails

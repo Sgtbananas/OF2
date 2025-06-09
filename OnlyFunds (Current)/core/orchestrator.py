@@ -1,14 +1,6 @@
 import logging
 import pandas as pd
 from typing import Optional, Dict, Any, List, Union
-from core.config import load_config
-from core.engine import run_bot
-from core.ml_filter import MLFilter
-from core.coin_selector import get_top_200_coinex_symbols, select_top_coins
-from core.risk_manager import adjust_risk_based_on_profile
-from core.logger import log_message, log_error
-from core.backtester import simulate_trades
-from core.features import add_all_features  # PATCH: Import feature engineering
 
 class TradingOrchestrator:
     """
@@ -17,11 +9,11 @@ class TradingOrchestrator:
     """
 
     def __init__(self, config_path: Optional[str] = None, config: Optional[Dict[str, Any]] = None):
-        """
-        Initializes the orchestrator with configuration.
-        """
+        # Move imports inside to avoid circular import issues
+        from core.config import load_config
+        from core.logger import log_message, log_error
+
         if config is not None:
-            # Merge config with loaded config to ensure all keys present
             loaded = load_config(config_path) if config_path else {}
             merged = {**loaded, **config}
             self.config = merged
@@ -30,14 +22,14 @@ class TradingOrchestrator:
             self.config = load_config(config_path)
             log_message(f"Config loaded from {config_path or 'default location'}.")
 
-        self.ml_filter: Optional[MLFilter] = None
+        self.ml_filter: Optional['MLFilter'] = None
         self.selected_coins: List[str] = []
         self._init_ml_filter()
 
     def _init_ml_filter(self):
-        """Initialize ML filter if enabled in config."""
+        from core.ml_filter import MLFilter
+        from core.logger import log_message, log_error
         ml_cfg = self.config.get("ml_filter", {})
-        # Handle legacy case where ml_filter is a bool instead of a dict
         if isinstance(ml_cfg, bool):
             enabled = ml_cfg
             ml_cfg = {}
@@ -52,10 +44,8 @@ class TradingOrchestrator:
                 self.ml_filter = None
 
     def auto_select_strategy(self):
-        """
-        Automatically selects the best-performing strategy using ML/optimizer.
-        Returns: strategy name (str)
-        """
+        from core.coin_selector import select_top_coins
+        from core.logger import log_message
         candidate_strategies = self.config.get("all_strategies", ["ema", "rsi", "macd", "sma", "bbands"])
         results = select_top_coins(
             all_strategies=candidate_strategies,
@@ -70,7 +60,6 @@ class TradingOrchestrator:
         )
         if results:
             best = results[0]
-            # "strategies" can be a str or list; pick the first if list
             stgy = best.get("strategies")
             if isinstance(stgy, list):
                 stgy = stgy[0] if stgy else None
@@ -81,7 +70,8 @@ class TradingOrchestrator:
             return "ema"
 
     def select_coins(self):
-        """Selects coins to trade based on exchange and config."""
+        from core.coin_selector import get_top_200_coinex_symbols
+        from core.logger import log_message, log_error
         try:
             if self.config.get("exchange", "coinex").lower() == "coinex":
                 self.selected_coins = get_top_200_coinex_symbols()
@@ -94,15 +84,16 @@ class TradingOrchestrator:
             self.selected_coins = []
 
     def run_trading(self):
-        """Run the live or dry-run trading bot (AI/ML picks strategy)."""
+        from core.engine import run_bot
+        from core.risk_manager import adjust_risk_based_on_profile
+        from core.logger import log_message, log_error
         try:
             if not self.selected_coins:
                 self.select_coins()
-            if not self.selected_coins:  # Fallback safety
+            if not self.selected_coins:
                 log_error("No tradable symbols available. Please check your exchange connectivity or configuration.")
                 raise RuntimeError("No tradable symbols available.")
 
-            # AI/ML strategy selection if not already set
             strategy = self.config.get("strategy")
             if not strategy:
                 strategy = self.auto_select_strategy()
@@ -118,7 +109,6 @@ class TradingOrchestrator:
 
             log_message(f"Running bot for {len(self.selected_coins)} symbols on {exchange} ({timeframe}) with strategy '{strategy}'.")
 
-            # PATCHED SECTION: Use a config dict for run_bot
             bot_config = {
                 "mode": self.config.get("mode", "dry_run"),
                 "risk": self.config.get("risk", 0.01),
@@ -136,14 +126,10 @@ class TradingOrchestrator:
             raise
 
     def backtest(self, start_date: str, end_date: str) -> pd.DataFrame:
-        """
-        Run a backtest across selected coins.
-        Args:
-            start_date: ISO8601 date, e.g. '2024-01-01'
-            end_date: ISO8601 date, e.g. '2024-05-31'
-        Returns:
-            DataFrame with backtest results.
-        """
+        from core.backtester import simulate_trades
+        from core.features import add_all_features
+        from core.risk_manager import adjust_risk_based_on_profile
+        from core.logger import log_message, log_error
         try:
             if not self.selected_coins:
                 self.select_coins()
@@ -151,7 +137,6 @@ class TradingOrchestrator:
                 log_error("No tradable symbols available for backtest. Please check your exchange connectivity or configuration.")
                 return pd.DataFrame()
 
-            # AI/ML strategy selection if not already set
             strategy = self.config.get("strategy")
             if not strategy:
                 strategy = self.auto_select_strategy()
@@ -181,7 +166,6 @@ class TradingOrchestrator:
                         config=self.config,
                         ml_filter=self.ml_filter
                     )
-                    # PATCH: Add features to each DataFrame before MLFilter is used
                     if df is not None:
                         df = add_all_features(df)
                         results.append(df)
@@ -200,12 +184,7 @@ class TradingOrchestrator:
             return pd.DataFrame()
 
     def run(self, mode: str = "live", **kwargs):
-        """
-        Entrypoint for orchestrator.
-        Args:
-            mode: 'live', 'dry_run', or 'backtest'
-            kwargs: Additional arguments for backtesting (start_date, end_date)
-        """
+        from core.logger import log_message
         log_message(f"Orchestrator run mode: {mode}")
         if mode in {"live", "dry_run"}:
             self.run_trading()
@@ -218,7 +197,6 @@ class TradingOrchestrator:
         else:
             raise ValueError(f"Unknown mode: {mode}")
 
-# Optional: global factory for integration
 _orch_instance: Optional[TradingOrchestrator] = None
 
 def get_orchestrator(config_path: Optional[str] = None, config: Optional[Dict[str, Any]] = None) -> TradingOrchestrator:

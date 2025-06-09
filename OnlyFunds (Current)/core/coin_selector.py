@@ -2,7 +2,6 @@ import ccxt
 import requests
 from core.data import fetch_klines, add_indicators
 from optimizer import optimize_strategies
-from core.ml_filter import MLFilter
 from core.strategy_loader import get_available_strategies  # <-- Import for automation
 
 def get_available_symbols(exchange_name="coinex", quote="USDT"):
@@ -216,7 +215,11 @@ def select_top_coins(
         if exchange_name.lower() == "coinex"
         else get_available_symbols(exchange_name, quote)
     )
-    ml_filter = MLFilter(model_path=ml_model_path) if ml_enabled else None
+    # PATCH: import MLFilter only when needed, not at top-level (avoiding circular import)
+    ml_filter = None
+    if ml_enabled:
+        from core.ml_filter import MLFilter
+        ml_filter = MLFilter(model_path=ml_model_path)
 
     # Always set config['all_strategies'] to strategies_to_test
     if config is None:
