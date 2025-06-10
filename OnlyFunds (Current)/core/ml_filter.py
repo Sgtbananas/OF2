@@ -20,22 +20,19 @@ class MLFilter:
 
         if model_path and os.path.exists(model_path):
             loaded = joblib.load(model_path)
-            # PATCH: Handle both dict and tuple formats for robustness
-            if isinstance(loaded, tuple):
+            # PATCH: Always use the full_feature_list (pre-selector) from training!
+            if isinstance(loaded, dict):
+                self.model = loaded.get("model", None)
+                self.selector = loaded.get("selector", None)
+                self.features = loaded.get("full_feature_list", None)
+                logging.info(f"MLFilter: Loaded model dict from {model_path}")
+            elif isinstance(loaded, tuple):
                 self.model = loaded[0]
                 if len(loaded) > 1:
                     self.selector = loaded[1]
                 if len(loaded) > 2:
                     self.features = loaded[2]
                 logging.info(f"MLFilter: Loaded model, selector, features from {model_path}")
-            elif isinstance(loaded, dict):
-                self.model = loaded.get("model", None)
-                self.selector = loaded.get("selector", loaded.get("feature_selector", None)) or loaded.get("model", None)
-                # THIS IS THE CRUCIAL LINE: use the full feature list from training:
-                self.features = loaded.get("full_feature_list", loaded.get("features", None))
-                if self.features is None:
-                    self.features = loaded.get("selected_features", None)
-                logging.info(f"MLFilter: Loaded model dict from {model_path}")
             else:
                 self.model = loaded
                 logging.info(f"MLFilter: Loaded model only from {model_path}")
@@ -55,12 +52,14 @@ class MLFilter:
         """
         if self.features is None:
             raise RuntimeError("MLFilter: Model loaded without feature names. Cannot extract features.")
+
         # Fill missing features with 0.0, drop extras, and order
         for col in self.features:
             if col not in df.columns:
                 df[col] = 0.0
         df = df[self.features]
         row = df.iloc[[idx]].values  # 2D for selector
+
         if self.selector is not None:
             try:
                 support_mask = self.selector.get_support()

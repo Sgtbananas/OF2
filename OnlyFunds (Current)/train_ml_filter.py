@@ -9,8 +9,6 @@ from sklearn.model_selection import train_test_split, GridSearchCV
 from sklearn.metrics import classification_report, confusion_matrix, roc_auc_score
 from sklearn.feature_selection import SelectFromModel
 from sklearn.preprocessing import StandardScaler
-from sklearn.pipeline import Pipeline
-from datetime import datetime
 from core.features import add_all_features
 
 try:
@@ -77,7 +75,7 @@ def train_pipeline(force=False):
     df = df.dropna(subset=[TARGET_COL])
     y = df[TARGET_COL]
     X = df[used_features].select_dtypes(include=[np.number])
-    full_feature_list = list(X.columns)  # CRUCIAL: Save full list before selection
+    full_feature_list = list(X.columns)  # Save full feature list (pre-selector)
 
     X.replace([np.inf, -np.inf], np.nan, inplace=True)
     X.dropna(inplace=True)
@@ -85,7 +83,7 @@ def train_pipeline(force=False):
 
     scaler = StandardScaler()
     X_scaled = scaler.fit_transform(X)
-    # fit selector on the *full* feature set
+    # Fit selector on the *full* feature set!
     selector = feature_selector(pd.DataFrame(X_scaled, columns=full_feature_list), y)
     X_sel = selector.transform(X_scaled)
 
@@ -131,7 +129,7 @@ def train_pipeline(force=False):
     best_name = [k for k, v in models.items() if v == best_model][0]
     print(f"[SELECT] Auto-selected best model: {best_name} (AUC: {best_auc:.4f})")
 
-    # Save all components for inference
+    # Save in a dict: model, selector, and full_feature_list (pre-selector)
     joblib.dump(
         {
             "model": best_model,
