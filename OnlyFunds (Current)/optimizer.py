@@ -19,14 +19,19 @@ def is_pipeline_fresh():
     return age_seconds < MODEL_MAX_AGE_HOURS * 3600
 
 def ensure_pipeline():
-    """Ensure a fresh ML pipeline exists, or retrain it."""
+    """Ensure a fresh ML pipeline exists, or retrain it. Then return the loaded pipeline."""
     if not is_pipeline_fresh():
         print("[OPTIMIZER] Pipeline missing or stale. Triggering training...")
         result = subprocess.run(["python", TRAIN_SCRIPT])
         if result.returncode != 0 or not os.path.exists(PIPELINE_PATH):
             raise RuntimeError("[OPTIMIZER] Training failed or pipeline not saved.")
     else:
-        print("[OPTIMIZER] Using fresh ML pipeline.")
+        print(f"[OPTIMIZER] Using fresh ML pipeline from: {PIPELINE_PATH}")
+
+    pipeline = joblib.load(PIPELINE_PATH)
+    model_name = type(pipeline.named_steps['classifier']).__name__
+    print(f"[OPTIMIZER] Active ML model: {model_name}")
+    return pipeline
 
 def align_features(df, pipeline):
     """Align dataframe with expected pipeline input feature structure."""
