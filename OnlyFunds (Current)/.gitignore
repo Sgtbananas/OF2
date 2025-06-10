@@ -11,3 +11,4 @@ signals_log.json
 .vscode/
 .idea/
 Thumbs.db
+auto-training.py

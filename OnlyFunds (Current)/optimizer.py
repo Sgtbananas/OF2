@@ -1,4 +1,5 @@
 import os
+import time
 import subprocess
 import itertools
 import joblib
@@ -9,26 +10,33 @@ from core.features import add_all_features
 
 PIPELINE_PATH = "ml_filter_pipeline.pkl"
 TRAIN_SCRIPT = "train_ml_filter.py"
+MODEL_MAX_AGE_HOURS = 24
+
+def is_pipeline_fresh():
+    if not os.path.exists(PIPELINE_PATH):
+        return False
+    age_seconds = time.time() - os.path.getmtime(PIPELINE_PATH)
+    return age_seconds < MODEL_MAX_AGE_HOURS * 3600
 
 def ensure_pipeline():
-    """Ensure the ML pipeline exists, or retrain it automatically."""
-    if not os.path.exists(PIPELINE_PATH):
-        print("[OPTIMIZER] Pipeline not found. Auto-training now...")
+    """Ensure a fresh ML pipeline exists, or retrain it."""
+    if not is_pipeline_fresh():
+        print("[OPTIMIZER] Pipeline missing or stale. Triggering training...")
         result = subprocess.run(["python", TRAIN_SCRIPT])
         if result.returncode != 0 or not os.path.exists(PIPELINE_PATH):
-            raise RuntimeError("[OPTIMIZER] Training failed or pipeline not created.")
+            raise RuntimeError("[OPTIMIZER] Training failed or pipeline not saved.")
     else:
-        print("[OPTIMIZER] Found existing ML pipeline.")
+        print("[OPTIMIZER] Using fresh ML pipeline.")
 
 def align_features(df, pipeline):
-    """Align live dataframe with pipeline expectations."""
+    """Align dataframe with expected pipeline input feature structure."""
     scaler = pipeline.named_steps["scaler"]
-    expected_features = scaler.feature_names_in_ if hasattr(scaler, "feature_names_in_") else df.columns
+    expected = scaler.feature_names_in_ if hasattr(scaler, "feature_names_in_") else df.columns
     aligned = df.copy()
-    for col in expected_features:
+    for col in expected:
         if col not in aligned.columns:
             aligned[col] = 0.0
-    return aligned[expected_features]
+    return aligned[expected]
 
 def optimize_strategies(df, all_strategies, config, ml_filter=True):
     ensure_pipeline()
@@ -36,9 +44,10 @@ def optimize_strategies(df, all_strategies, config, ml_filter=True):
 
     df = add_all_features(df)
     aligned_df = align_features(df, pipeline)
-    transformed = pipeline.transform(aligned_df)
+    transformed_features = pipeline.transform(aligned_df)
 
     results = []
+
     for r in range(1, len(all_strategies) + 1):
         for combo in itertools.combinations(all_strategies, r):
             test_config = config.copy()
@@ -50,9 +59,9 @@ def optimize_strategies(df, all_strategies, config, ml_filter=True):
                 df,
                 signal,
                 test_config,
-                config.get("symbol", "SYMBOL"),
+                config.get("symbol", "ASSET"),
                 ml_filter=ml_filter,
-                ml_features=transformed
+                ml_features=transformed_features
             )
 
             if trades:
@@ -67,7 +76,7 @@ def optimize_strategies(df, all_strategies, config, ml_filter=True):
                     "trades": len(trades)
                 })
 
-    df_results = pd.DataFrame(results).sort_values(by="pnl", ascending=False)
-    print("[OPTIMIZER] Top strategy sets:")
-    print(df_results.head(10))
-    return df_results
+    results_df = pd.DataFrame(results).sort_values(by="pnl", ascending=False)
+    print("[OPTIMIZER] Top strategies:")
+    print(results_df.head(10))
+    return results_df

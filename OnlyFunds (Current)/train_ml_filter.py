@@ -2,13 +2,16 @@ import pandas as pd
 import numpy as np
 import joblib
 import os
+import time
 from sklearn.linear_model import LogisticRegression
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import train_test_split, GridSearchCV
-from sklearn.metrics import classification_report, accuracy_score, confusion_matrix, roc_auc_score
+from sklearn.metrics import classification_report, confusion_matrix, roc_auc_score
 from sklearn.feature_selection import SelectFromModel
-import matplotlib.pyplot as plt
-from core.features import add_all_features  # PATCH: Import feature engineering
+from sklearn.preprocessing import StandardScaler
+from sklearn.pipeline import Pipeline
+from datetime import datetime
+from core.features import add_all_features
 
 try:
     from xgboost import XGBClassifier
@@ -17,11 +20,10 @@ except ImportError:
     xgb_available = False
 
 CSV_PATH = "ml_training_data.csv"
-MODEL_PATH = "ml_filter_model.pkl"
-SELECTOR_PATH = "feature_selector.pkl"
+PIPELINE_PATH = "ml_filter_pipeline.pkl"
+MODEL_MAX_AGE_HOURS = 24
 TARGET_COL = "label"
 
-# PATCH: Define the set of features to use for both train and live
 NUMERIC_FEATURES = [
     'open', 'high', 'low', 'close', 'volume', 'tr', 'atr14', 'log_return', 'realized_vol_10', 'return_3',
     'roll_close_std_5', 'roll_vol_mean_5', 'roll_vol_std_5',
@@ -30,166 +32,98 @@ NUMERIC_FEATURES = [
     'entry_idx', 'exit_idx', 'pnl'
 ]
 
-def safe_input(prompt, default="y"):
-    try:
-        return input(prompt)
-    except EOFError:
-        return default
+def is_model_fresh(path, max_age_hours):
+    if not os.path.exists(path):
+        return False
+    age_seconds = time.time() - os.path.getmtime(path)
+    return age_seconds < max_age_hours * 3600
 
-def automatic_feature_selection(X, y):
-    print("[ML_TRAINER] Selecting most predictive features using RandomForest...")
+def feature_selector(X, y):
     rf = RandomForestClassifier(n_estimators=100, n_jobs=-1, random_state=42)
     rf.fit(X, y)
     selector = SelectFromModel(rf, prefit=True, threshold='median')
-    X_selected = selector.transform(X)
-    selected_features = X.columns[selector.get_support()]
-    print(f"[ML_TRAINER] Selected {len(selected_features)} features out of {X.shape[1]}.")
-    # PATCH: Save selector, feature names, and selection mask for bulletproof inference
-    joblib.dump({
-        "model": selector,
-        "selected_features": list(selected_features),
-        "feature_mask": selector.get_support()
-    }, SELECTOR_PATH)
-    print(f"[ML_TRAINER] Feature selector and selected feature names saved to {SELECTOR_PATH}")
-    return X_selected, selected_features, selector
+    print(f"[TRAIN] Selected {selector.get_support().sum()} of {X.shape[1]} features.")
+    return selector
 
-def hyperparameter_search(model, param_grid, X, y):
-    print(f"[ML_TRAINER] Running GridSearchCV for {type(model).__name__}...")
+def tune_model(name, model, param_grid, X, y):
+    print(f"[TRAIN] Tuning {name}...")
     grid = GridSearchCV(model, param_grid, cv=3, scoring='accuracy', n_jobs=-1)
     grid.fit(X, y)
-    print(f"[ML_TRAINER] Best params: {grid.best_params_}")
+    print(f"[TRAIN] Best {name} params: {grid.best_params_}")
     return grid.best_estimator_
 
-def compare_models(X_train, X_test, y_train, y_test):
-    results = {}
-    # Logistic Regression
-    print("\n[ML_TRAINER] Training LogisticRegression...")
-    logreg_params = {"C": [0.01, 0.1, 1.0, 10.0], "solver": ["lbfgs"], "max_iter": [1000]}
-    logreg = hyperparameter_search(LogisticRegression(), logreg_params, X_train, y_train)
-    results["LogisticRegression"] = logreg
-
-    # Random Forest
-    print("\n[ML_TRAINER] Training RandomForestClassifier...")
-    rf_params = {"n_estimators": [100, 200], "max_depth": [None, 3, 6]}
-    rf = hyperparameter_search(RandomForestClassifier(), rf_params, X_train, y_train)
-    results["RandomForest"] = rf
-
-    # XGBoost
-    if xgb_available:
-        print("\n[ML_TRAINER] Training XGBoost...")
-        xgb_params = {"n_estimators": [100, 200], "max_depth": [3, 6], "learning_rate": [0.1, 0.3]}
-        xgb = hyperparameter_search(XGBClassifier(use_label_encoder=False, eval_metric='logloss'), xgb_params, X_train, y_train)
-        results["XGBoost"] = xgb
-
-    print("\n[ML_TRAINER] Model comparison:")
-    for name, model in results.items():
-        preds = model.predict(X_test)
-        acc = accuracy_score(y_test, preds)
+def evaluate_model(model, X_test, y_test, name):
+    preds = model.predict(X_test)
+    print(f"\n[EVAL] {name}")
+    print(classification_report(y_test, preds))
+    print("Confusion matrix:\n", confusion_matrix(y_test, preds))
+    if hasattr(model, "predict_proba"):
         try:
             auc = roc_auc_score(y_test, model.predict_proba(X_test)[:, 1])
-        except Exception:
-            auc = None
-        print(f"{name}: Accuracy = {acc:.3f}, ROC AUC = {auc if auc is not None else 'n/a'}")
-    return results
+            print("ROC AUC:", round(auc, 4))
+        except:
+            pass
 
-def evaluate_model(model, X_test, y_test, model_name="Model"):
-    preds = model.predict(X_test)
-    print(f"\n[ML_TRAINER] Evaluation for {model_name}:")
-    print(classification_report(y_test, preds))
-    print("Confusion matrix:")
-    print(confusion_matrix(y_test, preds))
-    try:
-        if hasattr(model, "predict_proba"):
-            auc = roc_auc_score(y_test, model.predict_proba(X_test)[:, 1])
-            print("ROC AUC: {:.3f}".format(auc))
-    except Exception:
-        pass
-    try:
-        plt.figure(figsize=(5, 5))
-        plt.title(f"{model_name} - Confusion Matrix")
-        cm = confusion_matrix(y_test, preds)
-        plt.imshow(cm, cmap="Blues")
-        plt.xlabel("Predicted")
-        plt.ylabel("True")
-        plt.colorbar()
-        for i in range(cm.shape[0]):
-            for j in range(cm.shape[1]):
-                plt.text(j, i, str(cm[i, j]), ha="center", va="center", color="red")
-        plt.show()
-    except Exception:
-        pass
+def train_pipeline(force=False):
+    if not force and is_model_fresh(PIPELINE_PATH, MODEL_MAX_AGE_HOURS):
+        print("[TRAIN] Model is fresh. Skipping retraining.")
+        return
 
-def main():
-    print("[ML_TRAINER] Loading training data...")
     df = pd.read_csv(CSV_PATH)
-    print(f"[ML_TRAINER] Loaded {len(df)} rows.")
-
+    print(f"[TRAIN] Loaded {len(df)} rows.")
     df = add_all_features(df)
-    print("[DEBUG][TRAIN] Features after add_all_features:", list(df.columns))
 
-    # PATCH: Select only the agreed numeric features + target for training
-    features_for_training = [col for col in NUMERIC_FEATURES if col in df.columns]
-    if TARGET_COL in df.columns:
-        features_for_training.append(TARGET_COL)
-    df = df[features_for_training]
-
+    used_features = [col for col in NUMERIC_FEATURES if col in df.columns]
     df = df.dropna(subset=[TARGET_COL])
     y = df[TARGET_COL]
-    X = df.drop(columns=[TARGET_COL])
+    X = df[used_features].select_dtypes(include=[np.number])
 
-    # Remove non-numeric columns (shouldn't be needed but for safety)
-    X = X.select_dtypes(include=[np.number])
-    print(f"[ML_TRAINER] Using {X.shape[1]} numeric features: {list(X.columns)}")
-
-    # --- NaN/Inf Handling ---
-    X = X.replace([np.inf, -np.inf], np.nan)
-    before = len(X)
-    X = X.dropna()
-    dropped = before - len(X)
-    if dropped > 0:
-        print(f"[ML_TRAINER] Dropped {dropped} rows with NaN or Inf values in features.")
+    X.replace([np.inf, -np.inf], np.nan, inplace=True)
+    X.dropna(inplace=True)
     y = y.loc[X.index]
 
-    # Feature selection
-    X_selected, selected_features, selector = automatic_feature_selection(X, y)
+    scaler = StandardScaler()
+    X_scaled = scaler.fit_transform(X)
 
-    # Defensive shape check
-    assert X_selected.shape[1] == selector.get_support().sum(), (
-        f"Selector mask mismatch: selected {X_selected.shape[1]}, mask sum {selector.get_support().sum()}"
+    selector = feature_selector(X, y)
+    X_sel = selector.transform(X_scaled)
+
+    X_train, X_test, y_train, y_test = train_test_split(
+        X_sel, y, test_size=0.2, stratify=y, random_state=42
     )
 
-    # Remove any NaNs from selected features (should not happen, but for safety)
-    nan_mask = ~np.isnan(X_selected).any(axis=1)
-    finite_mask = np.isfinite(X_selected).all(axis=1)
-    valid_mask = nan_mask & finite_mask
-    X_selected = X_selected[valid_mask]
-    y_valid = y.iloc[valid_mask]
+    models = {
+        "LogisticRegression": tune_model(
+            "LogisticRegression", LogisticRegression(max_iter=2000),
+            {"C": [0.1, 1.0, 10.0]}, X_train, y_train
+        ),
+        "RandomForest": tune_model(
+            "RandomForest", RandomForestClassifier(),
+            {"n_estimators": [100], "max_depth": [None, 3, 6]}, X_train, y_train
+        )
+    }
 
-    # Train/test split
-    X_train, X_test, y_train, y_test = train_test_split(X_selected, y_valid, test_size=0.2, random_state=42, stratify=y_valid)
+    if xgb_available:
+        models["XGBoost"] = tune_model(
+            "XGBoost", XGBClassifier(eval_metric="logloss", use_label_encoder=False),
+            {"n_estimators": [100], "max_depth": [3], "learning_rate": [0.1]}, X_train, y_train
+        )
 
-    # Model comparison
-    results = compare_models(X_train, X_test, y_train, y_test)
+    for name, model in models.items():
+        evaluate_model(model, X_test, y_test, name)
 
-    # Let user pick best model
-    print("\nAvailable models:", ", ".join(results.keys()))
-    best_model_name = safe_input("Enter model to use (default: LogisticRegression): ", default="LogisticRegression")
-    best_model_name = best_model_name or "LogisticRegression"
-    model = results[best_model_name]
+    # Let user choose model
+    best_name = input(f"Select best model {list(models.keys())} [default: XGBoost]: ") or "XGBoost"
+    best_model = models[best_name]
 
-    evaluate_model(model, X_test, y_test, model_name=best_model_name)
-    print(f"\n[ML_TRAINER] Selected model: {best_model_name}")
+    pipeline = Pipeline([
+        ("scaler", scaler),
+        ("selector", selector),
+        ("classifier", best_model)
+    ])
 
-    # Save selector and model together (as tuple)
-    if os.path.exists(MODEL_PATH):
-        confirm = safe_input(f"Model file {MODEL_PATH} exists. Overwrite? [y/N]: ", default="n").lower()
-        if confirm != "y":
-            print("[ML_TRAINER] Model not overwritten. Exiting.")
-            return
-
-    # PATCH: Save model, selector, and feature names for bulletproof inference
-    joblib.dump((model, selector, list(selected_features)), MODEL_PATH)
-    print(f"[ML_TRAINER] Model and feature selector saved to {MODEL_PATH}")
+    joblib.dump(pipeline, PIPELINE_PATH)
+    print(f"[TRAIN] ✅ Saved pipeline to {PIPELINE_PATH}")
 
 if __name__ == "__main__":
-    main()
+    train_pipeline()
