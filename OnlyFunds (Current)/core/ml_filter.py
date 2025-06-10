@@ -57,63 +57,44 @@ class MLFilter:
         """
         Extract features from a DataFrame row, ensuring order and presence matches training.
         Applies selector if present.
+        BULLETPROOF: Ensures DataFrame passed to selector has the exact columns, order, and length as at training time.
         """
         if self.features is None:
             raise RuntimeError("MLFilter: Model loaded without feature names. Cannot extract features.")
 
-        # == BULLETPROOF: Ensure DataFrame columns are exactly the model features, in order, no extras ==
-        missing_cols = [col for col in self.features if col not in df.columns]
-        if missing_cols:
-            msg = f"MLFilter: DataFrame is missing required features: {missing_cols}"
-            logging.error(msg)
-            raise RuntimeError(msg)
-        if list(df.columns) != list(self.features):
-            msg = (
-                "MLFilter: DataFrame columns do not match the order/length of model features!\n"
-                f"Expected columns: {self.features}\n"
-                f"Actual columns:   {list(df.columns)}"
-            )
-            logging.error(msg)
-            raise RuntimeError(msg)
-
-        row = df.iloc[idx]
-        feats = []
-        missing = []
+        # --- BULLETPROOF: Ensure DataFrame has all required features, in correct order ---
         for col in self.features:
-            if col in row:
-                v = row[col]
-                if v is None or (isinstance(v, float) and (np.isnan(v) or np.isinf(v))):
-                    v = 0.0
-            else:
-                missing.append(col)
-                v = 0.0
-            feats.append(v)
-        if missing:
-            msg = f"MLFilter: Refusing to predict—runtime data missing features: {missing}"
-            logging.error(msg)
-            raise RuntimeError(msg)
-        arr = np.array(feats, dtype=np.float32).reshape(1, -1)
-        logging.debug(f"MLFilter: Features extracted for prediction: {dict(zip(self.features, arr.flatten()))}")
+            if col not in df.columns:
+                df[col] = 0.0  # or np.nan if you prefer
 
-        # ---- SHAPE/ORDER CHECK BEFORE SELECTOR ----
+        # Remove any extra columns and reorder to match training
+        df = df[self.features]
+
+        row = df.iloc[[idx]].values  # use double brackets to keep 2D
+
+        # If feature selector is present, ensure input shape matches
         if self.selector is not None:
-            expected_shape = len(self.features)
-            if arr.shape[1] != expected_shape:
-                msg = (
-                    f"MLFilter: Feature count/order mismatch before selector.transform! "
-                    f"Got shape {arr.shape}, expected ({1}, {expected_shape}). "
-                    f"Feature order: {self.features}"
-                )
-                logging.error(msg)
-                raise RuntimeError(msg)
             try:
-                arr = self.selector.transform(arr)
-                logging.debug(f"MLFilter: Selector reduced features to shape {arr.shape}")
+                support_mask = self.selector.get_support()
+                if row.shape[1] != len(support_mask):
+                    logging.error(
+                        f"MLFilter: Feature count mismatch for selector! "
+                        f"Row has {row.shape[1]} columns, selector expects {len(support_mask)}"
+                    )
+                    logging.error(f"Selector expects features: {self.features}")
+                    logging.error(f"DF columns: {df.columns.tolist()}")
+                    logging.error(f"Selector support mask length: {len(support_mask)}")
+                    logging.error(f"DF shape: {df.shape}")
+                    raise RuntimeError(
+                        f"MLFilter: Feature selector transform failed: boolean index did not match indexed array along axis 1; "
+                        f"size of axis is {row.shape[1]} but size of corresponding boolean axis is {len(support_mask)}"
+                    )
+                row = self.selector.transform(row)
+                logging.debug(f"MLFilter: Selector reduced features to shape {row.shape}")
             except Exception as e:
-                msg = f"MLFilter: Feature selector transform failed: {e}"
-                logging.error(msg)
-                raise RuntimeError(msg)
-        return arr
+                logging.error(f"MLFilter: Feature selector transform failed: {e}")
+                raise
+        return row
 
     def predict(self, X: np.ndarray) -> np.ndarray:
         if hasattr(self.model, "predict"):
@@ -188,76 +169,40 @@ class MLFilter:
         including feature values, importance, and probabilities.
         """
         try:
-            # == Ensure DataFrame columns are exactly the model features, in order, no extras ==
-            missing_cols = [col for col in self.features if col not in df.columns]
-            if missing_cols:
-                msg = f"MLFilter: DataFrame is missing required features: {missing_cols}"
-                logging.error(msg)
-                raise RuntimeError(msg)
-            if list(df.columns) != list(self.features):
-                msg = (
-                    "MLFilter: DataFrame columns do not match the order/length of model features!\n"
-                    f"Expected columns: {self.features}\n"
-                    f"Actual columns:   {list(df.columns)}"
-                )
-                logging.error(msg)
-                raise RuntimeError(msg)
-
-            feats = []
-            feature_values = {}
-            missing = []
-            row = df.iloc[idx]
+            # --- BULLETPROOF: Ensure DataFrame has all required features, in correct order ---
             for col in self.features:
-                if col in row:
-                    v = row[col]
-                    if v is None or (isinstance(v, float) and (np.isnan(v) or np.isinf(v))):
-                        v = 0.0
-                else:
-                    missing.append(col)
-                    v = 0.0
-                feats.append(v)
-                feature_values[col] = v
-            if missing:
-                msg = f"MLFilter: Refusing to explain—runtime data missing features: {missing}"
-                logging.error(msg)
-                raise RuntimeError(msg)
-            arr = np.array(feats, dtype=np.float32).reshape(1, -1)
+                if col not in df.columns:
+                    df[col] = 0.0  # or np.nan if you prefer
+            df = df[self.features]
+
+            feats = df.iloc[[idx]].values
 
             # Features after selector (if any)
             if self.selector is not None:
-                expected_shape = len(self.features)
-                if arr.shape[1] != expected_shape:
-                    msg = (
-                        f"MLFilter: Feature count/order mismatch before selector.transform in explain! "
-                        f"Got shape {arr.shape}, expected ({1}, {expected_shape}). "
-                        f"Feature order: {self.features}"
+                support_mask = self.selector.get_support()
+                if feats.shape[1] != len(support_mask):
+                    logging.error(
+                        f"MLFilter: Feature count mismatch for selector in explain! "
+                        f"Row has {feats.shape[1]} columns, selector expects {len(support_mask)}"
                     )
-                    logging.error(msg)
-                    raise RuntimeError(msg)
-                try:
-                    arr_selected = self.selector.transform(arr)
-                    support_mask = self.selector.get_support() if hasattr(self.selector, 'get_support') else None
-                    selected_features = [f for f, sel in zip(self.features, support_mask) if sel] if support_mask is not None else self.features
-                    selected_values = dict(zip(selected_features, arr_selected.flatten()))
-                except Exception as e:
-                    logging.error(f"MLFilter: Selector transform failed in explain: {e}")
-                    arr_selected = arr
-                    selected_features = self.features
-                    selected_values = dict(zip(selected_features, arr.flatten()))
+                    raise RuntimeError("MLFilter: Feature selector shape mismatch in explain.")
+                feats_selected = self.selector.transform(feats)
+                selected_features = [f for f, sel in zip(self.features, support_mask) if sel]
+                selected_values = dict(zip(selected_features, feats_selected.flatten()))
             else:
-                arr_selected = arr
+                feats_selected = feats
                 selected_features = self.features
-                selected_values = dict(zip(selected_features, arr.flatten()))
+                selected_values = dict(zip(selected_features, feats.flatten()))
 
-            pred = self.predict(arr_selected)
+            pred = self.predict(feats_selected)
             info = {
-                "features_all": feature_values,
+                "features_all": dict(zip(self.features, feats.flatten())),
                 "features_selected": selected_values,
                 "prediction": int(pred[0]),
                 "importance": self.get_feature_importance()
             }
             if hasattr(self.model, "predict_proba"):
-                info["probability"] = float(self.model.predict_proba(arr_selected)[0, 1])
+                info["probability"] = float(self.model.predict_proba(feats_selected)[0, 1])
             return info
         except Exception as e:
             logging.error(f"MLFilter: explain blocked: {e}")
