@@ -1,52 +1,48 @@
-import itertools
-import pandas as pd
-import joblib
 import os
+import subprocess
+import itertools
+import joblib
+import pandas as pd
 from core.signals import generate_signals
 from core.trade import backtest_strategy
-from core.features import add_all_features  # Ensure feature engineering is applied
+from core.features import add_all_features
 
 PIPELINE_PATH = "ml_filter_pipeline.pkl"
+TRAIN_SCRIPT = "train_ml_filter.py"
 
-def load_pipeline():
-    if os.path.exists(PIPELINE_PATH):
-        return joblib.load(PIPELINE_PATH)
+def ensure_pipeline():
+    """Ensure the ML pipeline exists, or retrain it automatically."""
+    if not os.path.exists(PIPELINE_PATH):
+        print("[OPTIMIZER] Pipeline not found. Auto-training now...")
+        result = subprocess.run(["python", TRAIN_SCRIPT])
+        if result.returncode != 0 or not os.path.exists(PIPELINE_PATH):
+            raise RuntimeError("[OPTIMIZER] Training failed or pipeline not created.")
     else:
-        raise FileNotFoundError(f"[ERROR] Model pipeline file not found: {PIPELINE_PATH}")
+        print("[OPTIMIZER] Found existing ML pipeline.")
 
-def align_input_features(df, expected_features):
-    """
-    Ensures that df has all expected columns in correct order,
-    filling missing columns with 0.
-    """
+def align_features(df, pipeline):
+    """Align live dataframe with pipeline expectations."""
+    scaler = pipeline.named_steps["scaler"]
+    expected_features = scaler.feature_names_in_ if hasattr(scaler, "feature_names_in_") else df.columns
     aligned = df.copy()
     for col in expected_features:
         if col not in aligned.columns:
             aligned[col] = 0.0
     return aligned[expected_features]
 
-def optimize_strategies(df, all_strategies, config, ml_filter=None):
-    results = []
-    
-    # Apply feature engineering
+def optimize_strategies(df, all_strategies, config, ml_filter=True):
+    ensure_pipeline()
+    pipeline = joblib.load(PIPELINE_PATH)
+
     df = add_all_features(df)
+    aligned_df = align_features(df, pipeline)
+    transformed = pipeline.transform(aligned_df)
 
-    # Load full pipeline
-    pipeline = load_pipeline()
-
-    # Determine input feature names the pipeline expects
-    input_features = pipeline.named_steps["selector"].estimator_.feature_importances_.shape[0]
-    scaler_input_order = pipeline.named_steps["scaler"].get_feature_names_out(
-        input_features if isinstance(input_features, list) else None
-    ) if hasattr(pipeline.named_steps["scaler"], "get_feature_names_out") else df.columns
-
-    aligned_df = align_input_features(df, scaler_input_order)
-    ml_features = pipeline.transform(aligned_df)
-
+    results = []
     for r in range(1, len(all_strategies) + 1):
-        for strat_combo in itertools.combinations(all_strategies, r):
+        for combo in itertools.combinations(all_strategies, r):
             test_config = config.copy()
-            test_config["strategies"] = list(strat_combo)
+            test_config["strategies"] = list(combo)
 
             signal = generate_signals(df, test_config)
 
@@ -54,24 +50,24 @@ def optimize_strategies(df, all_strategies, config, ml_filter=None):
                 df,
                 signal,
                 test_config,
-                config.get("symbol", "TEST"),
+                config.get("symbol", "SYMBOL"),
                 ml_filter=ml_filter,
-                ml_features=ml_features  # Already aligned + transformed
+                ml_features=transformed
             )
 
             if trades:
-                pnl = sum(t.get("pnl", 0) for t in trades if "pnl" in t)
-                wins = sum(1 for t in trades if t.get("pnl", 0) > 0)
-                losses = sum(1 for t in trades if t.get("pnl", 0) <= 0)
+                pnl = sum(t["pnl"] for t in trades if "pnl" in t)
+                wins = sum(1 for t in trades if t["pnl"] > 0)
+                losses = sum(1 for t in trades if t["pnl"] <= 0)
                 win_rate = wins / (wins + losses + 1e-9)
                 results.append({
-                    "strategies": strat_combo,
-                    "pnl": pnl,
+                    "strategies": combo,
+                    "pnl": round(pnl, 2),
                     "win_rate": round(win_rate, 2),
                     "trades": len(trades)
                 })
 
-    result_df = pd.DataFrame(results).sort_values(by="pnl", ascending=False)
-    print("[OPTIMIZER] Top strategy combos:")
-    print(result_df.head(10))
-    return result_df
+    df_results = pd.DataFrame(results).sort_values(by="pnl", ascending=False)
+    print("[OPTIMIZER] Top strategy sets:")
+    print(df_results.head(10))
+    return df_results
