@@ -112,9 +112,22 @@ def train_pipeline(force=False):
     for name, model in models.items():
         evaluate_model(model, X_test, y_test, name)
 
-    # Let user choose model
-    best_name = input(f"Select best model {list(models.keys())} [default: XGBoost]: ") or "XGBoost"
-    best_model = models[best_name]
+    # Automatically select model with highest ROC AUC
+    best_model = None
+    best_auc = -1
+    for name, model in models.items():
+        if hasattr(model, "predict_proba"):
+            try:
+                auc = roc_auc_score(y_test, model.predict_proba(X_test)[:, 1])
+                print(f"[SELECT] {name} AUC: {auc:.4f}")
+                if auc > best_auc:
+                    best_model = model
+                    best_auc = auc
+            except:
+                continue
+
+    best_name = [k for k, v in models.items() if v == best_model][0]
+    print(f"[SELECT] Auto-selected best model: {best_name} (AUC: {best_auc:.4f})")
 
     pipeline = Pipeline([
         ("scaler", scaler),
