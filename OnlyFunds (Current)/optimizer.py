@@ -2,45 +2,46 @@ import itertools
 import pandas as pd
 import joblib
 import os
-
 from core.signals import generate_signals
 from core.trade import backtest_strategy
+from core.features import add_all_features  # Ensure feature engineering is applied
 
-SELECTOR_PATH = "feature_selector.pkl"
+PIPELINE_PATH = "ml_filter_pipeline.pkl"
 
-def get_selector_and_features():
-    if os.path.exists(SELECTOR_PATH):
-        fs_data = joblib.load(SELECTOR_PATH)
-        return (
-            fs_data["model"],
-            fs_data["selected_features"],
-            fs_data["feature_mask"],
-            fs_data["full_feature_list"]
-        )
-    return None, None, None, None
+def load_pipeline():
+    if os.path.exists(PIPELINE_PATH):
+        return joblib.load(PIPELINE_PATH)
+    else:
+        raise FileNotFoundError(f"[ERROR] Model pipeline file not found: {PIPELINE_PATH}")
 
-def align_features_for_ml(df, full_feature_list):
+def align_input_features(df, expected_features):
+    """
+    Ensures that df has all expected columns in correct order,
+    filling missing columns with 0.
+    """
     aligned = df.copy()
-    for col in full_feature_list:
+    for col in expected_features:
         if col not in aligned.columns:
             aligned[col] = 0.0
-    aligned = aligned[full_feature_list]
-    return aligned
+    return aligned[expected_features]
 
 def optimize_strategies(df, all_strategies, config, ml_filter=None):
     results = []
-    selector, selected_features, feature_mask, full_feature_list = get_selector_and_features()
+    
+    # Apply feature engineering
+    df = add_all_features(df)
 
-    ml_features_df = None
-    if ml_filter is not None and full_feature_list is not None and selector is not None:
-        aligned_df = align_features_for_ml(df, full_feature_list)
+    # Load full pipeline
+    pipeline = load_pipeline()
 
-        # Defensive assertion
-        assert aligned_df.shape[1] == len(feature_mask), (
-            f"[ERROR] Feature mismatch: aligned_df has {aligned_df.shape[1]}, mask expects {len(feature_mask)}"
-        )
+    # Determine input feature names the pipeline expects
+    input_features = pipeline.named_steps["selector"].estimator_.feature_importances_.shape[0]
+    scaler_input_order = pipeline.named_steps["scaler"].get_feature_names_out(
+        input_features if isinstance(input_features, list) else None
+    ) if hasattr(pipeline.named_steps["scaler"], "get_feature_names_out") else df.columns
 
-        ml_features_df = selector.transform(aligned_df)
+    aligned_df = align_input_features(df, scaler_input_order)
+    ml_features = pipeline.transform(aligned_df)
 
     for r in range(1, len(all_strategies) + 1):
         for strat_combo in itertools.combinations(all_strategies, r):
@@ -55,7 +56,7 @@ def optimize_strategies(df, all_strategies, config, ml_filter=None):
                 test_config,
                 config.get("symbol", "TEST"),
                 ml_filter=ml_filter,
-                ml_features=ml_features_df
+                ml_features=ml_features  # Already aligned + transformed
             )
 
             if trades:
@@ -71,4 +72,6 @@ def optimize_strategies(df, all_strategies, config, ml_filter=None):
                 })
 
     result_df = pd.DataFrame(results).sort_values(by="pnl", ascending=False)
+    print("[OPTIMIZER] Top strategy combos:")
+    print(result_df.head(10))
     return result_df
