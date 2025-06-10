@@ -9,14 +9,7 @@ from typing import Optional, List, Any
 class MLFilter:
     """
     World-class ML filter for trading bots.
-
-    - Only trades if model is valid, feature set matches, and all preconditions are met.
-    - Bulletproof: refuses to trade on any bug, data mismatch, missing or invalid features.
-    - Transparent logging of every critical event or error.
-    - Explainability: provides detailed model and feature diagnostics.
-
-    NOTE: At inference, always pass DataFrame with the EXACT full feature set and order as at model fit time.
-    Do NOT pass only selected features; MLFilter will handle feature selection and order internally.
+    - Bulletproof feature/selector alignment: no more axis errors.
     """
 
     def __init__(self, model_path: Optional[str] = None):
@@ -38,6 +31,7 @@ class MLFilter:
             elif isinstance(loaded, dict):
                 self.model = loaded.get("model", None)
                 self.selector = loaded.get("selector", loaded.get("feature_selector", None)) or loaded.get("model", None)
+                # THIS IS THE CRUCIAL LINE: use the full feature list from training:
                 self.features = loaded.get("full_feature_list", loaded.get("features", None))
                 if self.features is None:
                     self.features = loaded.get("selected_features", None)
@@ -61,18 +55,12 @@ class MLFilter:
         """
         if self.features is None:
             raise RuntimeError("MLFilter: Model loaded without feature names. Cannot extract features.")
-
-        # --- BULLETPROOF: Ensure DataFrame has all required features, in correct order ---
+        # Fill missing features with 0.0, drop extras, and order
         for col in self.features:
             if col not in df.columns:
-                df[col] = 0.0  # or np.nan if you prefer
-
-        # Remove any extra columns and reorder to match training
+                df[col] = 0.0
         df = df[self.features]
-
-        row = df.iloc[[idx]].values  # use double brackets to keep 2D
-
-        # If feature selector is present, ensure input shape matches
+        row = df.iloc[[idx]].values  # 2D for selector
         if self.selector is not None:
             try:
                 support_mask = self.selector.get_support()
@@ -107,9 +95,6 @@ class MLFilter:
         raise RuntimeError("MLFilter: Model lacks predict_proba().")
 
     def should_enter(self, df: pd.DataFrame, idx: int, signal: Any, threshold: float = 0.5) -> bool:
-        """
-        Should enter trade? Only if model, selector, and features are all present and valid.
-        """
         try:
             arr = self.extract_features(df, idx)
             if hasattr(self.model, "predict_proba"):
@@ -126,9 +111,6 @@ class MLFilter:
             return False
 
     def should_exit(self, df: pd.DataFrame, idx: int, signal: Any, threshold: float = 0.5) -> bool:
-        """
-        Should exit trade? Only if model, selector, and features are all present and valid.
-        """
         try:
             arr = self.extract_features(df, idx)
             if hasattr(self.model, "predict_proba"):
@@ -164,20 +146,13 @@ class MLFilter:
         return {}
 
     def explain(self, df: pd.DataFrame, idx: int):
-        """
-        Returns a detailed human- and machine-readable explanation of the model's prediction,
-        including feature values, importance, and probabilities.
-        """
         try:
-            # --- BULLETPROOF: Ensure DataFrame has all required features, in correct order ---
             for col in self.features:
                 if col not in df.columns:
-                    df[col] = 0.0  # or np.nan if you prefer
+                    df[col] = 0.0
             df = df[self.features]
-
             feats = df.iloc[[idx]].values
 
-            # Features after selector (if any)
             if self.selector is not None:
                 support_mask = self.selector.get_support()
                 if feats.shape[1] != len(support_mask):

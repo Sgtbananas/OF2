@@ -28,20 +28,28 @@ def ensure_pipeline():
     else:
         print(f"[OPTIMIZER] Using fresh ML pipeline from: {PIPELINE_PATH}")
 
-    pipeline = joblib.load(PIPELINE_PATH)
-    model_name = type(pipeline.named_steps['classifier']).__name__
-    print(f"[OPTIMIZER] Active ML model: {model_name}")
-    return pipeline
+    loaded = joblib.load(PIPELINE_PATH)
+    if isinstance(loaded, dict):
+        model_name = type(loaded['model']).__name__
+        print(f"[OPTIMIZER] Active ML model: {model_name}")
+    elif hasattr(loaded, 'named_steps'):
+        model_name = type(loaded.named_steps['classifier']).__name__
+        print(f"[OPTIMIZER] Active ML model: {model_name}")
+    return loaded
 
 def align_features(df, pipeline):
     """Align dataframe with expected pipeline input feature structure."""
-    scaler = pipeline.named_steps["scaler"]
-    expected = scaler.feature_names_in_ if hasattr(scaler, "feature_names_in_") else df.columns
+    # Always get the full feature list
+    if isinstance(pipeline, dict):
+        feature_list = pipeline.get('full_feature_list', df.columns)
+    else:
+        # fallback for legacy pipeline types
+        feature_list = df.columns
     aligned = df.copy()
-    for col in expected:
+    for col in feature_list:
         if col not in aligned.columns:
             aligned[col] = 0.0
-    return aligned[expected]
+    return aligned[feature_list]
 
 def optimize_strategies(df, all_strategies, config, ml_filter=True):
     ensure_pipeline()
@@ -49,7 +57,14 @@ def optimize_strategies(df, all_strategies, config, ml_filter=True):
 
     df = add_all_features(df)
     aligned_df = align_features(df, pipeline)
-    transformed_features = pipeline.transform(aligned_df)
+    # If using dict, manually apply scaler/selector/model if needed (not shown), else use pipeline.transform
+    if hasattr(pipeline, "transform"):
+        transformed_features = pipeline.transform(aligned_df)
+    else:
+        scaler = pipeline['scaler']
+        selector = pipeline['selector']
+        X_scaled = scaler.transform(aligned_df)
+        transformed_features = selector.transform(X_scaled)
 
     results = []
 

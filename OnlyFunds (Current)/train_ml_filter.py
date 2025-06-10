@@ -61,8 +61,8 @@ def evaluate_model(model, X_test, y_test, name):
         try:
             auc = roc_auc_score(y_test, model.predict_proba(X_test)[:, 1])
             print("ROC AUC:", round(auc, 4))
-        except:
-            pass
+        except Exception as e:
+            print("ROC AUC failed:", e)
 
 def train_pipeline(force=False):
     if not force and is_model_fresh(PIPELINE_PATH, MODEL_MAX_AGE_HOURS):
@@ -77,6 +77,7 @@ def train_pipeline(force=False):
     df = df.dropna(subset=[TARGET_COL])
     y = df[TARGET_COL]
     X = df[used_features].select_dtypes(include=[np.number])
+    full_feature_list = list(X.columns)  # CRUCIAL: Save full list before selection
 
     X.replace([np.inf, -np.inf], np.nan, inplace=True)
     X.dropna(inplace=True)
@@ -84,8 +85,8 @@ def train_pipeline(force=False):
 
     scaler = StandardScaler()
     X_scaled = scaler.fit_transform(X)
-
-    selector = feature_selector(X, y)
+    # fit selector on the *full* feature set
+    selector = feature_selector(pd.DataFrame(X_scaled, columns=full_feature_list), y)
     X_sel = selector.transform(X_scaled)
 
     X_train, X_test, y_train, y_test = train_test_split(
@@ -123,20 +124,23 @@ def train_pipeline(force=False):
                 if auc > best_auc:
                     best_model = model
                     best_auc = auc
-            except:
+            except Exception as e:
+                print(f"[SELECT] {name} AUC failed: {e}")
                 continue
 
     best_name = [k for k, v in models.items() if v == best_model][0]
     print(f"[SELECT] Auto-selected best model: {best_name} (AUC: {best_auc:.4f})")
 
-    pipeline = Pipeline([
-        ("scaler", scaler),
-        ("selector", selector),
-        ("classifier", best_model)
-    ])
-
-    joblib.dump(pipeline, PIPELINE_PATH)
-    print(f"[TRAIN] ✅ Saved pipeline to {PIPELINE_PATH}")
+    # Save all components for inference
+    joblib.dump(
+        {
+            "model": best_model,
+            "selector": selector,
+            "full_feature_list": full_feature_list
+        },
+        PIPELINE_PATH
+    )
+    print(f"[TRAIN] ✅ Saved pipeline (model, selector, full_feature_list) to {PIPELINE_PATH}")
 
 if __name__ == "__main__":
     train_pipeline()
